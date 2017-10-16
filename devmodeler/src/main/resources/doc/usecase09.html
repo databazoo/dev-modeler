@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC09. I want to optimize my model</h1>
+    <h3>This UC describes how one can optimize the database schema. It is assumed a project is already set (See UC01).</h3>
+
+    <ol>
+        <li>Switch view using “Optimizer view” button at the top of the main window.</li>
+        <li>Choose “Static analysis” tab to check for missing indexes, index clashes, useless tables, etc.</li>
+        <li>Choose “Data-based analysis” tab to check for wasteful column definitions and simplification options.</li>
+        <li>Choose filtering options and press “Analyze”.</li>
+        <li>Go through individual lines to find out on design flaws.</li>
+    </ol>
+    <p><font color="gray">NOTE: the database should be filled with real-world data to show decent results from data-based analysis.</font></p>
+    <p><font color="gray">NOTE: some flaws can not be detected for sure. Optimizer view only shows suggestions and potential problems. It is the designer who is to decide what to do about it.</font></p>
+</body>
+</html>

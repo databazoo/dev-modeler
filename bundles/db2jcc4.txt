@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=bundles/db2jcc4.jar -Dpackaging=jar -DgroupId=com.ibm.db2.jcc -DartifactId=db2jcc4 -Dversion=1.4.0

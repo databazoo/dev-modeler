@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC02. I want to create an empty database or model</h1>
+    <h3>This UC describes how one can connect to create an empty database, creating a new project on the way. It is assumed that you have the rights to create a database on target server.</h3>
+    <ol>
+        <li>Go to menu File - Projects.</li>
+        <li>Select “Create a new project” or press “New” button.</li>
+        <li>In simple mode:
+            <ol type="a">
+                <li>Fill in “Project name”.</li>
+                <li>Select database type or “Abstract model”.</li>
+                <li>Fill in “Host”, “User” (optional) and “Password” (optional).</li>
+                <li>Fill in “Database” with a desired database name.</li>
+                <li>Press “Create” button.</li>
+                <li>Confirmation of creation will appear. Press “OK”.</li>
+            </ol>
+        </li>
+        <li>In advanced mode:
+            <ol type="a">
+                <li>Select database type or “Abstract model” and press “Next”.</li>
+                <li>Choose appropriate server count.</li>
+                <li>Fill in connection information for every environment listed in “Server connections” table. Use “Delete” key to remove unneeded rows.</li>
+                <li>Press “Next”.</li>
+                <li>Fill in “Project name”.</li>
+                <li>Choose “Store revisions to” path. Changes you make will be stored there in XML format. If you already use VCS for your application source files you can choose your database changes to share same location.</li>
+                <li>Fill in a desired database name into “Databases” table.</li>
+                <li>Press “Create project” button.</li>
+                <li>Confirmation of database creation will appear. Press “OK”.</li>
+                <li>Databases on other environments will be created upon first communication with the target server. Confirmation of creation will appear. Press “OK”.</li>
+            </ol>
+        </li>
+    </ol>
+    <p><font color="gray">NOTE: “Host” input fields may contain full resource information including port (:5432), Oracle SID (:SID or /serviceName), MSSQL instance (\instance), etc. See JDBC connection string documentation for your target DB type.</font></p>
+</body>
+</html>

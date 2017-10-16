@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC14. I want to program in PL/SQL</h1>
+    <h3>This UC describes how one can store application logics in database itself. It is assumed a project is already set (See UC01).</h3>
+
+    <p>PL/SQL is generally supported by SQL inputs. Particular options depend on target database type.</p>
+
+    <p><b>To create a function or procedure (if supported by database type):</b></p>
+    <ol>
+        <li>You can Right-click a schema on canvas or in object tree.</li>
+        <li>Choose “Add new function” option.</li>
+        <li>Fill in “Name”, “Arguments” and other fields according to selected database type.</li>
+        <li>Fill in “Returns” with primitive type, TRIGGER (for triggered functions), TABLE (for tabular results) or leave empty (to create procedures). See your database documentation for complete syntax reference.</li>
+        <li>Fill in “Function body” in PL/SQL (or other language available for your database type).</li>
+        <li>check the generated SQL in “SQL” tab at the right side of the window.</li>
+        <li>Press “Create” or hit “Ctrl+S”.</li>
+    </ol>
+
+    <p><b>To create a package (if supported by database type):</b></p>
+    <ol>
+        <li>Right-click a schema on canvas or in object tree.</li>
+        <li>Choose “Add new package” option.</li>
+        <li>Fill in “Package name”, “Package definition” and other fields according to selected database type.</li>
+        <li>Fill in “Package body” in PL/SQL (or other language available for your database type).</li>
+        <li>You can check the generated SQL in “SQL” tab at the right side of the window.</li>
+        <li>Press “Create” or hit “Ctrl+S”.</li>
+    </ol>
+
+    <p><b>To create a trigger (if supported by database type):</b></p>
+    <ol>
+        <li>Right-click a table on canvas or in object tree.</li>
+        <li>Choose “Add new trigger” option. An existing trigger function is required in PostgreSQL for this option to be available (see UC14.a on how to create one).</li>
+        <li>Fill in “Trigger name”, “Events” and other fields according to selected database type.</li>
+        <li>Fill in “Trigger body” in PL/SQL (or other language available for your database type) or choose a trigger function to execute.</li>
+        <li>You can check the generated SQL in “SQL” tab at the right side of the window.</li>
+        <li>Press “Create” or hit “Ctrl+S”.</li>
+    </ol>
+</body>
+</html>

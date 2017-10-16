@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC10. I want to make changes and publish them</h1>
+    <h3>This UC describes how to make both structural and data changes, pack them into revisions and publish them. It is assumed a full development stack is set (See UC03).</h3>
+
+    <ol>
+        <li>Make structural changes:
+            <ol type="a">
+                <li>Create table “customers” (See UC05).</li>
+                <li>Add columns (id, firstname, lastname) and a primary key (See UC05).</li>
+                <li>Select “Add new table” in the tree.</li>
+                <li>Fill in “Name” with “customer_types”.</li>
+                <li>Press “Save” or hit “Ctrl+S”.</li>
+                <li>Add columns (id, title) and a primary key (See UC05).</li>
+                <li>Close the wizard.</li>
+                <li>Select “customers” table.</li>
+                <li>Drag column “id” to table “customer_types” column “id”. A 1:N wizard will open.</li>
+                <li>Set “Local column” to “New column”.</li>
+                <li>Set “New column name” to “customer_type_id”.</li>
+                <li>Press “Save” or hit “Ctrl+S”.</li>
+            </ol>
+        </li>
+        <li>Fill in data:
+            <ol type="a">
+                <li>Fill in at least one row into “customer_types” (See UC06).</li>
+                <li>Fill in at least one row into “customers” (See UC06).</li>
+                <li>Press “SQL query” hot button at the top of the main window.</li>
+                <li>Insert <b><i>UPDATE customers SET customer_type_id = 1</i></b> into SQL input.</li>
+                <li>Press “Run query” or hit “F5”.</li>
+                <li>Press “Add to revision” to add your manual UPDATE to revision.</li>
+                <li>Choose last outgoing revision in “Select revision” select and press “Add to revision”.</li>
+                <li>Close data windows.</li>
+            </ol>
+        </li>
+        <li>Commit the change to VCS:
+            <ol type="a">
+                <li>The change XML file is already on disk, just commit it (<b><i>git commit</i></b>, <b><i>git push</i></b>).</li>
+            </ol>
+        </li>
+        <li>Publish the change:
+            <ol type="a">
+                <li>Switch view using “Changes” button at the top of the main window.</li>
+                <li>Double-click your revision (last outgoing revision).</li>
+                <li>Click “Apply” to Production (or other environment).</li>
+                <li>Review the query.</li>
+                <li>Click “Apply to Production”.</li>
+                <li>Close the wizard window.</li>
+            </ol>
+        </li>
+        <li>Commit to VCS:
+            <ol type="a">
+                <li>The change XML file was updated. Commit your change (<b><i>git commit</i></b>, <b><i>git push</i></b>).</li>
+            </ol>
+        </li>
+    </ol>
+</body>
+</html>

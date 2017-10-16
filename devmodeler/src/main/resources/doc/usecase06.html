@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC06. I want to see, export and edit data in a table</h1>
+    <h3>This UC describes how one can select, update and delete data from a table. It is assumed a project is already set (See UC01).</h3>
+
+    <ol>
+        <li>Select a table on canvas or in the object tree.</li>
+        <li>Use right-click - First/Last 200 rows to open table data window. Alternatively, use “View data of selected table” hot button at the top of the main window.</li>
+        <li>Wait for data window to appear and data to be loaded from server.</li>
+        <li>Use context menu options to narrow down your search. Right-click a value in the table and choose one of filtering and ordering options.</li>
+        <li>Double-click a value to edit it. Hit “Ctrl+S”, “Tab” or “Enter” keys to save or “Escape” key to cancel the edit.</li>
+        <li>Use last (empty) line of the table to insert a new row. Confirm the insert with “Ctrl+S”.</li>
+        <li>Use context menu option “Delete row” to delete a row or multiple rows. You will be asked to confirm deletion.</li>
+        <li>Use “Export” button at the upper left corner of the table to export current data. You can choose from XLS or CSV formats.</li>
+    </ol>
+    <p><font color="gray">NOTE: data operations are not available on tables without primary keys, views and procedure results.</font></p>
+
+    <p><b>Tabular data</b></p>
+    <p>When altering the SQL query, you might want to insert tabular data from Microsoft Excel, OpenOffice/LibreOffice Calc or result data tables. This is supported by formatting inserted data in 2 modes:</p>
+    <ol>
+        <li>Single-column data is transferred to comma-separated list for use in constructs like <b><i>WHERE ... IN (1,2,3...)</i></b></li>
+        <li>Multi-column data is formatted to fit the needs of constructs like <b><i>INSERT ... VALUES (1,2,3...), (4,5,6...)</i></b></li>
+    </ol>
+    <p><font color="gray">NOTE: if the automatic change does not suit your case, simply hit “Ctrl+Z” to get back to raw insert.</font></p>
+</body>
+</html>
