@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC13. I want to migrate my schema to a different DB type</h1>
+    <h3>This UC describes how one can migrate schemata between different database types. It is assumed the 2 projects with different types are already set (See UC01).</h3>
+    <ol>
+        <li>Open source project.</li>
+        <li>Go to menu Model - Export - To SQL.</li>
+        <li>Choose appropriate dialect (target database type).</li>
+        <li>Press “Export” and save the export file.</li>
+        <li>Go to menu Model - Export - To XML.</li>
+        <li>Press “Export” and save the schema layout.</li>
+        <li>Open target project.</li>
+        <li>Press “SQL query” hot button at the top of the main window.</li>
+        <li>Insert contents of the export file into SQL input.</li>
+        <li>Run the query. If (for any reason) the query should fail, run individual statements by selecting them in the SQL input and pressing “Run” or hitting “F5”.</li>
+        <li>Close the SQL window.</li>
+        <li>Go to menu Model - Import.</li>
+        <li>Choose previously exported schema layout file and press “Import”.</li>
+        <li>Press “Sync” at the top of the main window to synchronize the model with the physical database.</li>
+    </ol>
+    <p><font color="gray">NOTE: Keep in mind that database types are not fully compatible. Not all schema properties can be moved between database types due to different support for datatypes, objects, trigger events, etc.</font></p>
+</body>
+</html>

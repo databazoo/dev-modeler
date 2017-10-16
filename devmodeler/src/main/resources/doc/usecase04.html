@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC04. I want to share my configuration with other developers</h1>
+    <h3>This UC describes how to share project or model configuration. It is assumed a project is already set (See UC01).</h3>
+
+    <b>To share a complete project (models, environments, etc.):</b>
+    <ol>
+        <li>Go to menu File - Projects.</li>
+        <li>Press “Export”.</li>
+        <li>Choose where your project configuration to be saved.</li>
+        <li>Add the configuration file to VCS or send it to other developers.</li>
+    </ol>
+    <p>On target workstation:</p>
+    <ol>
+        <li>Download the configuration file.</li>
+        <li>Go to menu File - Projects.</li>
+        <li>Press “Import”.</li>
+        <li>Choose the configuration file.</li>
+        <li>Confirmation window appears if project with same name already exists. Choose a different project name or merge the configuration.</li>
+        <li>Optionally, open the project and press “Sync” at the top of the main window to synchronize models with physical databases.</li>
+    </ol>
+
+    <b>To share the model of a single database:</b>
+    <ol>
+        <li>Go to menu Model - Export - To XML.</li>
+        <li>Choose where your model will be saved.</li>
+        <li>Add the configuration XML file to VCS or send it to other developers.</li>
+    </ol>
+    <p>On target workstation:</p>
+    <ol>
+        <li>Download the configuration file.</li>
+        <li>Open the target project and database.</li>
+        <li>Go to menu Model - Import.</li>
+        <li>Choose the configuration XML file.</li>
+        <li>Press “Sync” at the top of the main window to synchronize models with physical databases.</li>
+    </ol>
+    <p><font color="gray">NOTE: passwords are not stored in XML export files. Use encrypted <b><i>.dproj</i></b> export files if you want to store passwords, too.</font></p>
+</body>
+</html>

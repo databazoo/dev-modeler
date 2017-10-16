@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC07. I want to navigate through an existing database</h1>
+    <h3>This UC describes how to use search, neighborhood and data click-through. It is assumed a project is already set (See UC01).</h3>
+
+    <p><b>Search:</b></p>
+    <ol>
+        <li>Search input is available above object tree in the main window.</li>
+        <li>Fulltext option makes the filter search through comments, function and trigger bodies, etc.</li>
+        <li>Search limits listed objects to matching ones. The object tree is not refreshed automatically if search is applied.</li>
+        <li>You can use “Clear filter” and “Search history” buttons to simplify search operations.</li>
+    </ol>
+
+    <p><b>Neighborhood view:</b></p>
+    <ol>
+        <li>Click a table on canvas or in object tree.</li>
+        <li>Neighborhood view becomes available in lower left corner of the main window.</li>
+        <li>Tables above the selected table are referenced by the selected table. Tables below the selected table have references to it.</li>
+        <li>Clicking referenced tables places focus on them. Right-click shows a context menu without changing the focus.</li>
+        <li>Data on the selected table provide an overview of table statistics.</li>
+    </ol>
+
+    <p><b>Data window:</b></p>
+    <ol>
+        <li>Select a table on canvas or in the object tree.</li>
+        <li>Use right-click - First/Last 200 rows to open table data window. Alternatively, use “View data of selected table” hot button at the top of the main window.</li>
+        <li>Wait for data window to appear and data to be loaded from server.</li>
+        <li>If a column references data in another table, column header is marked with “[R]” and green color.</li>
+        <li>Reference columns provide extra options in context menu. Use “Show referenced row” to see the referenced row or “Show referenced table” to see the whole table.</li>
+    </ol>
+
+</body>
+</html>

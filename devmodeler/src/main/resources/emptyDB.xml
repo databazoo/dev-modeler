@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="My test database">
+    <locations>
+        <loc name="films" value="450,180"/>
+        <loc name="people" value="270,450"/>
+        <loc name="new_table_9" value="570,300"/>
+        <loc name="screenshots" value="810,330"/>
+        <loc name="films_categories" value="450,30"/>
+        <loc name="roles" value="90,210"/>
+        <loc name="new_table_3" value="390,120"/>
+        <loc name="new_table_2" value="60,60"/>
+        <loc name="new_table_1" value="90,30"/>
+        <loc name="actors" value="90,360"/>
+        <loc name="categories" value="810,30"/>
+        <loc name="new_table_7" value="300,360"/>
+        <loc name="public" value="300,300"/>
+        <loc name="producers" value="450,360"/>
+        <loc name="new_table_6" value="570,180"/>
+        <loc name="ratings" value="810,180"/>
+        <loc name="new_table_4" value="90,30"/>
+    </locations>
+    <schemata>
+        <schema loc="300,300" name="public" size="1051,527">
+            <table inherits="people" loc="90,360" name="actors" pk="1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="id" num="1" store="a" type="serial4"/>
+                <index con="1" def="id" name="pk_actors" pkey="1" ux="1"/>
+            </table>
+            <table loc="810,30" name="categories" pk="1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="id" num="1" store="a" type="serial4"/>
+                <column name="category_name" num="2" store="a" type="varchar"/>
+                <column name="parent_id" null="1" num="3" store="a" type="integer"/>
+                <index def="parent_id" name="ix_categories_parent_id"/>
+                <index con="1" def="id" name="pk_categories" pkey="1" ux="1"/>
+            </table>
+            <table loc="450,180" name="films" pk="1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="id" num="1" store="a" type="serial4"/>
+                <column name="official_name" num="2" store="a" type="varchar"/>
+                <column name="year" num="3" store="a" type="int"/>
+                <column name="producer_id" num="4" store="a" type="integer"/>
+                <column name="description" null="1" num="5" store="a" type="text"/>
+                <index def="producer_id" name="ix_films_producer_id"/>
+                <index con="1" def="id" name="pk_films" pkey="1" ux="1"/>
+            </table>
+            <table loc="450,30" name="films_categories" pk="0,1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="film_id" num="1" store="p" type="int4"/>
+                <column name="category_id" num="2" store="p" type="int4"/>
+                <index con="1" def="film_id,category_id" name="pkey_films_categories" pkey="1" ux="1"/>
+            </table>
+            <table loc="270,450" name="people" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="first_name" num="1" store="a" type="varchar"/>
+                <column name="last_name" num="2" store="a" type="varchar"/>
+                <column def="CURRENT_DATE" name="birthday" null="1" num="3" store="a" type="date"/>
+            </table>
+            <table inherits="people" loc="450,360" name="producers" pk="1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="id" num="1" store="a" type="serial4"/>
+                <index con="1" def="id" name="pk_producers" pkey="1" ux="1"/>
+            </table>
+            <table loc="810,180" name="ratings" pk="1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="id" num="1" store="a" type="serial4"/>
+                <column name="user" num="2" store="a" type="varchar"/>
+                <column def="100" name="rating" num="3" store="a" type="int"/>
+                <column name="film_id" num="4" store="a" type="integer"/>
+                <column name="user_comment" null="1" num="5" store="a" type="text"/>
+                <index def="film_id" name="ix_ratings_film_id"/>
+                <index con="1" def="id" name="pk_ratings" pkey="1" ux="1"/>
+            </table>
+            <table loc="90,210" name="roles" pk="0,1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="actor_id" num="1" store="p" type="int4"/>
+                <column name="film_id" num="2" store="p" type="int4"/>
+                <column name="role_name" num="3" store="a" type="varchar"/>
+                <index con="1" def="actor_id,film_id" name="pkey_roles" pkey="1" ux="1"/>
+            </table>
+            <table loc="810,330" name="screenshots" pk="1" rows="0" sizeI="0" sizeT="0" store="MyISAM">
+                <column name="id" num="1" store="a" type="serial4"/>
+                <column name="file" num="2" store="a" type="varchar"/>
+                <column name="description" null="1" num="3" store="a" type="text"/>
+                <column name="film_id" num="4" store="a" type="integer"/>
+                <index def="film_id" name="ix_screenshots_film_id"/>
+                <index con="1" def="id" name="pk_screenshots" pkey="1" ux="1"/>
+            </table>
+        </schema>
+    </schemata>
+    <constraints>
+        <constraint attr1="parent_id" attr2="id" delete="c" name="categories_category_parent" rel1="categories" rel2="categories" update="c"/>
+        <constraint def="CHECK (rating BETWEEN 0 AND 100)" name="cc_rating_between_0_100" rel1="ratings"/>
+        <constraint attr1="category_id" attr2="id" delete="c" name="fk_films_categories_category_id" rel1="films_categories" rel2="categories" update="c"/>
+        <constraint attr1="film_id" attr2="id" delete="c" name="fk_films_categories_film_id" rel1="films_categories" rel2="films" update="c"/>
+        <constraint attr1="producer_id" attr2="id" delete="r" name="fk_films_producer_id" rel1="films" rel2="producers" update="c"/>
+        <constraint attr1="film_id" attr2="id" delete="c" name="fk_ratings_film_id" rel1="ratings" rel2="films" update="c"/>
+        <constraint attr1="actor_id" attr2="id" delete="c" name="fk_roles_actor_id" rel1="roles" rel2="actors" update="c"/>
+        <constraint attr1="film_id" attr2="id" delete="c" name="fk_roles_film_id" rel1="roles" rel2="films" update="c"/>
+        <constraint attr1="film_id" attr2="id" delete="c" name="fk_screenshots_film_id" rel1="screenshots" rel2="films" update="c"/>
+    </constraints>
+    <triggers/>
+</database>

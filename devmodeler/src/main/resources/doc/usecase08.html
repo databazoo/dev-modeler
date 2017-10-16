@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC08. I want to optimize SQL queries</h1>
+    <h3>This UC describes how one can optimize application queries (like ones appearing in slowlog). It is assumed a project is already set (See UC01).</h3>
+
+    <ol>
+        <li>Press “Run SQL queries” hot button at the top of the main window.</li>
+        <li>Insert your query into SQL input.</li>
+        <li>Press “Explain” or hit “F6” to show operation tree.</li>
+        <li>Operation tree shows individual operations as they would be executed on the server.</li>
+        <li>Lines connecting operations show the operation load. Thicker lines mean heavier operations.</li>
+        <li>Click the operation to show operation details.</li>
+        <li>Choose “Data” tab on the right to see the explanation in text mode.</li>
+        <li>According to information you find in the explanation, alter your query or add indexes.</li>
+        <li>Rerun the explain with “Explain” button or hit “F6”.</li>
+    </ol>
+    <p><font color="gray">NOTE: availability of operation properties depend on your database type and server version.</font></p>
+</body>
+</html>
