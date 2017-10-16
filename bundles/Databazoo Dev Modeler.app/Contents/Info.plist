@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+        <key>CFBundleExecutable</key>
+        <string>JavaAppLauncher</string>
+        <key>CFBundleIconFile</key>
+        <string>devmodeler.icns</string>
+        <key>CFBundleIdentifier</key>
+        <string>com.databazoo.devmodeler.DevModeler</string>
+        <key>CFBundleDisplayName</key>
+        <string>Databazoo Dev Modeler</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleName</key>
+        <string>Databazoo Dev Modeler</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleShortVersionString</key>
+        <string>2.1</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+        <key>CFBundleVersion</key>
+        <string>1</string>
+        <key>NSHumanReadableCopyright</key>
+        <string></string>
+        <key>NSHighResolutionCapable</key>
+        <true/>
+        <key>NSSupportsAutomaticGraphicsSwitching</key>
+        <true/>
+        <key>JVMMainClassName</key>
+        <string>com.databazoo.devmodeler.DevModeler</string>
+        <key>JVMVersion</key>
+        <string>1.7+</string>
+        <key>JVMOptions</key>
+        <array>
+            <string>-Xdock:name=Databazoo Dev Modeler</string>
+            <string>-XX:+UseG1GC</string>
+            <string>-XX:+UseFastAccessorMethods</string>
+        </array>
+        <key>JVMArguments</key>
+        <array></array>
+    </dict>
+</plist>

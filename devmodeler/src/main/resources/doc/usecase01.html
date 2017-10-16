@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC01. I want to connect to an existing database</h1>
+    <h3>This UC describes how one can connect to an existing database, creating a new project on the way.</h3>
+    <ol>
+        <li>Go to menu File - Projects.</li>
+        <li>Select “Create a new project” or press “New” button.</li>
+        <li>In simple mode:
+            <ol type="a">
+                <li>Fill in “Project name”.</li>
+                <li>Select database type.</li>
+                <li>Fill in “Host”, “User” (optional) and “Password” (optional).</li>
+                <li>If access information is correct a list of available databases will be shown. Choose one or more and press OK.</li>
+                <li>Press “Create” button and wait until database information is loaded from server.</li>
+            </ol>
+        </li>
+        <li>In advanced mode:
+            <ol type="a">
+                <li>Select database type and press “Next”.</li>
+                <li>Choose appropriate server count.</li>
+                <li>Fill in connection information for every environment listed in “Server connections” table. Use “Delete” key to remove unneeded rows. Press “Next”.</li>
+                <li>If access information is correct for the first environment a list of available databases will be shown. Choose one or more and press OK.</li>
+                <li>Fill in “Project name”.</li>
+                <li>Choose “Store revisions to” path. Changes you make will be stored there in XML format. If you already use VCS for your application source files you can choose your database changes to share same location.</li>
+                <li>You may also use “Configure separate setting for each database and connection” checkbox at the bottom of the window to finetune your connection settings for different environments. Upon checking a table will be shown where you can set different aliases for same database throughout the environments, different access info, etc.</li>
+                <li>Press “Create project” button and wait until database information is loaded from server.</li>
+            </ol>
+        </li>
+        <li>You may want to use menu Model - Rearrange items to arrange downloaded objects automatically on the canvas. Try different options for better results and finetune placements manually.</li>
+    </ol>
+    <p><font color="gray">NOTE: “Host” input fields may contain full resource information including port (:5432), Oracle SID (:SID or /serviceName), MSSQL instance (\instance), etc. See JDBC connection string documentation for your target DB type.</font></p>
+</body>
+</html>

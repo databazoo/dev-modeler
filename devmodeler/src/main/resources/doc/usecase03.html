@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC03. I want to set up a complete development stack</h1>
+    <h3>This UC shows how to set up a complete dev stack - set up a new project and connect it to Version Control System. It is assumed that you are familiar with VCS you are going to use (like GIT, SVN, etc). For simplicity, this example will use GIT commands, but feel free to adapt them to VCS of your choice.</h3>
+    <ol>
+        <li>Checkout your VCS project into local folder (<b><i>git clone</i></b>)</li>
+        <li>Create a subfolder called “db” and add it to VCS (<b><i>git add</i></b>)</li>
+        <li>In “db” create a subfolder called “changes” and add it to VCS (<b><i>git add</i></b>)</li>
+        <li>Go to menu File - Projects.</li>
+        <li>Select “Create a new project” or press “New” button.</li>
+        <li>Switch to advanced mode.</li>
+        <li>Select database type and press “Next”.</li>
+        <li>Choose appropriate server count.</li>
+        <li>Fill in connection information for every environment listed in “Server connections” table. Use “Delete” key to remove unneeded rows.</li>
+        <li>Press “Next”.</li>
+        <li>If access information is correct (for the first environment) a list of available databases will be shown. Choose one or more and press OK.</li>
+        <li>Fill in “Project name”.</li>
+        <li>Set “Store revisions to” path to point to “your project folder / db / changes”. Changes you make will be stored there in XML format.</li>
+        <li>Press “Create project” button.</li>
+        <li>You may want to use menu Model - Rearrange items to arrange downloaded objects automatically on the canvas. Try different options for better results and finetune placements manually.</li>
+        <li>Go to menu File - Projects.</li>
+        <li>Press “Export”.</li>
+        <li>Choose the project configuration to be saved in “your project folder / db / config.dproj”. This way any developer who checks out your project can import your database stack information.</li>
+        <li>Add “your project folder / db / config.dproj” to VCS (<b><i>git add</i></b>).</li>
+        <li>Commit your project to VCS (<b><i>git commit</i></b>, <b><i>git push</i></b>)</li>
+        <li>If you are using Enterprise Edition you may want to use menu File - Projects and choose Versioning tab to set up automatic operation of VCS.</li>
+    </ol>
+    <p><font color="gray">NOTE: “Host” input fields may contain full resource information including port (:5432), Oracle SID (:SID or /serviceName), MSSQL instance (\instance), etc. See JDBC connection string documentation for your target DB type.</font></p>
+</body>
+</html>

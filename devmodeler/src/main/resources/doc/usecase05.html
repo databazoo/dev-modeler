@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC page</title>
+</head>
+<body>
+    <h1>UC05. I want to create a table</h1>
+    <h3>This UC describes how one can create a table. It is assumed a project is already set (See UC01).</h3>
+
+    <ol>
+        <li>Right-click a schema and choose “Add new table”.</li>
+        <li>Fill in “Name”.</li>
+        <li>Press “Save” or hit “Ctrl+S”.</li>
+        <li>If the database type does not require at least one column:
+            <ol type="a">
+                <li>Select “New attribute” in the tree.</li>
+                <li>Fill in “Name” with “id”.</li>
+                <li>Fill in “Datatype” with “serial” (PostgreSQL) or “integer”.</li>
+                <li>Fill in “Default” with “autoincrement” (MySQL).</li>
+                <li>Press “Save” or hit “Ctrl+S”.</li>
+            </ol>
+        </li>
+        <li>If the database type does not require a primary key:
+            <ol type="a">
+                <li>Select “New primary key” in the tree.</li>
+                <li>Press “Save” or hit “Ctrl+S”.</li>
+            </ol>
+        </li>
+        <li>Feel free to add more columns or other objects (indexes, unique keys, etc.).</li>
+        <li>Close the wizard window.</li>
+    </ol>
+</body>
+</html>
