@@ -55,6 +55,15 @@ public class GCFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * Terminate all windows. Can be called on program exit to remove the UI if the program will be still processing
+	 * something for a few moments.
+	 */
+	public static void disposeAll() {
+		new ArrayList<>(topWindows)
+				.forEach(GCFrame::dispose);
+	}
+
 	private final List<Frame> childWindows = new ArrayList<>();
 
 	/**

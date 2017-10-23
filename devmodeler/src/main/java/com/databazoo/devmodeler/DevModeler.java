@@ -1,6 +1,7 @@
 
 package com.databazoo.devmodeler;
 
+import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
@@ -34,7 +35,7 @@ public class DevModeler {
 	}
 
 	public static void exit(int exitCode){
-		DesignGUI.get().frame.dispose();
+		GCFrame.disposeAll();
 		Usage.log(UsageElement.MAIN_WINDOW_CLOSE, "Exit Code: " + exitCode);
 		Usage.sendReport();
 		System.exit(exitCode);
