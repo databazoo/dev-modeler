@@ -241,7 +241,8 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 				for (Schema schema : db.getSchemas()) {
 					if (schema.getName().equals(q.getString(TABLE_SCHEMA))) {
 						Query lastValQuery = new Query(
-								"SELECT last_value + increment_by AS current_value FROM " + escapeFullName(q.getString(FULL_NAME))).run();
+								"SELECT last_value + " + getIncrementSQL(q.getString(FULL_NAME)) + " AS current_value " +
+								"FROM " + escapeFullName(q.getString(FULL_NAME))).run();
 						Sequence seq = new Sequence(schema,
 								q.getString(FULL_NAME),
 								q.getString("depend").isEmpty() ? new String[0] : q.getString("depend").split(COMMA),
@@ -259,6 +260,18 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 			q.close();
 			q.log(log);
 		}
+	}
+
+	private String getIncrementSQL(String fullName) {
+		return versionMajor >= 10.0 ?
+				"(SELECT s.increment::integer\n" +
+				"FROM pg_class c\n" +
+				"JOIN pg_type ct ON ct.oid = c.reltype\n" +
+				"JOIN pg_namespace cs ON cs.oid = ct.typnamespace\n" +
+				"JOIN information_schema.sequences s ON (sequence_schema, sequence_name) = (cs.nspname, c.relname)\n" +
+				"WHERE c.relpersistence = 'p' AND c.relkind = 'S' AND " +
+				"(CASE WHEN cs.nspname = 'public' THEN c.relname ELSE cs.nspname||'.'||c.relname END) = '" + fullName + "')" :
+				"increment_by";
 	}
 
 	@Override
