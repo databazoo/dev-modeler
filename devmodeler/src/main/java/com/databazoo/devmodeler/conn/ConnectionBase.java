@@ -1,5 +1,23 @@
 package com.databazoo.devmodeler.conn;
 
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.window.ProgressWindow;
@@ -10,11 +28,6 @@ import com.databazoo.tools.Dbg;
 import com.databazoo.tools.GC;
 import com.databazoo.tools.SQLUtils;
 import com.databazoo.tools.Schedule;
-
-import java.sql.*;
-import java.util.*;
-import java.util.Date;
-import java.util.concurrent.CountDownLatch;
 
 import static com.databazoo.devmodeler.conn.ConnectionUtils.COMMA;
 
@@ -28,6 +41,13 @@ public abstract class ConnectionBase implements IConnection {
 	static final Map<String, Float> CONN_VERSIONS = new HashMap<>();
 	static final Map<String, java.sql.Connection> CONN_CACHE = new HashMap<>();
 	static final Map<String, Date> CONN_LAST_USE = new HashMap<>();
+
+	/**
+	 * Thread pool for parallel loading of database objects. It is limited to only allow several open connections to target DB.
+	 *
+	 * Implementation is static, so all connections share the limit even if they are connecting to different servers.
+	 */
+	private static final Executor THREAD_POOL = new ThreadPoolExecutor(1, 5, 10L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(250));
 
 	protected String name = "";
 	protected String host;
@@ -75,11 +95,11 @@ public abstract class ConnectionBase implements IConnection {
 			// Parallel load the rest
 			CountDownLatch latch = new CountDownLatch(5);
 
-			Schedule.inWorker(() -> loadFunctions(db, latch, dbCommException));
-			Schedule.inWorker(() -> loadIndexes(db, latch, dbCommException));
-			Schedule.inWorker(() -> loadViews(db, latch, dbCommException));
-			Schedule.inWorker(() -> loadSequences(db, latch, dbCommException));
-			Schedule.inWorker(() -> loadConstraints(db, latch, dbCommException));
+			THREAD_POOL.execute(() -> loadFunctions(db, latch, dbCommException));
+			THREAD_POOL.execute(() -> loadIndexes(db, latch, dbCommException));
+			THREAD_POOL.execute(() -> loadViews(db, latch, dbCommException));
+			THREAD_POOL.execute(() -> loadSequences(db, latch, dbCommException));
+			THREAD_POOL.execute(() -> loadConstraints(db, latch, dbCommException));
 
 			// Wait for workers to finish
 			try {
