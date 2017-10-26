@@ -27,7 +27,7 @@ public class AutocompletePopupMenu extends JWindow {
 	 *
 	 * @return AutocompletePopupMenu
 	 */
-	public static AutocompletePopupMenu get(){
+	public static synchronized AutocompletePopupMenu get(){
 		if(instance == null){
 			instance = new AutocompletePopupMenu();
 		}
@@ -39,7 +39,7 @@ public class AutocompletePopupMenu extends JWindow {
 	 *
 	 * @return is shown?
 	 */
-	public static boolean isShown(){
+	public static synchronized boolean isShown(){
 		return instance != null && instance.isVisible();
 	}
 
@@ -48,7 +48,7 @@ public class AutocompletePopupMenu extends JWindow {
 	 *
 	 * @return is shown and selected?
 	 */
-	public static boolean isShownAndSelected(){
+	public static synchronized boolean isShownAndSelected(){
 		return instance != null && instance.isVisible() && instance.selectedRow >= 0;
 	}
 
