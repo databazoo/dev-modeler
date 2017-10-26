@@ -1,10 +1,9 @@
 
 package com.databazoo.devmodeler.gui.window;
 
-import java.awt.*;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
@@ -77,7 +76,12 @@ public class AppInfoWindow {
 		leftPanel.add(statusPanel);
 		leftPanel.add(linkPanel);
 
-		frame.setContentPane(new VerticalContainer(head, new HorizontalContainer(leftPanel, addAboutText(), null), new JLabel("<html><font size=2><br>&copy; " + Config.APP_COPYRIGHT + ". All rights reserved. Logos and other trademarks are property of their respective owners.</font><br><br><br></html>", JLabel.CENTER)));
+		frame.setContentPane(new VerticalContainer(
+				head,
+				new HorizontalContainer(leftPanel, addAboutText(), null),
+				new JLabel("<html><font size=2><br>&copy; " + Config.APP_COPYRIGHT + ". Licensed under GNU AGPL v3.0. "
+						+ "Logos and other trademarks are property of their respective owners.</font><br><br><br></html>", JLabel.CENTER)
+		));
 		frame.pack();
 		frame.setLocationRelativeTo(DesignGUI.get().frame);
 		frame.setVisible(GCFrame.SHOW_GUI);
