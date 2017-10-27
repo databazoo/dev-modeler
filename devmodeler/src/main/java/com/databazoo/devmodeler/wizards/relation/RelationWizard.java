@@ -1,6 +1,23 @@
 
 package com.databazoo.devmodeler.wizards.relation;
 
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.text.Position;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.databazoo.components.GCFrameWithObservers;
 import com.databazoo.components.RotatedTabbedPane;
 import com.databazoo.components.WizardTree;
@@ -41,23 +58,6 @@ import com.databazoo.devmodeler.project.RevisionFactory;
 import com.databazoo.devmodeler.wizards.HistoryTableModel;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
-
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.text.Position;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Wizard for manipulating of all database objects (tables, attributes, indexes, etc.)
@@ -635,7 +635,7 @@ public class RelationWizard extends RelationWizardPagesSequence {
 		}
 
 		// Prepare revision
-        RevisionFactory.getCurrent(inModelOnly ? null : connection, editableElement.getFullName()).addDifference(
+        RevisionFactory.getCurrent(inModelOnly ? null : connection, editableElement.getEditedFullName()).addDifference(
                 database,
                 new Date(),
                 editableElement.getClassName(),
