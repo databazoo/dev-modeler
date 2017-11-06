@@ -630,12 +630,12 @@ public class Menu extends JPanel {
                         ServerActivityWindow.get(Project.getCurrent().getCurrentConn(), Project.getCurrDB().getName());
                         break;
                     case 11:
-                        Usage.log(RIGHT_MENU_ADMIN_USERS);
-                        ServerAdministrationWizard.getInstance().drawUsersRoles();
-                        break;
-                    case 12:
                         Usage.log(RIGHT_MENU_ADMIN_DBS);
                         ServerAdministrationWizard.getInstance().drawDatabases();
+                        break;
+                    case 12:
+                        Usage.log(RIGHT_MENU_ADMIN_USERS);
+                        ServerAdministrationWizard.getInstance().drawUsersRoles();
                         break;
                     default:
                         throw new IllegalArgumentException("Menu option " + type + " is not known");
@@ -643,8 +643,8 @@ public class Menu extends JPanel {
 
                 })
                         .addItem(L_RUNNING_TASKS, 10)
-                        .addItem(L_USERS_AND_ROLES, 11)
-                        .addItem(L_DATABASES, 12);
+                        .addItem(L_DATABASES, 11)
+                        .addItem(L_USERS_AND_ROLES, 12);
             });
             menuBtnAdmin.setFocusable(false);
             menuBtnAdmin.setPreferredSize(new Dimension(SERVER_STATUS_WIDTH, COMPONENT_HEIGHT));

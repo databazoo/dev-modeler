@@ -49,6 +49,7 @@ import com.databazoo.devmodeler.wizards.DiffWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 import net.miginfocom.MigLayout;
+import org.apache.commons.lang3.StringUtils;
 import plugins.api.IDataWindowResult;
 import plugins.api.IModelTable;
 
@@ -58,6 +59,9 @@ import plugins.api.IModelTable;
  * @author bobus
  */
 public class DataWindow extends DataWindowOutputMessages {
+
+	private static final String NEWLINE_NN = "\n\n";
+	private static final String NEWLINE_NN_COMMENTED_OUT = NEWLINE_NN + "-- ";
 
 	public enum Tab {
         HISTORY(0, "History"),
@@ -513,7 +517,7 @@ public class DataWindow extends DataWindowOutputMessages {
 			DesignGUI.getInfoPanel().writeFailed(log, ex.getMessage());
 			timeCounter.setText(running != null ? running.getTimeString() : "");
 			rowCounter.setText("");
-			setMessages((running != null ? getShortenedWarnings(running.getWarnings())+"\n\n" : "")+connection.getCleanError(ex.getMessage()));
+			setMessages((running != null ? getShortenedWarnings(running.getWarnings()) + NEWLINE_NN : "")+connection.getCleanError(ex.getMessage()));
 			running = null;
 			resetRunButton();
 			Point error = connection.getErrorPosition(sql, ex.getMessage());
@@ -585,7 +589,7 @@ public class DataWindow extends DataWindowOutputMessages {
 				running.checkWarnings();
 				if(!oldMessages.equals(running.getWarnings())) {
 					oldMessages = running.getWarnings();
-					setMessages(getShortenedWarnings(oldMessages)+"\n\n");
+					setMessages(getShortenedWarnings(oldMessages) + NEWLINE_NN);
 				}
 			}
 		}, 500, 500);
@@ -640,7 +644,7 @@ public class DataWindow extends DataWindowOutputMessages {
 
 	@Override
 	public void appendQuery(String queryText) {
-		setQuery(queryInput.getText()+"\n\n"+queryText);
+		setQuery(queryInput.getText()+ NEWLINE_NN +queryText);
 	}
 
 	@Override
@@ -660,20 +664,44 @@ public class DataWindow extends DataWindowOutputMessages {
 
 	@Override
 	public void setQuerySelect(String columns) {
-		queryInput.setText(connection.getQuerySelect(queryInput.getText(), columns));
-		queryInput.format();
+		final String text = queryInput.getText();
+		if (StringUtils.countMatches(text, "SELECT") == 1) {
+			queryInput.setText(connection.getQuerySelect(text, columns));
+			queryInput.format();
+			runQuery();
+		} else {
+			queryInput.setText(queryInput.getText() + connection.getQuerySelect("", columns).replace(NEWLINE_NN, NEWLINE_NN_COMMENTED_OUT));
+			queryInput.format();
+		}
 	}
 
 	@Override
 	public void setQueryOrder(String orderBy) {
-		queryInput.setText(connection.getQueryOrder(queryInput.getText(), orderBy));
-		queryInput.format();
+		final String text = queryInput.getText();
+		if (StringUtils.countMatches(text, "ORDER BY") <= 1 && StringUtils.countMatches(text, "SELECT") == 1) {
+			queryInput.setText(connection.getQueryOrder(text, orderBy));
+			queryInput.format();
+			runQuery();
+		} else {
+			queryInput.setText(queryInput.getText() + connection.getQueryOrder("\n", orderBy).replace(NEWLINE_NN, NEWLINE_NN_COMMENTED_OUT));
+			queryInput.format();
+		}
 	}
 
 	@Override
 	public void setQueryWhere(String where) {
-		queryInput.setText(connection.getQueryWhere(queryInput.getText(), where));
-		queryInput.format();
+		final String text = queryInput.getText();
+		if (StringUtils.countMatches(text, "WHERE") <= 1 &&
+				StringUtils.countMatches(text, "SELECT") + StringUtils.countMatches(text, "UPDATE") + StringUtils.countMatches(text, "DELETE") == 1) {
+			queryInput.setText(connection.getQueryWhere(text, where));
+			queryInput.format();
+			if (!text.contains("DELETE") && !text.contains("UPDATE")) {
+				runQuery();
+			}
+		} else {
+			queryInput.setText(queryInput.getText() + connection.getQueryWhere(NEWLINE_NN, where).replace(NEWLINE_NN, NEWLINE_NN_COMMENTED_OUT));
+			queryInput.format();
+		}
 	}
 
 	@Override
