@@ -1,24 +1,19 @@
 
 package com.databazoo.devmodeler.tools.organizer;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.model.DB;
-import com.databazoo.devmodeler.model.Function;
+import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.model.Package;
-import com.databazoo.devmodeler.model.Relation;
-import com.databazoo.devmodeler.model.Schema;
-import com.databazoo.devmodeler.model.Trigger;
-import com.databazoo.devmodeler.model.Workspace;
 import com.databazoo.devmodeler.model.reference.FunctionReference;
 import com.databazoo.devmodeler.model.reference.RelationReference;
 import com.databazoo.devmodeler.model.reference.SchemaReference;
 import com.databazoo.devmodeler.tools.Geometry;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Tool for automatic placement of elements in model
@@ -271,7 +266,7 @@ public class OrganizerAlphabetical implements Organizer {
 		int funcOffsetY = rel.getLocation().y + rel.getSize().height;
 		for(Trigger trig: rel.getTriggers()){
 			Function func = (Function)trig.getRel2();
-			if(!func.isOrganized && func.getBehavior().getSchemaName().equals(rel.getBehavior().getSchemaName())){
+			if(func != null && !func.isOrganized && func.getBehavior().getSchemaName().equals(rel.getBehavior().getSchemaName())){
 				Point loc = Geometry.getSnappedPosition(rel.getLocation().x + H_PAD*2, funcOffsetY + V_PAD);
 				func.setLocation(loc);
 				funcOffsetY = loc.y;
