@@ -1,11 +1,7 @@
 
 package com.databazoo.devmodeler.tools.organizer;
 
-import static com.databazoo.devmodeler.gui.Menu.L_REARRANGE_ALPHABETICAL;
-import static com.databazoo.devmodeler.gui.Menu.L_REARRANGE_CIRCULAR;
-import static com.databazoo.devmodeler.gui.Menu.L_REARRANGE_EXPLODE;
-import static com.databazoo.devmodeler.gui.Menu.L_REARRANGE_FORCE_BASED;
-import static com.databazoo.devmodeler.gui.Menu.L_REARRANGE_IMPLODE;
+import static com.databazoo.devmodeler.gui.Menu.*;
 
 public interface OrganizerFactory {
 
@@ -16,6 +12,7 @@ public interface OrganizerFactory {
         switch(actionCommand){
         case L_REARRANGE_CIRCULAR:		return getCircular();
         case L_REARRANGE_FORCE_BASED:	return getForceDirected();
+        case L_REARRANGE_NATURAL:	    return getNatural();
         case L_REARRANGE_EXPLODE:		return getExplode();
         case L_REARRANGE_IMPLODE:		return getImplode();
         default:						return getAlphabetical();
@@ -32,6 +29,10 @@ public interface OrganizerFactory {
 
     static Organizer getForceDirected() {
         return new OrganizerForceDirected();
+    }
+
+    static Organizer getNatural() {
+        return new OrganizerNatural();
     }
 
     static Organizer getExplode() {

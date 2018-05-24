@@ -1,15 +1,6 @@
 
 package com.databazoo.devmodeler.gui;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.stream.Collectors;
-
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.combo.IconableComboBox;
 import com.databazoo.devmodeler.config.Settings;
@@ -20,53 +11,29 @@ import com.databazoo.devmodeler.gui.view.ViewMode;
 import com.databazoo.devmodeler.gui.window.AppInfoWindow;
 import com.databazoo.devmodeler.gui.window.ServerActivityWindow;
 import com.databazoo.devmodeler.gui.window.datawindow.DataWindow;
-import com.databazoo.devmodeler.model.Constraint;
-import com.databazoo.devmodeler.model.DB;
-import com.databazoo.devmodeler.model.IModelElement;
-import com.databazoo.devmodeler.model.Relation;
-import com.databazoo.devmodeler.model.View;
+import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.devmodeler.tools.organizer.Organizer;
 import com.databazoo.devmodeler.tools.organizer.OrganizerFactory;
 import com.databazoo.devmodeler.wizards.DocumentationWizard;
 import com.databazoo.devmodeler.wizards.ExportImportWizard;
-import com.databazoo.devmodeler.wizards.server.ServerAdministrationWizard;
 import com.databazoo.devmodeler.wizards.SettingsWizard;
 import com.databazoo.devmodeler.wizards.project.ProjectWizard;
+import com.databazoo.devmodeler.wizards.server.ServerAdministrationWizard;
 import com.databazoo.tools.Schedule;
 import com.databazoo.tools.Usage;
 
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DATA;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DESIGN;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DIFF;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_OPTIMIZE;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ABOUT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_DATA;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_EDIT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_PROJECTS;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_SQL;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXIT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_IMG;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_SQL;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_XML;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_HELP;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_IMPORT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_PROJECTS;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_REARRANGE;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_SETTINGS;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_TGL_GRID;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_TGL_TREE;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ZOOM_IN;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ZOOM_OUT;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_DBS;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_SERVER_ACTIVITY;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_USERS;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_BTN_SYNC;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CHK_SYNC;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CONN2_COMBO;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CONN_COMBO;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_DB_COMBO;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.stream.Collectors;
+
+import static com.databazoo.devmodeler.gui.UsageElement.*;
 
 /**
  * Application menu.
@@ -93,6 +60,7 @@ public class Menu extends JPanel {
     public static final String L_REARRANGE_ALPHABETICAL = "Alphabetical (A-Z, rows and columns)";
     public static final String L_REARRANGE_CIRCULAR = "Circular (A-Z, one large circle)";
     public static final String L_REARRANGE_FORCE_BASED = "Force directed (pull related objects together)";
+    public static final String L_REARRANGE_NATURAL = "Natural (force directed, unrelated objects last)";
     public static final String L_REARRANGE_EXPLODE = "Explode (make some space between objects)";
     public static final String L_REARRANGE_IMPLODE = "Shrink (remove some space between objects)";
 
@@ -324,6 +292,7 @@ public class Menu extends JPanel {
             case L_REARRANGE_ALPHABETICAL:
             case L_REARRANGE_CIRCULAR:
             case L_REARRANGE_FORCE_BASED:
+            case L_REARRANGE_NATURAL:
             case L_REARRANGE_EXPLODE:
             case L_REARRANGE_IMPLODE:
                 Usage.log(LEFT_MENU_REARRANGE);
@@ -447,7 +416,9 @@ public class Menu extends JPanel {
             rearrangeMenuElem.setIcon(Theme.getSmallIcon(Theme.ICO_ORGANIZE));
             rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_ALPHABETICAL, Theme.getSmallIcon(Theme.ICO_ORG_ALPHABET)));
             rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_CIRCULAR, Theme.getSmallIcon(Theme.ICO_ORG_CIRCULAR)));
-            rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_FORCE_BASED, Theme.getSmallIcon(Theme.ICO_ORG_FORCE)));
+            //rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_FORCE_BASED, Theme.getSmallIcon(Theme.ICO_ORG_FORCE)));
+            rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_NATURAL, Theme.getSmallIcon(Theme.ICO_ORG_FORCE)));
+            rearrangeMenuElem.addSeparator();
             rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_EXPLODE, Theme.getSmallIcon(Theme.ICO_ORG_EXPLODE)));
             rearrangeMenuElem.add(new MyMenuItem(L_REARRANGE_IMPLODE, Theme.getSmallIcon(Theme.ICO_ORG_IMPLODE)));
             return rearrangeMenuElem;

@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
  */
 public class OrganizerAlphabetical implements Organizer {
 
-	private final int H_PAD = Canvas.GRID_SIZE * 2;
-	private final int V_PAD = Canvas.GRID_SIZE;
+	final int H_PAD = Canvas.GRID_SIZE * 2;
+	final int V_PAD = Canvas.GRID_SIZE;
 
 	OrganizerAlphabetical(){}
 

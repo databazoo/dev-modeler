@@ -1,15 +1,15 @@
 
 package com.databazoo.devmodeler.gui;
 
+import com.databazoo.devmodeler.config.Config;
+import com.databazoo.devmodeler.config.Theme;
+import com.databazoo.tools.Schedule;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.databazoo.devmodeler.config.Config;
-import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.tools.Schedule;
 
 /**
  *
@@ -91,6 +91,9 @@ public class RightClickMenu extends JPopupMenu implements java.awt.event.ActionL
 		for(String val : submenuValues){
 			if(val.startsWith("Create ")){
 				addSeparator = true;
+			}else if(val.equals("|")){
+				addSeparator = true;
+				continue;
 			}else if(addSeparator){
 				submenu.addSeparator();
 				addSeparator = false;
