@@ -1,12 +1,7 @@
 package com.databazoo.devmodeler.model;
 
 import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.devmodeler.conn.ConnectionUtils;
-import com.databazoo.devmodeler.conn.DBCommException;
-import com.databazoo.devmodeler.conn.IConnection;
-import com.databazoo.devmodeler.conn.SQLOutputConfig;
-import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
-import com.databazoo.devmodeler.conn.SupportedElement;
+import com.databazoo.devmodeler.conn.*;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.Menu;
@@ -23,12 +18,8 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -278,7 +269,7 @@ public class DB implements IModelElement {
 						Menu.L_REARRANGE_ITEMS,
 						Theme.getSmallIcon(Theme.ICO_ORGANIZE),
 						80,
-						new String[]{Menu.L_REARRANGE_ALPHABETICAL, Menu.L_REARRANGE_CIRCULAR, Menu.L_REARRANGE_FORCE_BASED, Menu.L_REARRANGE_EXPLODE}
+						new String[]{Menu.L_REARRANGE_ALPHABETICAL, Menu.L_REARRANGE_CIRCULAR, /*Menu.L_REARRANGE_FORCE_BASED,*/ Menu.L_REARRANGE_NATURAL, "|", Menu.L_REARRANGE_EXPLODE, Menu.L_REARRANGE_IMPLODE}
 						);
 		if(getProject().getType() != Project.TYPE_ABSTRACT) {
 			if(getConnection().isSupported(SupportedElement.VACUUM)){

@@ -1,6 +1,15 @@
 
 package com.databazoo.devmodeler.tools.organizer;
 
+import com.databazoo.components.UIConstants;
+import com.databazoo.components.elements.DraggableComponent;
+import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.window.ProgressWindow;
+import com.databazoo.devmodeler.model.*;
+import com.databazoo.devmodeler.model.reference.*;
+import com.databazoo.devmodeler.tools.Geometry;
+import com.databazoo.tools.Dbg;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,37 +18,42 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import com.databazoo.components.UIConstants;
-import com.databazoo.components.elements.DraggableComponent;
-import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.gui.window.ProgressWindow;
-import com.databazoo.devmodeler.model.Constraint;
-import com.databazoo.devmodeler.model.DB;
-import com.databazoo.devmodeler.model.Function;
-import com.databazoo.devmodeler.model.Inheritance;
-import com.databazoo.devmodeler.model.Relation;
-import com.databazoo.devmodeler.model.Schema;
-import com.databazoo.devmodeler.model.Sequence;
-import com.databazoo.devmodeler.model.Workspace;
-import com.databazoo.devmodeler.model.reference.FunctionReference;
-import com.databazoo.devmodeler.model.reference.IReferenceElement;
-import com.databazoo.devmodeler.model.reference.LineComponentReference;
-import com.databazoo.devmodeler.model.reference.RelationReference;
-import com.databazoo.devmodeler.model.reference.SchemaReference;
-import com.databazoo.devmodeler.tools.Geometry;
-import com.databazoo.tools.Dbg;
-
 /**
  * Implementation of Force-directed Layout (http://en.wikipedia.org/wiki/Force_directed_layout) of elements inside a schema.
  * @author bobus
  */
 class OrganizerForceDirected extends OrganizerAlphabetical {
-	private final static int RESISTANCE = 1500000;
-	private final static int GRAVITY = 15;
-	private final static int FORCE_LIMIT = 800;
-	private final static int CYCLES = UIConstants.isPerformant() ? 100 : 60;
-	private final static int[] EXPLOSIVE_CYCLES = new int[]{10};
-	private final static int SNAPPINESS = 1;
+
+    /**
+     * Resistance between objects - "push force"
+     */
+    private final static int RESISTANCE = 1500000;
+
+    /**
+     * Gravity between objects - "pull force"
+     */
+    private final static int GRAVITY = 15;
+
+    /**
+     * Force limit per cycle. Required so that close objects do not get sling-shot too far.
+     */
+    private final static int FORCE_LIMIT = 800;
+
+    /**
+     * Overall number of cycles
+     */
+    private final static int CYCLES = UIConstants.isPerformant() ? 100 : 60;
+
+    /**
+     * Explosive cycles help unwind some very messy graphs. For example, 10th and 20th pull-push cycle can be exploded
+     * to provide more space between object, thus removing some possibly blocked paths.
+     */
+    private final static int[] EXPLOSIVE_CYCLES = new int[]{10};
+
+    /**
+     * Snap to grid distance. Larger number means larger grid.
+     */
+    private final static int SNAPPINESS = 1;
 
 	private final Map<DraggableComponent, Point> forces = new HashMap<>();
 	private Point lLoc;
@@ -149,7 +163,7 @@ class OrganizerForceDirected extends OrganizerAlphabetical {
 		}
 	}
 
-	private void organizeSchema(Object schema) {
+	private void organizeSchema(DraggableComponent schema) {
 		List<DraggableComponent> elems = new ArrayList<>();
 		if(schema instanceof Schema) {
 			Schema scLocal = (Schema) schema;
@@ -250,7 +264,7 @@ class OrganizerForceDirected extends OrganizerAlphabetical {
 				}
 			}
 		}
-		((DraggableComponent)schema).checkSize();
+		schema.checkSize();
 	}
 
 	private void applyElementVector(DraggableComponent elem){

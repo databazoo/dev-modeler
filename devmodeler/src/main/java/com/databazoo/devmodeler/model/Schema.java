@@ -7,12 +7,8 @@ import com.databazoo.devmodeler.conn.SQLOutputConfig;
 import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.gui.DBTree;
-import com.databazoo.devmodeler.gui.DesignGUI;
+import com.databazoo.devmodeler.gui.*;
 import com.databazoo.devmodeler.gui.Menu;
-import com.databazoo.devmodeler.gui.Navigator;
-import com.databazoo.devmodeler.gui.RightClickMenu;
-import com.databazoo.devmodeler.gui.SearchPanel;
 import com.databazoo.devmodeler.gui.window.datawindow.DataWindow;
 import com.databazoo.devmodeler.model.reference.SchemaReference;
 import com.databazoo.devmodeler.project.Project;
@@ -26,23 +22,11 @@ import com.databazoo.tools.Usage;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_COPY;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_DROP;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_EDIT;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_MAINTAIN;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_REARRANGE;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_SOURCE;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_WORKSPACE;
-import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_DOUBLE_CLICKED;
-import static com.databazoo.devmodeler.gui.UsageElement.WS_REMOVE;
+import static com.databazoo.devmodeler.gui.UsageElement.*;
 
 /**
  * Model representation of schemata.
@@ -238,7 +222,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 					Usage.log(SCHEMA_CONTEXT_REARRANGE);
 					final Project p = Project.getCurrent();
 					final Organizer organizer = OrganizerFactory.get(selectedValue);
-                    int cycles = selectedValue.equals(Menu.L_REARRANGE_FORCE_BASED) ? 15 : 1;
+                    int cycles = selectedValue.equals(Menu.L_REARRANGE_FORCE_BASED) || selectedValue.equals(Menu.L_REARRANGE_NATURAL) ? 15 : 1;
                     if(p.getCurrentWorkspace() == null) {
 						organizer.organize(Schema.this, cycles);
                     }else{
@@ -287,7 +271,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 					Menu.L_REARRANGE_ITEMS,
 					Theme.getSmallIcon(Theme.ICO_ORGANIZE),
 					80,
-					new String[]{Menu.L_REARRANGE_ALPHABETICAL, Menu.L_REARRANGE_CIRCULAR, Menu.L_REARRANGE_FORCE_BASED, Menu.L_REARRANGE_EXPLODE, Menu.L_REARRANGE_IMPLODE}
+					new String[]{Menu.L_REARRANGE_ALPHABETICAL, Menu.L_REARRANGE_CIRCULAR, /*Menu.L_REARRANGE_FORCE_BASED,*/ Menu.L_REARRANGE_NATURAL, "|", Menu.L_REARRANGE_EXPLODE, Menu.L_REARRANGE_IMPLODE}
 					);
 		if(getDB().getProject().getType() != Project.TYPE_ABSTRACT) {
 			if(conn.isSupported(SupportedElement.VACUUM)){
