@@ -1,12 +1,12 @@
 
 package com.databazoo.components.elements;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.tools.Geometry;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Line-type components.
@@ -239,4 +239,18 @@ public abstract class LineComponent extends EnvironmentComponent {
 		addMouseMotionListener(new DraggableComponentMouseListener());
 	}
 
+    /**
+     * Get component center location on canvas
+     *
+     * @return component center location on canvas
+     */
+	public Point getAbsCenter() {
+		Point location = getLocation();
+		int tableSizeCorrection = 0;
+		if(getHeight() > getWidth()) {
+			int initialCorrection = (rel1.getHeight() - rel2.getHeight()) / 4;
+			tableSizeCorrection = initialCorrection * (rel1.getHeight() < rel2.getHeight() || rel1.getAbsCenter().y < rel2.getAbsCenter().y ? 1 : -1);
+		}
+		return new Point(location.x + getWidth() / 2, location.y + getHeight() / 2 + tableSizeCorrection);
+    }
 }

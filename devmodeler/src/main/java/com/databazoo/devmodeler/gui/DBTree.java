@@ -1,20 +1,6 @@
 
 package com.databazoo.devmodeler.gui;
 
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import com.databazoo.components.WizardTree;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponent;
@@ -32,6 +18,20 @@ import com.databazoo.devmodeler.model.reference.DraggableComponentReference;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Database tree that is visible to the left of Canvas. Implements object selection and search (filtering).
@@ -344,6 +344,7 @@ public class DBTree extends WizardTree {
 							Menu.redrawRightMenu();
 							Canvas.instance.drawProject(true);
 							Navigator.instance.checkSize();
+							HotMenu.instance.checkSize();
 
 							animationDelay = 500;
 						}

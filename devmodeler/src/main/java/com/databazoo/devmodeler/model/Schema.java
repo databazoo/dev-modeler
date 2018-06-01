@@ -100,7 +100,8 @@ public class Schema extends DraggableComponent implements IModelElement {
 	@Override
 	public void clicked(){
 		if(!isSelected){
-			if(getDB().getConnection().isSupported(SupportedElement.SCHEMA)){
+			if(Canvas.instance.getSelectedElement() == null &&
+					getDB().getConnection().isSupported(SupportedElement.SCHEMA)){
 				setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 				scrollIntoView();
 				Canvas.instance.setSelectedElement(this);
@@ -434,6 +435,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 			setToolTipText(getDescr());
 		}
 		Navigator.instance.checkSchemata();
+		HotMenu.instance.checkSize();
 	}
 
 	@Override
