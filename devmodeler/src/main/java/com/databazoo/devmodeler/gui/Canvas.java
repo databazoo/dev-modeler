@@ -1,14 +1,5 @@
 package com.databazoo.devmodeler.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponent;
@@ -17,20 +8,8 @@ import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.view.ViewMode;
-import com.databazoo.devmodeler.model.Attribute;
-import com.databazoo.devmodeler.model.Constraint;
-import com.databazoo.devmodeler.model.DB;
-import com.databazoo.devmodeler.model.Function;
-import com.databazoo.devmodeler.model.IModelElement;
-import com.databazoo.devmodeler.model.Index;
-import com.databazoo.devmodeler.model.Inheritance;
+import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.model.Package;
-import com.databazoo.devmodeler.model.Relation;
-import com.databazoo.devmodeler.model.Schema;
-import com.databazoo.devmodeler.model.Sequence;
-import com.databazoo.devmodeler.model.Trigger;
-import com.databazoo.devmodeler.model.View;
-import com.databazoo.devmodeler.model.Workspace;
 import com.databazoo.devmodeler.model.reference.DraggableComponentReference;
 import com.databazoo.devmodeler.model.reference.LineComponentReference;
 import com.databazoo.devmodeler.model.reference.RelationReference;
@@ -40,6 +19,15 @@ import com.databazoo.devmodeler.tools.Geometry;
 import com.databazoo.devmodeler.tools.MathUtils;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -197,6 +185,7 @@ public class Canvas extends ClickableComponent {
 			overview.setLocation(hVal + scrollPane.getSize().width - overview.getSize().width - scrollPane.getVerticalScrollBar().getSize().width - 15,
 					vVal + scrollPane.getSize().height - overview.getSize().height - scrollPane.getHorizontalScrollBar().getSize().height - 15);
 		}
+		HotMenu.instance.checkSize();
 	}
 
 	public void scrollToCenter() {
@@ -254,6 +243,7 @@ public class Canvas extends ClickableComponent {
 				}
 				drawInfoPanel();
 				drawOverview();
+				drawHotMenu();
 				repaint();
 			} else {
 				drawInfoPanel();
@@ -930,9 +920,10 @@ public class Canvas extends ClickableComponent {
 			overview.checkSize();
 			overview.repaint();
 		}
+        Schedule.inWorker(Schedule.CLICK_DELAY, HotMenu.instance::checkSize);
 	}
 
-	IModelElement getSelectedElement() {
+	public IModelElement getSelectedElement() {
 		return selectedElem;
 	}
 
@@ -1058,6 +1049,11 @@ public class Canvas extends ClickableComponent {
 			setComponentZOrder(overview, 0);
 		}
 	}
+
+	private void drawHotMenu() {
+        add(HotMenu.instance);
+        setComponentZOrder(HotMenu.instance, 0);
+    }
 
 	public boolean checkZoomBeforeProjectClose() {
 		if (!isDefaultZoom()) {
