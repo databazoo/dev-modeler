@@ -7,16 +7,9 @@ import com.databazoo.components.elements.LineComponent;
 import com.databazoo.components.text.SelectableText;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.devmodeler.conn.DBCommException;
-import com.databazoo.devmodeler.conn.IConnection;
-import com.databazoo.devmodeler.conn.SQLOutputConfig;
-import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
-import com.databazoo.devmodeler.conn.SupportedElement;
+import com.databazoo.devmodeler.conn.*;
 import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.gui.DBTree;
-import com.databazoo.devmodeler.gui.DesignGUI;
-import com.databazoo.devmodeler.gui.RightClickMenu;
-import com.databazoo.devmodeler.gui.SearchPanel;
+import com.databazoo.devmodeler.gui.*;
 import com.databazoo.devmodeler.gui.window.datawindow.DataWindow;
 import com.databazoo.devmodeler.model.reference.FunctionReference;
 import com.databazoo.devmodeler.project.Project;
@@ -30,23 +23,12 @@ import com.databazoo.tools.Usage;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.databazoo.devmodeler.gui.UsageElement.COPY_FULL;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_CONTEXT_COPY;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_CONTEXT_DROP;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_CONTEXT_EDIT;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_CONTEXT_EXEC;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_CONTEXT_SOURCE;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_CONTEXT_WORKSPACE;
-import static com.databazoo.devmodeler.gui.UsageElement.FUNCTION_DOUBLE_CLICKED;
-import static com.databazoo.devmodeler.gui.UsageElement.WS_REMOVE;
+import static com.databazoo.devmodeler.gui.UsageElement.*;
 
 /**
  * Model representation of procedures.
@@ -58,7 +40,7 @@ public class Function extends DraggableComponent implements IModelElement {
 	public static final String L_CLASS = "Function";
 	public static final Icon ico16 = Theme.getSmallIcon(Theme.ICO_FUNCTION);
 	public static final Color BG_COLOR = Color.decode("#6FCC66");
-	static final String TRIGGER = "trigger";
+	public static final String TRIGGER = "trigger";
 
 	public static Function lastCreatedTriggerFunction;
 
@@ -395,10 +377,10 @@ public class Function extends DraggableComponent implements IModelElement {
 		if(!behavior.args.isEmpty()){
 			if(displayName.length() > 40){
 				int size = behavior.args.split(",").length;
-				String attrs = "";
+				StringBuilder attrs = new StringBuilder();
 				String comma = "";
 				for(int i=1; i<=size; i++){
-					attrs += comma + "$"+i;
+					attrs.append(comma).append("$").append(i);
 					comma = ", ";
 				}
 				displayName = behavior.name+"("+attrs+")";

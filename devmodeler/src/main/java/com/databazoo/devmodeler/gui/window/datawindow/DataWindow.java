@@ -1,22 +1,5 @@
 package com.databazoo.devmodeler.gui.window.datawindow;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.databazoo.components.GCFrameWithObservers;
 import com.databazoo.components.RotatedTabbedPane;
 import com.databazoo.components.combo.IconableComboBox;
@@ -26,17 +9,10 @@ import com.databazoo.components.icons.PlainColorIcon;
 import com.databazoo.components.textInput.FormattedClickableTextField;
 import com.databazoo.components.textInput.LineNumberRowHeader;
 import com.databazoo.components.textInput.QueryErrorPositionObserver;
-import com.databazoo.devmodeler.project.RecentQuery;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.devmodeler.conn.ConnectionUtils;
-import com.databazoo.devmodeler.conn.DBCommException;
-import com.databazoo.devmodeler.conn.IColoredConnection;
-import com.databazoo.devmodeler.conn.IConnection;
-import com.databazoo.devmodeler.conn.IConnectionQuery;
-import com.databazoo.devmodeler.conn.Result;
-import com.databazoo.devmodeler.conn.SupportedElement;
+import com.databazoo.devmodeler.conn.*;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.model.DB;
@@ -44,6 +20,7 @@ import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.devmodeler.model.View;
 import com.databazoo.devmodeler.plugincontrol.DataWindowPluginManager;
 import com.databazoo.devmodeler.project.Project;
+import com.databazoo.devmodeler.project.RecentQuery;
 import com.databazoo.devmodeler.tools.formatter.FormatterSQL;
 import com.databazoo.devmodeler.wizards.DiffWizard;
 import com.databazoo.tools.Dbg;
@@ -52,6 +29,15 @@ import net.miginfocom.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import plugins.api.IDataWindowResult;
 import plugins.api.IModelTable;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Data window.
@@ -125,10 +111,19 @@ public class DataWindow extends DataWindowOutputMessages {
 		return this;
 	}
 
+	/**
+	 * Open an empty query window
+	 */
 	public void drawQueryWindow(){
 		draw("SQL query on %database_name% - %connection_name%");
 	}
 
+	/**
+	 * Open a query window with given query.
+	 *
+	 * @param sql given query
+	 * @param db current database
+	 */
 	public void drawQueryWindow(String sql, DB db) {
 		database = db;
 		connection = ConnectionUtils.getCurrent(database.getName());
@@ -136,11 +131,24 @@ public class DataWindow extends DataWindowOutputMessages {
 		queryInput.setQuery(sql);
 	}
 
+	/**
+	 * Open a query window with given query.
+	 *
+	 * @param sql given query
+	 * @param db current database
+	 * @param conn current connection
+	 */
 	public void drawQueryWindow(String sql, DB db, IConnection conn) {
 		connection = conn;
 		drawQueryWindow(sql, db);
 	}
 
+	/**
+	 * Open a query window with a SELECT-JOIN on given constraint.
+	 * Query is automatically executed on window open.
+	 *
+	 * @param con selected constraint
+	 */
 	public void drawConstraintData(Constraint con) {
 		this.rel = (Relation)con.getRel1();
 		database = rel.getDB();
@@ -153,6 +161,25 @@ public class DataWindow extends DataWindowOutputMessages {
 		cacheFKsForColumns();
 	}
 
+	/**
+	 * Open a query window with a SELECT on given view.
+	 * Query is automatically executed on window open.
+	 *
+	 * @param view selected view
+	 */
+	public void drawViewData(View view) {
+		drawQueryWindow(connection.getQuerySelect(view, where, "", Settings.getInt(Settings.L_DATA_DEFAULT_LIMIT)), view.getDB());
+		runQuery();
+
+	}
+
+	/**
+	 * Open a query window with a SELECT on given table.
+	 * Query is automatically executed on window open.
+	 *
+	 * @param rel selected table
+	 * @param desc ORDER BY ... DESC?
+	 */
 	public void drawRelationData(Relation rel, boolean desc) {
 		this.rel = rel;
 		database = rel.getDB();
@@ -163,6 +190,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		runQuery();
 		cacheFKsForColumns();
 	}
+
 	void drawRelationData(IConnection conn, Relation rel, boolean desc) {
 		this.rel = rel;
 		database = rel.getDB();
@@ -173,6 +201,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		runQuery();
 		cacheFKsForColumns();
 	}
+
 	private void prepareRelationData(Relation rel, boolean desc) {
 		String relName = rel.getFullName();
 		draw(relName+" in %database_name% - %connection_name%");
@@ -183,14 +212,10 @@ public class DataWindow extends DataWindowOutputMessages {
 		}
 		queryInput.setQuery(connection.getQuerySelect(rel, where, order, limit));
 	}
+
 	public DataWindow setWhere(String where) {
 		this.where = where;
 		return this;
-	}
-	public void drawViewData(View view) {
-		drawQueryWindow(connection.getQuerySelect(view, where, "", Settings.getInt(Settings.L_DATA_DEFAULT_LIMIT)), view.getDB());
-		runQuery();
-
 	}
 
 	private void draw(String fullName) {

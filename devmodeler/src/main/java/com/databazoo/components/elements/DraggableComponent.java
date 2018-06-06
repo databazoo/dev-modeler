@@ -1,15 +1,11 @@
 
 package com.databazoo.components.elements;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.DBTree;
+import com.databazoo.devmodeler.gui.HotMenu;
 import com.databazoo.devmodeler.model.Attribute;
 import com.databazoo.devmodeler.model.DB;
 import com.databazoo.devmodeler.model.IModelElement;
@@ -19,6 +15,11 @@ import com.databazoo.devmodeler.model.reference.SchemaReference;
 import com.databazoo.devmodeler.tools.Geometry;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  * Makes it possible to create a JComponent that can be clicked and dragged.
@@ -164,6 +165,8 @@ public abstract class DraggableComponent extends EnvironmentComponent {
 			public void mouseDragged(MouseEvent e) {
 				if(isSelected || !Settings.getBool(Settings.L_DND_DRAG_ONLY_SELECTED) || DraggableComponent.this instanceof SchemaReference)
 				{
+					HotMenu.instance.setVisible(false);
+
 					Point parentOnScreen = getParent().getLocationOnScreen();
 					Point mouseOnScreen = e.getLocationOnScreen();
 
