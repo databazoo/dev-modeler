@@ -71,7 +71,7 @@ public class Menu extends JPanel {
     private static final String L_IMPORT = "Import";
 
     private static final int SIDE_MENU_WIDTH = 390;
-    private static final int COMPONENT_HEIGHT = 28;
+    static final int COMPONENT_HEIGHT = 28;
 
     private static final Menu INSTANCE = new Menu();
 
