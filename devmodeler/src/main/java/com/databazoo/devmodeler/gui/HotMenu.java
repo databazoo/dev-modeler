@@ -9,7 +9,6 @@ import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.model.Package;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.tools.Geometry;
-import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 import com.databazoo.tools.Usage;
 
@@ -67,9 +66,7 @@ public final class HotMenu extends JComponent {
             }
             add(Buttons.COPY);
 
-            int componentCount = getComponentCount();
-            Dbg.info("Buttons: " + componentCount);
-            setSize(new Dimension(45 * componentCount, COMPONENT_HEIGHT));
+            setSize(new Dimension(45 * getComponentCount(), COMPONENT_HEIGHT));
             setVisible(true);
 
             checkLocation(element);
