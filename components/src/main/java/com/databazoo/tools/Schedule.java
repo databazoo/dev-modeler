@@ -1,13 +1,9 @@
 package com.databazoo.tools;
 
-import javax.swing.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import com.databazoo.components.UIConstants;
+
+import javax.swing.*;
+import java.util.concurrent.*;
 
 /**
  * Timed and threaded tasks factory.
@@ -97,7 +93,8 @@ public interface Schedule {
         SERVER_ADMIN_TABLE_EDIT,
         SETTINGS_SAVE,
         TEXT_FIELD_KEY_LISTENER,
-        USAGE_LOG_REPEATED;
+        USAGE_LOG_REPEATED,
+        HOT_MENU_RECHECK;
 
         private Timer timeout;
     }

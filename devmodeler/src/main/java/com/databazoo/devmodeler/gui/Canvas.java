@@ -920,7 +920,7 @@ public class Canvas extends ClickableComponent {
 			overview.checkSize();
 			overview.repaint();
 		}
-        Schedule.inWorker(Schedule.CLICK_DELAY, HotMenu.instance::checkSize);
+        HotMenu.instance.checkSize();
 	}
 
 	public IModelElement getSelectedElement() {
