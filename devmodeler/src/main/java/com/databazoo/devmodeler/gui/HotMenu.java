@@ -9,6 +9,8 @@ import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.model.Package;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.tools.Geometry;
+import com.databazoo.tools.Dbg;
+import com.databazoo.tools.Schedule;
 import com.databazoo.tools.Usage;
 
 import javax.swing.*;
@@ -31,44 +33,47 @@ public final class HotMenu extends JComponent {
     }
 
     public void checkSize() {
-        if (Project.getCurrent() == null || Project.getCurrent().getCurrentWorkspace() != null) {
+        Schedule.reInvokeInEDT(Schedule.Named.HOT_MENU_RECHECK, Schedule.CLICK_DELAY, () -> {
             setVisible(false);
-            return;
-        }
-
-        removeAll();
-        IModelElement element = Canvas.instance.getSelectedElement();
-        if (element instanceof Relation ||
-                element instanceof View ||
-                element instanceof Constraint) {
-            add(Buttons.properties);
-            add(Buttons.data);
-
-        } else if (element instanceof Function) {
-            add(Buttons.properties);
-
-            Buttons.function = (Function) element;
-            if (Project.getCurrent().getType() != Project.TYPE_ABSTRACT &&
-                    !Buttons.function.getBehavior().getRetType().equals(Function.TRIGGER)) {
-                add(Buttons.run);
+            if (Project.getCurrent() == null || Project.getCurrent().getCurrentWorkspace() != null) {
+                return;
             }
 
-        } else if (element instanceof Package ||
-                //element instanceof Schema ||
-                element instanceof Trigger ||
-                element instanceof Sequence) {
-            add(Buttons.properties);
+            removeAll();
+            IModelElement element = Canvas.instance.getSelectedElement();
+            if (element instanceof Relation ||
+                    element instanceof View ||
+                    element instanceof Constraint) {
+                add(Buttons.PROPERTIES);
+                add(Buttons.DATA);
 
-        } else {
-            setVisible(false);
-            return;
-        }
-        add(Buttons.copy);
+            } else if (element instanceof Function) {
+                add(Buttons.PROPERTIES);
 
-        setSize(new Dimension(45 * getComponentCount(), COMPONENT_HEIGHT));
-        setVisible(true);
+                Buttons.function = (Function) element;
+                if (Project.getCurrent().getType() != Project.TYPE_ABSTRACT &&
+                        !Buttons.function.getBehavior().getRetType().equals(Function.TRIGGER)) {
+                    add(Buttons.RUN);
+                }
 
-        checkLocation(element);
+            } else if (element instanceof Package ||
+                    //element instanceof Schema ||
+                    element instanceof Trigger ||
+                    element instanceof Sequence) {
+                add(Buttons.PROPERTIES);
+
+            } else {
+                return;
+            }
+            add(Buttons.COPY);
+
+            int componentCount = getComponentCount();
+            Dbg.info("Buttons: " + componentCount);
+            setSize(new Dimension(45 * componentCount, COMPONENT_HEIGHT));
+            setVisible(true);
+
+            checkLocation(element);
+        });
     }
 
     private void checkLocation(IModelElement element) {
@@ -88,10 +93,10 @@ public final class HotMenu extends JComponent {
     }
 
     private static class Buttons {
-        private static JButton properties;
-        private static JButton data;
-        private static JButton run;
-        private static JButton copy;
+        private static final JButton PROPERTIES = new JButton(Theme.getSmallIcon(Theme.ICO_EDIT));
+        private static final JButton DATA = new JButton(Theme.getSmallIcon(Theme.ICO_DATA));
+        private static final JButton RUN = new JButton(Theme.getSmallIcon(Theme.ICO_RUN));
+        private static final JButton COPY = new JButton(Theme.getSmallIcon(Theme.ICO_COPY));
 
         private static Function function;
 
@@ -103,45 +108,41 @@ public final class HotMenu extends JComponent {
         }
 
         private static void drawEditButton() {
-            properties = new JButton(Theme.getSmallIcon(Theme.ICO_EDIT));
-            properties.setToolTipText("Properties");
-            properties.addActionListener(e -> {
+            PROPERTIES.setToolTipText("Properties");
+            PROPERTIES.addActionListener(e -> {
                 Usage.log(LEFT_MENU_BTN_EDIT);
                 ViewMode viewOld = DesignGUI.getView();
                 DesignGUI.get().switchView(ViewMode.DESIGNER, false);
                 Canvas.instance.getSelectedElement().doubleClicked();
                 DesignGUI.get().switchView(viewOld, false);
             });
-            properties.setFocusable(false);
+            PROPERTIES.setFocusable(false);
         }
 
         private static void drawDataButton() {
-            data = new JButton(Theme.getSmallIcon(Theme.ICO_DATA));
-            data.setToolTipText("View data");
-            data.addActionListener(e -> {
+            DATA.setToolTipText("View data");
+            DATA.addActionListener(e -> {
                 Usage.log(LEFT_MENU_BTN_DATA);
                 ViewMode viewOld = DesignGUI.getView();
                 DesignGUI.get().switchView(ViewMode.DATA, false);
                 Canvas.instance.getSelectedElement().doubleClicked();
                 DesignGUI.get().switchView(viewOld, false);
             });
-            data.setFocusable(false);
+            DATA.setFocusable(false);
         }
 
         private static void drawRunButton() {
-            run = new JButton(Theme.getSmallIcon(Theme.ICO_RUN));
-            run.setToolTipText("Run");
-            run.addActionListener(e -> DataWindow.get().drawQueryWindow(Project.getCurrent().getCurrentConn().getQueryExecFunction(function), Project.getCurrDB()));
-            run.setFocusable(false);
+            RUN.setToolTipText("Run");
+            RUN.addActionListener(e -> DataWindow.get().drawQueryWindow(Project.getCurrent().getCurrentConn().getQueryExecFunction(function), Project.getCurrDB()));
+            RUN.setFocusable(false);
         }
 
         private static void drawCopyButton() {
-            copy = new JButton(Theme.getSmallIcon(Theme.ICO_COPY));
-            copy.setToolTipText("Copy name to clipboard");
-            copy.addActionListener(e -> {
+            COPY.setToolTipText("Copy name to clipboard");
+            COPY.addActionListener(e -> {
                 DesignGUI.toClipboard(Canvas.instance.getSelectedElement().getName());
             });
-            copy.setFocusable(false);
+            COPY.setFocusable(false);
         }
     }
 }
