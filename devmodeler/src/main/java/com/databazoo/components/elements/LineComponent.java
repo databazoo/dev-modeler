@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  * @author bobus
  */
 public abstract class LineComponent extends EnvironmentComponent {
-	protected static final int CLICK_TOLERANCE = 15;
+	protected static final int CLICK_TOLERANCE = 16;
 	protected static final int LEFT_TOP_RIGHT_BOTTOM = 1;
 	protected static final int LEFT_BOTTOM_RIGHT_TOP = 2;
 	protected static final int RIGHT_TOP_LEFT_BOTTOM = 3;
@@ -246,11 +246,32 @@ public abstract class LineComponent extends EnvironmentComponent {
      */
 	public Point getAbsCenter() {
 		Point location = getLocation();
-		int tableSizeCorrection = 0;
-		if(getHeight() > getWidth()) {
-			int initialCorrection = (rel1.getHeight() - rel2.getHeight()) / 4;
-			tableSizeCorrection = initialCorrection * (rel1.getHeight() < rel2.getHeight() || rel1.getAbsCenter().y < rel2.getAbsCenter().y ? 1 : -1);
+		Point tableSizeCorrection = new Point(0, 0);
+
+		int lineComponentHeight = getHeight();
+		int lineComponentWidth = getWidth();
+
+		if(lineComponentHeight * 2 > lineComponentWidth) {
+
+			DraggableComponent upperComponent, lowerComponent;
+
+			if(rel1.getAbsCenter().y < rel2.getAbsCenter().y) {
+				upperComponent = rel1;
+				lowerComponent = rel2;
+			} else {
+				upperComponent = rel2;
+				lowerComponent = rel1;
+			}
+
+			int upperHeight = upperComponent.getHeight();
+			int lowerHeight = lowerComponent.getHeight();
+
+			tableSizeCorrection.y = (upperHeight - lowerHeight) / 4;
+			tableSizeCorrection.x = tableSizeCorrection.y * (lineComponentWidth - CLICK_TOLERANCE) / (lineComponentHeight - CLICK_TOLERANCE) * (isFlipped ? -1 : 1);
 		}
-		return new Point(location.x + getWidth() / 2, location.y + getHeight() / 2 + tableSizeCorrection);
+		return new Point(
+				location.x + lineComponentWidth / 2 + tableSizeCorrection.x,
+				location.y + lineComponentHeight / 2 + tableSizeCorrection.y
+		);
     }
 }
