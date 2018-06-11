@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  * @author bobus
  */
 public abstract class LineComponent extends EnvironmentComponent {
-	protected static final int CLICK_TOLERANCE = 16;
+	protected static final int CLICK_TOLERANCE = 15;
 	protected static final int LEFT_TOP_RIGHT_BOTTOM = 1;
 	protected static final int LEFT_BOTTOM_RIGHT_TOP = 2;
 	protected static final int RIGHT_TOP_LEFT_BOTTOM = 3;
