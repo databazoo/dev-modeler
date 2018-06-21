@@ -1,15 +1,15 @@
 package com.databazoo.devmodeler.gui.window;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.devmodeler.DevModeler;
 import com.databazoo.tools.Dbg;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Initial splash window.
@@ -27,7 +27,12 @@ public class Splash extends JWindow {
 
     public static synchronized Splash get() {
         if (instance == null) {
-            instance = new Splash();
+            try {
+                SwingUtilities.invokeAndWait(() -> instance = new Splash());
+            } catch (InterruptedException | InvocationTargetException e) {
+                Dbg.fixme("Splash creation interrupted", e);
+                throw new IllegalStateException("Splash creation interrupted", e);
+            }
         }
         return instance;
     }

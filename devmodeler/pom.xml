@@ -144,6 +144,12 @@
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.insubstantial/substance -->
+        <dependency>
+            <groupId>com.github.insubstantial</groupId>
+            <artifactId>substance</artifactId>
+            <version>7.3</version>
+        </dependency>
 
         <dependency>
             <groupId>org.swinglabs.swingx</groupId>

@@ -1,18 +1,5 @@
 package com.databazoo.devmodeler.gui;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.containers.VerticalContainer;
@@ -29,6 +16,15 @@ import com.databazoo.devmodeler.gui.window.Splash;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Main GUI controller.
@@ -47,6 +43,9 @@ public class DesignGUI {
 	public static DesignGUI get(){
 		if(instance == null){
 			instance = new DesignGUI();
+			if(!GCFrame.SHOW_GUI) {
+				Dbg.info("Creating GUI instance in silent mode");
+			}
 		}
 		return instance;
 	}
@@ -78,6 +77,15 @@ public class DesignGUI {
 		if(UIConstants.isRetina()){
 			return;
 		}
+		/*Dbg.info(UIConstants.getJREVersion());
+		if(UIConstants.getJREVersion().startsWith("1.")) {
+			try {
+				UIManager.setLookAndFeel(new SubstanceLAF());
+				return;
+			} catch (UnsupportedLookAndFeelException e) {
+				Dbg.fixme("Switching to SubstanceLAF failed, trying Nimbus.", e);
+			}
+		}*/
 
 		boolean found = false;
 		try {

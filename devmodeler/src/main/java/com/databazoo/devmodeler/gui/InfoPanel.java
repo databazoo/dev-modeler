@@ -11,6 +11,7 @@ import com.databazoo.tools.Schedule;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,47 +34,44 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 
 	@Override
 	public synchronized int write(String message) {
-		InfoPanelLabel label = new InfoPanelLabel(message, Color.BLACK);
-		labels.add(label);
-		drawLabels();
-
-		return label.UID;
+		return createLabel(message, Color.BLACK);
 	}
 
 	@Override
 	public synchronized int writeGray(String message) {
-		InfoPanelLabel label = new InfoPanelLabel(message, UIConstants.COLOR_GRAY);
-		labels.add(label);
+		return createLabel(message, UIConstants.COLOR_GRAY);
+	}
+
+	private int createLabel(String message, Color colorGray) {
+		final InfoPanelLabel[] label = new InfoPanelLabel[1];
+		if (!SwingUtilities.isEventDispatchThread()) {
+			try {
+				SwingUtilities.invokeAndWait(() -> label[0] = new InfoPanelLabel(message, colorGray));
+			} catch (InterruptedException | InvocationTargetException e) {
+				throw new IllegalStateException("Label creation failed", e);
+			}
+		} else {
+			label[0] = new InfoPanelLabel(message, colorGray);
+		}
+		labels.add(label[0]);
 		drawLabels();
 
-		return label.UID;
+		return label[0].UID;
 	}
 
 	@Override
 	public synchronized int writeGreen(String message) {
-		InfoPanelLabel label = new InfoPanelLabel(message, UIConstants.COLOR_GREEN);
-		labels.add(label);
-		drawLabels();
-
-		return label.UID;
+		return createLabel(message, UIConstants.COLOR_GREEN);
 	}
 
 	@Override
 	public synchronized int writeRed(String message) {
-		InfoPanelLabel label = new InfoPanelLabel(message, UIConstants.COLOR_RED);
-		labels.add(label);
-		drawLabels();
-
-		return label.UID;
+		return createLabel(message, UIConstants.COLOR_RED);
 	}
 
 	@Override
 	public synchronized int writeBlue(String message) {
-		InfoPanelLabel label = new InfoPanelLabel(message, UIConstants.COLOR_BLUE);
-		labels.add(label);
-		drawLabels();
-
-		return label.UID;
+		return createLabel(message, UIConstants.COLOR_BLUE);
 	}
 
 	@Override
