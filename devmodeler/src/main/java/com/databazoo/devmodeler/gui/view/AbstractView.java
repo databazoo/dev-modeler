@@ -1,6 +1,9 @@
 
 package com.databazoo.devmodeler.gui.view;
 
+import com.databazoo.components.RotatedTabbedPane;
+import com.databazoo.components.UIConstants;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -22,11 +25,13 @@ abstract class AbstractView extends JComponent {
 	final RotatedTabbedPane outputTabs = new RotatedTabbedPane(JTabbedPane.LEFT);
 
 	AbstractView() {
-		setLayout(new BorderLayout(0, 0));
-		setMinimumSize(new Dimension(0, 0));
-		drawWindow();
-		add(outputTabs);
-		setColWidths();
+		SwingUtilities.invokeLater(() -> {
+			setLayout(new BorderLayout(0, 0));
+			setMinimumSize(new Dimension(0, 0));
+			drawWindow();
+			add(outputTabs);
+			setColWidths();
+		});
 	}
 
 	protected abstract void drawWindow();
