@@ -344,7 +344,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 	void checkSize(DraggableComponent entity) {
 
 		// Expand left or top
-		if (entity.getLocation().x < Canvas.GRID_SIZE || entity.getLocation().y < Canvas.GRID_SIZE) {
+		if (Canvas.isDefaultZoom() && (entity.getLocation().x < Canvas.GRID_SIZE || entity.getLocation().y < Canvas.GRID_SIZE)) {
 			Point sizeDiff = Geometry.getSnappedPosition(
 					entity.getLocation().x < Canvas.GRID_SIZE ? Canvas.DEFAULT_ENTITY_WIDTH : 0,
 					entity.getLocation().y < Canvas.GRID_SIZE ? Canvas.DEFAULT_ENTITY_WIDTH : 0);
@@ -418,7 +418,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 		}
 
 		// Contract left and top margins
-		if((minX != RESIZE_INITIAL_VALUE && minX > Canvas.DEFAULT_ENTITY_WIDTH) || (minY != RESIZE_INITIAL_VALUE && minY > Canvas.DEFAULT_ENTITY_WIDTH)){
+		if (Canvas.isDefaultZoom() && ((minX != RESIZE_INITIAL_VALUE && minX > Canvas.DEFAULT_ENTITY_WIDTH) || (minY != RESIZE_INITIAL_VALUE && minY > Canvas.DEFAULT_ENTITY_WIDTH))) {
 			minX -= Canvas.GRID_SIZE;
 			minY -= Canvas.GRID_SIZE;
 			for(Component elem : getComponents()){
