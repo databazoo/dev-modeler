@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.gui.window.datawindow;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.table.BigTextTableCellEditor;
 import com.databazoo.components.table.EditableTable;
@@ -111,7 +112,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
                 btnExport.setEnabled(result.getRowCount() > 1 || !result.isNewLine(0));
                 if(result.getColumnCount() > 3){
                     outputData.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    Font nameFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+                    Font nameFont = FontFactory.getSans(Font.PLAIN, 14);
                     for(int i=0; i<result.getColumnCount(); i++)
                     {
                         TableColumn col = outputData.getColumnModel().getColumn(i);

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.config.Settings;
@@ -112,7 +113,7 @@ public class ExplainOperation extends DraggableComponent {
 			lab = new JLabel(indName);
 			lab.setToolTipText(indName);
 			lab.setAlignmentX(Component.CENTER_ALIGNMENT);
-			lab.setFont(new Font(Font.MONOSPACED, Font.ITALIC, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
+			lab.setFont(FontFactory.getMonospaced(Font.ITALIC, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
 			lab.setForeground(UIConstants.COLOR_GREEN);
 			add(lab);
 		}
@@ -120,7 +121,7 @@ public class ExplainOperation extends DraggableComponent {
 			lab = new JLabel(relName);
 			lab.setToolTipText(relName);
 			lab.setAlignmentX(Component.CENTER_ALIGNMENT);
-			lab.setFont(new Font(Font.MONOSPACED, Font.ITALIC, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
+			lab.setFont(FontFactory.getMonospaced(Font.ITALIC, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
 			lab.setForeground(UIConstants.COLOR_GREEN);
 			add(lab);
 		}

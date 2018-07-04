@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.model;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponentMouseListener;
@@ -423,7 +424,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 
 	public void checkSizeNoZoom() {
 		setSize(new Dimension(Canvas.DEFAULT_ENTITY_WIDTH - 7, Attribute.V_SIZE));
-		typeOffset = getSize().width - UIConstants.GRAPHICS.getFontMetrics(new Font(Font.SANS_SERIF, Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE))).stringWidth(getFullType()) - 1;
+		typeOffset = getSize().width - UIConstants.GRAPHICS.getFontMetrics(FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE))).stringWidth(getFullType()) - 1;
 	}
 
 	@Override

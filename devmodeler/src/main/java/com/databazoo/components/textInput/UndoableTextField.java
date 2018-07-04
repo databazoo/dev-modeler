@@ -1,6 +1,7 @@
 package com.databazoo.components.textInput;
 
 import com.databazoo.components.AutocompletePopupMenu;
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.GCFrameWithObservers;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
@@ -96,7 +97,7 @@ public class UndoableTextField extends JTextPane {
 		setText(text);
 		setKeyListeners();
 		if (monoFont) {
-			setFont(new Font(Font.MONOSPACED, Font.PLAIN, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
+			setFont(FontFactory.getMonospaced(Font.PLAIN, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
 		}
 		setCaretPosition(0);
 	}

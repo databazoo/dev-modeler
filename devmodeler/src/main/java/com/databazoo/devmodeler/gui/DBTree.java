@@ -1,6 +1,7 @@
 
 package com.databazoo.devmodeler.gui;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.WizardTree;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponent;
@@ -66,7 +67,7 @@ public class DBTree extends WizardTree {
 		super(null, 0, new ModelIconRenderer());
 		drawProjectName = true;
 		//setDragEnabled(true);
-		setFont(new Font(Font.SANS_SERIF, Font.PLAIN, Settings.getInt(Settings.L_FONT_TREE_SIZE)));
+		setFont(FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_TREE_SIZE)));
 		addTreeSelectionListener(new DBViewSelectionListener());
 		setExpandsSelectedPaths(true);
 		addMouseListener(new MouseAdapter(){

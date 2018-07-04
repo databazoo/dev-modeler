@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.model;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.components.text.SelectableText;
@@ -42,7 +43,7 @@ import static com.databazoo.devmodeler.model.Schema.RESIZE_INITIAL_VALUE;
 public class Package extends DraggableComponent implements IModelElement {
 	public static final String L_CLASS = "Package";
 	public static final Icon ico16 = Theme.getSmallIcon(Theme.ICO_SCHEMA);
-	private static final Font HEAD_FONT = new Font(Font.DIALOG, Font.BOLD + Font.ITALIC, 13);
+	private static final Font HEAD_FONT = FontFactory.getSans(Font.BOLD + Font.ITALIC, 13);
 
 	public final transient List<Function> functions = new ArrayList<>();
 

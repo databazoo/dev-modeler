@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
@@ -18,7 +19,7 @@ import com.databazoo.devmodeler.conn.Result;
  */
 public class LineNumberTableRowHeader extends JComponent {
 	private final transient Image img = Theme.getSmallIcon(Theme.ICO_SAVE).getImage();
-	private final Font headerFont = new Font(Font.MONOSPACED, Font.PLAIN, Settings.getInt(Settings.L_FONT_MONO_SIZE));
+	private final Font headerFont = FontFactory.getMonospaced(Font.PLAIN, Settings.getInt(Settings.L_FONT_MONO_SIZE));
 	private final FontMetrics fm = UIConstants.GRAPHICS.getFontMetrics(headerFont);
     private final JTable table;
     private final JScrollPane scrollPane;

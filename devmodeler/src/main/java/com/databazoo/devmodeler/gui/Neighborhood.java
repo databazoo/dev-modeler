@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.config.Settings;
@@ -29,7 +30,7 @@ import com.databazoo.tools.Usage;
  * @author bobus
  */
 public class Neighborhood extends JPanel {
-	private static final Font HEADER_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
+	private static final Font HEADER_FONT = FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
 	public static final Neighborhood instance = new Neighborhood();
 
 	private boolean firstDraw = true;

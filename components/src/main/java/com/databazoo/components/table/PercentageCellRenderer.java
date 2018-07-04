@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 
 /**
@@ -12,7 +13,7 @@ import com.databazoo.components.UIConstants;
 public class PercentageCellRenderer extends JProgressBar implements TableCellRenderer {
 
     private static final int FONT_SIZE = 10;
-    private static final Font HEADER_FONT = new Font(Font.DIALOG_INPUT, Font.BOLD, FONT_SIZE);
+    private static final Font HEADER_FONT = FontFactory.getMonospaced(Font.BOLD, FONT_SIZE);
     private static final FontMetrics METRICS = UIConstants.GRAPHICS.getFontMetrics(HEADER_FONT);
 
     private String textValue = "";

@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.RotatedTabbedPane;
 import com.databazoo.components.UIConstants;
 
@@ -14,7 +15,7 @@ import com.databazoo.components.UIConstants;
  * @author bobus
  */
 abstract class AbstractView extends JComponent {
-	private static final Font FILTER_FONT = new Font(Font.DIALOG, Font.BOLD + Font.ITALIC, 16);
+	private static final Font FILTER_FONT = FontFactory.getSans(Font.BOLD + Font.ITALIC, 16);
 
 	static final String L_ALL_DATABASES = "All databases";
 

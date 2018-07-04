@@ -1,6 +1,7 @@
 
 package com.databazoo.devmodeler.gui;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.combo.IconableComboBox;
 import com.databazoo.devmodeler.config.Settings;
@@ -625,7 +626,7 @@ public class Menu extends JPanel {
             JButton syncNowBtn = new JButton("sync now");
             syncNowBtn.setPreferredSize(new Dimension(SYNC_WIDTH, SYNC_BUTTON_HEIGHT));
             syncNowBtn.setFocusable(false);
-            syncNowBtn.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+            syncNowBtn.setFont(FontFactory.getSans(Font.PLAIN, 10));
             syncNowBtn.setMargin(new Insets(0, 0, 0, 0));
             syncNowBtn.addActionListener(e -> {
                 Usage.log(RIGHT_MENU_BTN_SYNC);
@@ -642,7 +643,7 @@ public class Menu extends JPanel {
             syncCheckBox.setSelected(Settings.getBool(Settings.L_SYNC_INITIAL_CHECKED) && !UIConstants.DEBUG);
             syncCheckBox.setPreferredSize(new Dimension(SYNC_WIDTH, SYNC_CHECKBOX_HEIGHT));
             syncCheckBox.setFocusable(false);
-            syncCheckBox.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+            syncCheckBox.setFont(FontFactory.getSans(Font.PLAIN, 10));
             syncCheckBox.addActionListener(e -> Usage.log(RIGHT_MENU_CHK_SYNC));
             return syncCheckBox;
         }

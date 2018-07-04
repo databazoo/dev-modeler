@@ -1,6 +1,7 @@
 
 package com.databazoo.devmodeler.model;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponentMouseListener;
@@ -55,7 +56,7 @@ public class Index extends EnvironmentComponent implements IModelElement {
 	public static final Icon ico16			= Theme.getSmallIcon(Theme.ICO_INDEX);
 	public static final Icon icoPkey16		= Theme.getSmallIcon(Theme.ICO_PRIMARY_KEY);
 	private static int NAME_FONT_SIZE 		= Settings.getInt(Settings.L_FONT_CANVAS_SIZE);
-	private static Font NAME_FONT			= new Font(Font.SANS_SERIF, Font.PLAIN, NAME_FONT_SIZE);
+	private static Font NAME_FONT			= FontFactory.getSans(Font.PLAIN, NAME_FONT_SIZE);
 
 	private static final String BTREE 		= "btree";
 
@@ -69,7 +70,7 @@ public class Index extends EnvironmentComponent implements IModelElement {
 
 	public static void checkFontSize(){
 		NAME_FONT_SIZE = Geometry.getZoomed(Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
-		NAME_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, NAME_FONT_SIZE);
+		NAME_FONT = FontFactory.getSans(Font.PLAIN, NAME_FONT_SIZE);
 	}
 
 	private Relation relation;

@@ -23,7 +23,7 @@ import com.databazoo.devmodeler.project.ProjectManager;
  */
 public class WizardTree extends JTree {
 
-    private static final Font HOLO_FONT = new Font(Font.SANS_SERIF, Font.BOLD+Font.ITALIC, 64);
+    private static final Font HOLO_FONT = FontFactory.getSans(Font.BOLD+Font.ITALIC, 64);
 	private static final Color HOLO_COLOR = Color.decode("#DCE4ED");
 	private static final FontMetrics HOLO_FM = UIConstants.GRAPHICS.getFontMetrics(HOLO_FONT);
 
@@ -121,7 +121,7 @@ public class WizardTree extends JTree {
 	private void draw(){
 		setOpaque(false);
 		scrollsOnExpand = false;
-		setFont(new Font(Font.SANS_SERIF, Font.PLAIN, Settings.getInt(Settings.L_FONT_TREE_SIZE)));
+		setFont(FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_TREE_SIZE)));
 		for (int i = 0; i < getRowCount(); i++) {
 			expandRow(i);
 		}

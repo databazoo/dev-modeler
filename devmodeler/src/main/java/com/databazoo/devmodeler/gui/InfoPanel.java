@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.gui;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.devmodeler.config.Config;
@@ -21,7 +22,7 @@ import java.util.List;
 class InfoPanel extends ClickableComponent implements IInfoPanel {
 
 	private final List<InfoPanelLabel> labels = new ArrayList<>();
-	private final Font nameFont = new Font(Font.SANS_SERIF, Font.ITALIC, Settings.getInt(Settings.L_FONT_TREE_SIZE));
+	private final Font nameFont = FontFactory.getSans(Font.ITALIC, Settings.getInt(Settings.L_FONT_TREE_SIZE));
 	private int maxLabelCount = Config.INFO_PANEL_MAX_LABELS;
 	private Timer hideTimer;
 

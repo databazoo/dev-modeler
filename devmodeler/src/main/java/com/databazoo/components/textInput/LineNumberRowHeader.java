@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.tools.Dbg;
@@ -17,7 +18,7 @@ import com.databazoo.tools.Dbg;
 public class LineNumberRowHeader extends JComponent {
 	private final FormattedTextField textField;
 	private final JScrollPane scrollPane;
-	private final Font headerFont = new Font(Font.MONOSPACED, Font.PLAIN, Settings.getInt(Settings.L_FONT_MONO_SIZE));
+	private final Font headerFont = FontFactory.getMonospaced(Font.PLAIN, Settings.getInt(Settings.L_FONT_MONO_SIZE));
 	private final FontMetrics fm = UIConstants.GRAPHICS.getFontMetrics(headerFont);
 
 	/**

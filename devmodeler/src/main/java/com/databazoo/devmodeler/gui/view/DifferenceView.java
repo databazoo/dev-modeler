@@ -54,7 +54,7 @@ import com.databazoo.tools.Schedule;
  */
 public class DifferenceView extends AbstractView {
     public static final DifferenceView instance = new DifferenceView();
-    //private static final Font AUTHOR_FONT = new Font(Font.DIALOG, Font.ITALIC, 12);
+    //private static final Font AUTHOR_FONT = FontFactory.getSans(Font.ITALIC, 12);
     private static final String L_ALL_ELEMS = "All elements (w/o data)";
     private static final String L_SCHEMATA = "Schemas";
     private static final String L_TABLES = "Tables";

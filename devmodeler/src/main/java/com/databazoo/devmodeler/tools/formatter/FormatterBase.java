@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.textInput.FormattedTextField;
 import com.databazoo.devmodeler.config.Settings;
@@ -120,7 +121,7 @@ public abstract class FormatterBase implements Serializable {
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
 		styleRegular = doc.addStyle("regular", def);
-		StyleConstants.setFontFamily(def, Font.MONOSPACED);
+		StyleConstants.setFontFamily(def, FontFactory.getMonospacedName());
 		StyleConstants.setFontSize(def, Settings.getInt(Settings.L_FONT_MONO_SIZE));
 		StyleConstants.setForeground(def, Color.BLACK);
 

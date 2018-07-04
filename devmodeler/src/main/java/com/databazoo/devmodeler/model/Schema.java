@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.model;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.IConnection;
@@ -59,7 +60,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 		behavior.dbName = parent.getName();
 		behavior.descr = descr;
 
-		setFont(new Font(Font.DIALOG, Font.BOLD + Font.ITALIC, 13));
+		setFont(FontFactory.getSans(Font.BOLD + Font.ITALIC, 13));
 
 		setToolTipText("Schema " + name);
 		draw();

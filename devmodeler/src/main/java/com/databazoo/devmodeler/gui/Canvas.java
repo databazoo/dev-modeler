@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.gui;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponent;
@@ -66,7 +67,7 @@ public class Canvas extends ClickableComponent {
 	private static volatile BasicStroke lineStrokeFull1, lineStrokeFull2, lineStrokeFull4, lineStrokeDashed;
 
 	private static double zoomFactor = 1.0;
-	private static Font titleFont = new Font(Font.SANS_SERIF, Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
+	private static Font titleFont = FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
 
 	public static synchronized boolean getZoomNotTooSmall() {
 		return zoomFactor > 0.55;
@@ -83,7 +84,7 @@ public class Canvas extends ClickableComponent {
 	static synchronized void setZoom(double val) {
 		zoomFactor = val;
 		ZOOMED_ENTITY_WIDTH = Geometry.getZoomed(DEFAULT_ENTITY_WIDTH);
-		titleFont = new Font(Font.SANS_SERIF, Font.PLAIN, Geometry.getZoomed(Settings.getInt(Settings.L_FONT_CANVAS_SIZE)));
+		titleFont = FontFactory.getSans(Font.PLAIN, Geometry.getZoomed(Settings.getInt(Settings.L_FONT_CANVAS_SIZE)));
 		updateStrokes();
 	}
 
