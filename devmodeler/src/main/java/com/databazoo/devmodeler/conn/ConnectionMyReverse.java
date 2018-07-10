@@ -263,54 +263,56 @@ abstract class ConnectionMyReverse extends ConnectionMyForward {
 
 	@Override
 	public void loadFunctions(DB db) throws DBCommException {
-		int log = DesignGUI.getInfoPanel().write("Loading functions of "+db.getFullName()+"...");
-		Query q = new Query("SELECT ROUTINE_SCHEMA, ROUTINE_NAME, DTD_IDENTIFIER AS DATA_TYPE, " +
-					"ROUTINE_DEFINITION, SECURITY_TYPE, " +
-					"CASE " +
-						"WHEN EXISTS " +
-						"(" +
-							"SELECT * " +
-							FROM_INFORMATION_SCHEMA_PARAMETERS +
-							"WHERE PARAMETER_MODE IS NOT NULL AND SPECIFIC_SCHEMA = r.ROUTINE_SCHEMA AND SPECIFIC_NAME = r.ROUTINE_NAME AND ROUTINE_TYPE = r.ROUTINE_TYPE AND PARAMETER_MODE != 'IN'" +
-						") " +
-						"THEN " +
-						"(" +
-							"SELECT group_concat(concat(PARAMETER_MODE, ' ', PARAMETER_NAME, ' ', DTD_IDENTIFIER) ORDER BY ORDINAL_POSITION) " +
-							FROM_INFORMATION_SCHEMA_PARAMETERS +
-							"WHERE PARAMETER_MODE IS NOT NULL AND SPECIFIC_SCHEMA = r.ROUTINE_SCHEMA AND SPECIFIC_NAME = r.ROUTINE_NAME AND ROUTINE_TYPE = r.ROUTINE_TYPE" +
-						") " +
-						"ELSE " +
-						"(" +
-							"SELECT group_concat(concat(PARAMETER_NAME, ' ', DTD_IDENTIFIER) ORDER BY ORDINAL_POSITION) " +
-							FROM_INFORMATION_SCHEMA_PARAMETERS +
-							"WHERE PARAMETER_MODE IS NOT NULL AND SPECIFIC_SCHEMA = r.ROUTINE_SCHEMA AND SPECIFIC_NAME = r.ROUTINE_NAME AND ROUTINE_TYPE = r.ROUTINE_TYPE" +
-						") " +
-						"END AS args," +
-					"ROUTINE_BODY, " +
-					"SQL_DATA_ACCESS, ROUTINE_COMMENT " +
-				"FROM information_schema.routines r ORDER BY routine_name", db.getFullName()).run();
-		while (q.next()) {
-			for(Schema schema: db.getSchemas()){
-				if(schema.getName().equals(q.getString("ROUTINE_SCHEMA"))) {
+		if (versionMajor > 5.0f ) {
+            int log = DesignGUI.getInfoPanel().write("Loading functions of " + db.getFullName() + "...");
+            Query q = new Query("SELECT ROUTINE_SCHEMA, ROUTINE_NAME, DTD_IDENTIFIER AS DATA_TYPE, " +
+                    "ROUTINE_DEFINITION, SECURITY_TYPE, " +
+                    "CASE " +
+                    "WHEN EXISTS " +
+                    "(" +
+                    "SELECT * " +
+                    FROM_INFORMATION_SCHEMA_PARAMETERS +
+                    "WHERE PARAMETER_MODE IS NOT NULL AND SPECIFIC_SCHEMA = r.ROUTINE_SCHEMA AND SPECIFIC_NAME = r.ROUTINE_NAME AND ROUTINE_TYPE = r.ROUTINE_TYPE AND PARAMETER_MODE != 'IN'" +
+                    ") " +
+                    "THEN " +
+                    "(" +
+                    "SELECT group_concat(concat(PARAMETER_MODE, ' ', PARAMETER_NAME, ' ', DTD_IDENTIFIER) ORDER BY ORDINAL_POSITION) " +
+                    FROM_INFORMATION_SCHEMA_PARAMETERS +
+                    "WHERE PARAMETER_MODE IS NOT NULL AND SPECIFIC_SCHEMA = r.ROUTINE_SCHEMA AND SPECIFIC_NAME = r.ROUTINE_NAME AND ROUTINE_TYPE = r.ROUTINE_TYPE" +
+                    ") " +
+                    "ELSE " +
+                    "(" +
+                    "SELECT group_concat(concat(PARAMETER_NAME, ' ', DTD_IDENTIFIER) ORDER BY ORDINAL_POSITION) " +
+                    FROM_INFORMATION_SCHEMA_PARAMETERS +
+                    "WHERE PARAMETER_MODE IS NOT NULL AND SPECIFIC_SCHEMA = r.ROUTINE_SCHEMA AND SPECIFIC_NAME = r.ROUTINE_NAME AND ROUTINE_TYPE = r.ROUTINE_TYPE" +
+                    ") " +
+                    "END AS args," +
+                    "ROUTINE_BODY, " +
+                    "SQL_DATA_ACCESS, ROUTINE_COMMENT " +
+                    "FROM information_schema.routines r ORDER BY routine_name", db.getFullName()).run();
+            while (q.next()) {
+                for (Schema schema : db.getSchemas()) {
+                    if (schema.getName().equals(q.getString("ROUTINE_SCHEMA"))) {
 
-					Function func = new Function(schema,
-						q.getString("ROUTINE_SCHEMA") + "." +  q.getString("ROUTINE_NAME"),
-						q.getString("DATA_TYPE") == null ? "" : q.getString("DATA_TYPE"),
-						q.getString("args") == null ? "" : q.getString("args"),
-						q.getString("ROUTINE_DEFINITION"),
-						q.getString("ROUTINE_BODY"),
-						q.getString("SQL_DATA_ACCESS"),
-						q.getString("SECURITY_TYPE").matches("DEFINER"),
-						0,
-						0,
-						q.getString("ROUTINE_COMMENT"));
-					func.assignToSchema();
-					break;
-				}
-			}
-		}
-		q.close();
-		q.log(log);
+                        Function func = new Function(schema,
+                                q.getString("ROUTINE_SCHEMA") + "." + q.getString("ROUTINE_NAME"),
+                                q.getString("DATA_TYPE") == null ? "" : q.getString("DATA_TYPE"),
+                                q.getString("args") == null ? "" : q.getString("args"),
+                                q.getString("ROUTINE_DEFINITION"),
+                                q.getString("ROUTINE_BODY"),
+                                q.getString("SQL_DATA_ACCESS"),
+                                q.getString("SECURITY_TYPE").matches("DEFINER"),
+                                0,
+                                0,
+                                q.getString("ROUTINE_COMMENT"));
+                        func.assignToSchema();
+                        break;
+                    }
+                }
+            }
+            q.close();
+            q.log(log);
+        }
 	}
 
 	@Override
@@ -367,7 +369,8 @@ abstract class ConnectionMyReverse extends ConnectionMyForward {
 							+ (versionMajor >= 5.5f ? "INDEX_COMMENT" : "''")+" AS "+DESCRIPTION+"\n"
 						+ "FROM information_schema.STATISTICS\n"
 						+ "WHERE TABLE_SCHEMA = '"+(dbAlias != null ? dbAlias : db.getName())+"'\n"
-						+ "GROUP BY TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, NON_UNIQUE, INDEX_TYPE, INDEX_COMMENT";
+						+ "GROUP BY TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, NON_UNIQUE, INDEX_TYPE" +
+				(versionMajor >= 5.5f ? ", INDEX_COMMENT" : "");
 		Query q = new Query(sql, db.getFullName()).run();
 		while (q.next()) {
 			db.getSchemas().get(0).getRelations().stream()
