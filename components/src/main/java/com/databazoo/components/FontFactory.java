@@ -55,7 +55,7 @@ public class FontFactory {
             for (String name : sansNames) {
                 if (availableFontFamilyNames.contains(name)) {
                     sansName = name;
-                    System.out.println("sans font is " + name);
+                    Dbg.info("sans font is " + name);
                     break;
                 }
             }
