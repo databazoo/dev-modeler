@@ -85,8 +85,6 @@ public class Menu extends JPanel {
     }
 
     private JButton menuBtnAdmin;
-    private JButton menuBtnData;
-    private JButton menuBtnProperties;
 
     JButton menuBtnViewDesigner, menuBtnViewOptimizer, menuBtnViewData, menuBtnViewDiff;
 
@@ -177,11 +175,7 @@ public class Menu extends JPanel {
     public void setEntityButtonsEnabled(boolean enabled) {
         if (enabled && Project.getCurrent().getType() != Project.TYPE_ABSTRACT) {
             IModelElement elem = Canvas.instance.getSelectedElement();
-            menuBtnData.setEnabled(elem instanceof Relation || elem instanceof View || elem instanceof Constraint);
-        } else {
-            menuBtnData.setEnabled(false);
         }
-        menuBtnProperties.setEnabled(enabled);
         menuBtnQuery.setEnabled(Project.getCurrent().getType() != Project.TYPE_ABSTRACT);
     }
 
@@ -377,8 +371,6 @@ public class Menu extends JPanel {
 
             add(drawProjectButton());
             add(drawQueryButton());
-            add(drawEditButton());
-            add(drawDataButton());
         }
 
         private JMenu drawFileMenu() {
@@ -455,37 +447,6 @@ public class Menu extends JPanel {
             menuBtnQuery.setFocusable(false);
             return menuBtnQuery;
         }
-
-        private JButton drawEditButton() {
-            menuBtnProperties = new JButton(Theme.getSmallIcon(Theme.ICO_EDIT));
-            menuBtnProperties.setToolTipText("Properties of selected entity");
-            menuBtnProperties.addActionListener(e -> {
-                Usage.log(LEFT_MENU_BTN_EDIT);
-                ViewMode viewOld = DesignGUI.getView();
-                DesignGUI.get().switchView(ViewMode.DESIGNER, false);
-                Canvas.instance.getSelectedElement().doubleClicked();
-                DesignGUI.get().switchView(viewOld, false);
-            });
-            menuBtnProperties.setFocusable(false);
-            menuBtnProperties.setEnabled(false);
-            return menuBtnProperties;
-        }
-
-        private JButton drawDataButton() {
-            menuBtnData = new JButton(Theme.getSmallIcon(Theme.ICO_DATA));
-            menuBtnData.setToolTipText("View data of selected table");
-            menuBtnData.addActionListener(e -> {
-                Usage.log(LEFT_MENU_BTN_DATA);
-                ViewMode viewOld = DesignGUI.getView();
-                DesignGUI.get().switchView(ViewMode.DATA, false);
-                Canvas.instance.getSelectedElement().doubleClicked();
-                DesignGUI.get().switchView(viewOld, false);
-            });
-            menuBtnData.setFocusable(false);
-            menuBtnData.setEnabled(false);
-            return menuBtnData;
-        }
-
     }
 
     private class CenterMenu extends JPanel {
