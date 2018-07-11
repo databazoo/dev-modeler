@@ -172,10 +172,7 @@ public class Menu extends JPanel {
         rightMenu.redraw();
     }
 
-    public void setEntityButtonsEnabled(boolean enabled) {
-        if (enabled && Project.getCurrent().getType() != Project.TYPE_ABSTRACT) {
-            IModelElement elem = Canvas.instance.getSelectedElement();
-        }
+    public void setEntityButtonsEnabled() {
         menuBtnQuery.setEnabled(Project.getCurrent().getType() != Project.TYPE_ABSTRACT);
     }
 
