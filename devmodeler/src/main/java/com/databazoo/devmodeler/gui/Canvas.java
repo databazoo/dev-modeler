@@ -906,10 +906,10 @@ public class Canvas extends ClickableComponent {
 		selectedElem = element;
 		if (selectedElem != null) {
 			selectedElem.setSelected(true);
-			Menu.getInstance().setEntityButtonsEnabled(true);
+			Menu.getInstance().setEntityButtonsEnabled();
 			Schedule.inWorker(Schedule.TYPE_DELAY, () -> Neighborhood.instance.draw(selectedElem));
 		} else {
-			Menu.getInstance().setEntityButtonsEnabled(false);
+			Menu.getInstance().setEntityButtonsEnabled();
 			if (Project.getCurrent().getCurrentWorkspace() != null) {
 				DBTree.instance.selectWorkspaceByName(Project.getCurrent().getCurrentWorkspace().toString());
 			} else {

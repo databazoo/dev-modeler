@@ -559,7 +559,7 @@ public final class ProjectManager
 			SearchPanel.instance.updateDbTree();
 			Menu.redrawRightMenu();
 			Menu.getInstance().setModelingMode(Project.getCurrent().getType() == Project.TYPE_ABSTRACT);
-			Menu.getInstance().setEntityButtonsEnabled(false);
+			Menu.getInstance().setEntityButtonsEnabled();
 			Menu.getInstance().setCompareAvailable(false);
 			Menu.getInstance().checkSyncCheckbox();
 			Canvas.instance.scrollToCenter();
