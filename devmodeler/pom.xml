@@ -87,7 +87,6 @@
         </resources>
     </build>
 
-    <!-- Enable integration testing using a profile -->
     <profiles>
         <profile>
             <id>release</id>
