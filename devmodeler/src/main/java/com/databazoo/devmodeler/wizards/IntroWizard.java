@@ -102,7 +102,7 @@ public class IntroWizard extends MigWizard {
 					loadPasswordPage();
 					break;*/
 				case L_TUTORIAL:
-					tree.setSelectionRow(3);
+					tree.setSelectionRow(2);
 					break;
 				case L_TUTORIAL_1:
 					loadTutorialPage1();
