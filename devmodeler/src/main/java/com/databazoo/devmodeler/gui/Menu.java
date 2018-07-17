@@ -22,6 +22,7 @@ import com.databazoo.devmodeler.wizards.ExportImportWizard;
 import com.databazoo.devmodeler.wizards.SettingsWizard;
 import com.databazoo.devmodeler.wizards.project.ProjectWizard;
 import com.databazoo.devmodeler.wizards.server.ServerAdministrationWizard;
+import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 import com.databazoo.tools.Usage;
 
@@ -35,6 +36,14 @@ import java.awt.event.ItemListener;
 import java.util.stream.Collectors;
 
 import static com.databazoo.devmodeler.gui.UsageElement.*;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_FUNCTIONS;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_PACKAGES;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_SEQUENCES;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_TABLES;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_VIEWS;
+import static com.databazoo.devmodeler.model.Relation.L_CONSTRAINTS;
+import static com.databazoo.devmodeler.model.Relation.L_INDEXES;
+import static com.databazoo.devmodeler.model.Relation.L_TRIGGERS;
 
 /**
  * Application menu.
@@ -91,6 +100,7 @@ public class Menu extends JPanel {
     private MyCheckboxMenuItem dbTreeMenuItem;
     private MyMenuItem zoomInMenuItem;
     private MyMenuItem zoomOutMenuItem;
+    private JMenu elementsMenuElem;
 
     private RightMenu rightMenu;
     private String[] dbComboOptions = { "" };
@@ -169,6 +179,7 @@ public class Menu extends JPanel {
                 menuBtnViewDiff.setEnabled(false);
             }
         }
+        MenuElementView.getInstance().updateMenuItems();
         rightMenu.redraw();
     }
 
@@ -216,7 +227,7 @@ public class Menu extends JPanel {
         }
     }
 
-    private class MyCheckboxMenuItem extends JCheckBoxMenuItem {
+    static class MyCheckboxMenuItem extends JCheckBoxMenuItem {
 
         MyCheckboxMenuItem(String title, Icon icon, boolean value) {
             super(title, icon, value);
@@ -241,7 +252,7 @@ public class Menu extends JPanel {
 		}*/
     }
 
-    private class MenuItemListener implements ActionListener, ItemListener {
+    private static class MenuItemListener implements ActionListener, ItemListener {
 
         @Override
         public void actionPerformed(final ActionEvent ae) {
@@ -329,16 +340,30 @@ public class Menu extends JPanel {
 
         @Override
         public void itemStateChanged(ItemEvent ie) {
-            switch (((AbstractButton) ie.getItem()).getText()) {
+            AbstractButton item = (AbstractButton) ie.getItem();
+            switch (item.getText()) {
             case L_DB_TREE:
                 Usage.log(LEFT_MENU_TGL_TREE);
                 DesignGUI.get().toggleDBView();
                 break;
             case L_GRID:
                 Usage.log(LEFT_MENU_TGL_GRID);
-                Canvas.instance.gridEnabled = ((AbstractButton) ie.getItem()).isSelected();
+                Canvas.instance.gridEnabled = item.isSelected();
                 Canvas.instance.repaint();
                 break;
+
+            case L_TABLES:
+            case L_INDEXES:
+            case L_CONSTRAINTS:
+            case L_TRIGGERS:
+            case L_FUNCTIONS:
+            case L_VIEWS:
+            case L_SEQUENCES:
+            case L_PACKAGES:
+                MenuElementView
+                        .setChange(item.getText(), item.isSelected())
+                        .updateMenuItems();
+                Canvas.instance.drawProjectLater(true);
             }
         }
     }
@@ -386,9 +411,17 @@ public class Menu extends JPanel {
                     Settings.getBool(Settings.L_LAYOUT_DB_TREE)));
             viewMenuElem.add(new MyCheckboxMenuItem(L_GRID, Theme.getSmallIcon(Theme.ICO_GRID), Settings.getBool(Settings.L_LAYOUT_GRID)));
             viewMenuElem.addSeparator();
+            viewMenuElem.add(drawElementsMenu());
+            viewMenuElem.addSeparator();
             viewMenuElem.add(zoomInMenuItem = new MyMenuItem(L_ZOOM_IN, Theme.getSmallIcon(Theme.ICO_ZOOM_IN), true));
             viewMenuElem.add(zoomOutMenuItem = new MyMenuItem(L_ZOOM_OUT, Theme.getSmallIcon(Theme.ICO_ZOOM_OUT), true));
             return viewMenuElem;
+        }
+
+        private JMenu drawElementsMenu() {
+            elementsMenuElem = new JMenu("Elements");
+            MenuElementView.getInstance(elementsMenuElem).updateMenuItems();
+            return elementsMenuElem;
         }
 
         private JMenu drawModelMenu() {
@@ -469,7 +502,7 @@ public class Menu extends JPanel {
             menuBtnViewDiff.setToolTipText("History of changes, database comparator");
             menuBtnViewDiff.addActionListener(e -> {
                 Usage.log(CENTER_MENU_BTN_DIFF);
-                DesignGUI.get().switchView(ViewMode.DIFF, DesignGUI.getView() == ViewMode.DATA || DesignGUI.getView() == ViewMode.OPTIMIZE);
+                DesignGUI.get().switchView(ViewMode.DIFF, true);
             });
             menuBtnViewDiff.setFocusable(false);
             return menuBtnViewDiff;
@@ -502,7 +535,7 @@ public class Menu extends JPanel {
             menuBtnViewDesigner.setToolTipText("Design view [ALT]");
             menuBtnViewDesigner.addActionListener(e -> {
                 Usage.log(CENTER_MENU_BTN_DESIGN);
-                DesignGUI.get().switchView(ViewMode.DESIGNER, DesignGUI.getView() == ViewMode.DATA || DesignGUI.getView() == ViewMode.OPTIMIZE);
+                DesignGUI.get().switchView(ViewMode.DESIGNER, true);
             });
             menuBtnViewDesigner.setFocusable(false);
             return menuBtnViewDesigner;

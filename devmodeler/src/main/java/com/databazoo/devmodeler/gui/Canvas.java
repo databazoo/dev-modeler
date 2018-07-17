@@ -30,6 +30,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_FUNCTIONS;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_PACKAGES;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_SEQUENCES;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_TABLES;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.L_VIEWS;
+import static com.databazoo.devmodeler.model.Relation.L_CONSTRAINTS;
+import static com.databazoo.devmodeler.model.Relation.L_INDEXES;
+import static com.databazoo.devmodeler.model.Relation.L_TRIGGERS;
+
 
 /**
  * Main canvas.
@@ -215,33 +224,58 @@ public class Canvas extends ClickableComponent {
 				drawSchemata();
 
 				if (quirksMode) {
-					drawRelations();
-					drawSequences();
-					drawViews();
-					drawFunctions();
-					drawPackages();
+					if (MenuElementView.getVisibility(L_TABLES)) {
+						drawRelations();
+					}
+					if (MenuElementView.getVisibility(L_SEQUENCES)) {
+						drawSequences();
+					}
+					if (MenuElementView.getVisibility(L_VIEWS)) {
+						drawViews();
+					}
+					if (MenuElementView.getVisibility(L_FUNCTIONS)) {
+						drawFunctions();
+					}
+					if (MenuElementView.getVisibility(L_PACKAGES)) {
+						drawPackages();
+					}
 					return;
 				}
 
-				if (differentDB) {
+				if (MenuElementView.getVisibility(L_TABLES) && differentDB) {
 					drawRelations();
 					drawInheritances();
 				}
-				drawConstraints(differentDB);
+				if (MenuElementView.getVisibility(L_CONSTRAINTS)) {
+					drawConstraints(differentDB);
+				}
 
 				if (DesignGUI.getView() == ViewMode.DATA) {
 					drawRelationDataInfo();
 				} else {
 					if (getZoomNotTooSmall()) {
 						drawAttributes();
+					}
+				}
+				if (MenuElementView.getVisibility(L_INDEXES) && getZoomNotTooSmall()) {
 						drawIndexes();
 					}
+				if (MenuElementView.getVisibility(L_SEQUENCES)) {
 					drawSequences();
+				}
+				if (MenuElementView.getVisibility(L_VIEWS)) {
 					drawViews();
+				}
+				if (MenuElementView.getVisibility(L_FUNCTIONS)) {
 					drawFunctions();
+				}
+				if (MenuElementView.getVisibility(L_PACKAGES)) {
 					drawPackages();
+				}
+				if (MenuElementView.getVisibility(L_TRIGGERS)) {
 					drawTriggers();
 				}
+
 				drawInfoPanel();
 				drawOverview();
 				drawHotMenu();
