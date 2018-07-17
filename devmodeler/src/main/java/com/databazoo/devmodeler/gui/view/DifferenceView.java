@@ -57,10 +57,11 @@ public class DifferenceView extends AbstractView {
     //private static final Font AUTHOR_FONT = FontFactory.getSans(Font.ITALIC, 12);
     private static final String L_ALL_ELEMS = "All elements (w/o data)";
     private static final String L_SCHEMATA = "Schemas";
-    private static final String L_TABLES = "Tables";
-    private static final String L_FUNCTIONS = "Functions";
-    private static final String L_VIEWS = "Views";
-    private static final String L_SEQUENCES = "Sequences";
+    public static final String L_TABLES = "Tables";
+    public static final String L_FUNCTIONS = "Functions";
+    public static final String L_VIEWS = "Views";
+    public static final String L_SEQUENCES = "Sequences";
+    public static final String L_PACKAGES = "Packages";
     private static final String L_DATA = "Data & sequences";
 
     private int connSelected = 1;
