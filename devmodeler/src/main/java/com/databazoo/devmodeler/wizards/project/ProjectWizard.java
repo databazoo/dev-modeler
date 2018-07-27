@@ -24,6 +24,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -40,6 +41,7 @@ import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.DBCommException;
+import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.SearchPanel;
@@ -273,6 +275,7 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 				Settings.save();
 			}
 		});
+
 		setNextButton("Create", true, CREATE_PROJECT_SIMPLE);
 	}
 
@@ -840,12 +843,19 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 
 		p.setProjectPath(ProjectManager.getSettingsDirectory(simpleProjectName).toString());
 		p.setRevPath(projectRevPathField.getText());
-		if(projectType != Project.TYPE_ABSTRACT){
-			p.getConnections().addAll(tablesUI.connectionsTableModel.conns);
-		}
 		p.setDatabases(tablesUI.dbsTableModel.databases);
 		for(DB db : p.getDatabases()){
 			db.setProject(p);
+		}
+		if(projectType != Project.TYPE_ABSTRACT){
+			p.getConnections().addAll(tablesUI.connectionsTableModel.conns);
+			HashMap<String, IConnection> dedicatedConnections = new HashMap<>();
+			for(DB db : p.getDatabases()){
+				for(IConnection con : p.getConnections()) {
+					dedicatedConnections.put(db.getName()+"~"+con.getName(), con);
+				}
+			}
+			p.setDedicatedConnections(dedicatedConnections);
 		}
 		p.save();
 		ProjectManager.getInstance().saveProjects();
