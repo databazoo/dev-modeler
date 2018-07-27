@@ -849,16 +849,20 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 		}
 		if(projectType != Project.TYPE_ABSTRACT){
 			p.getConnections().addAll(tablesUI.connectionsTableModel.conns);
-			HashMap<String, IConnection> dedicatedConnections = new HashMap<>();
-			for(DB db : p.getDatabases()){
-				for(IConnection con : p.getConnections()) {
-					dedicatedConnections.put(db.getName()+"~"+con.getName(), con);
-				}
-			}
-			p.setDedicatedConnections(dedicatedConnections);
+			setDedicatedConnections(p);
 		}
 		p.save();
 		ProjectManager.getInstance().saveProjects();
+	}
+
+	private void setDedicatedConnections(Project p) {
+		HashMap<String, IConnection> dedicatedConnections = new HashMap<>();
+		for(DB db : p.getDatabases()){
+			for(IConnection con : p.getConnections()) {
+				dedicatedConnections.put(db.getName()+"~"+con.getName(), con);
+			}
+		}
+		p.setDedicatedConnections(dedicatedConnections);
 	}
 
 	@Override
