@@ -9,6 +9,7 @@ import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.model.Attribute;
 import com.databazoo.devmodeler.model.Constraint;
+import com.databazoo.devmodeler.model.ConstraintUtil;
 import com.databazoo.devmodeler.model.Workspace;
 import com.databazoo.devmodeler.tools.Geometry;
 
@@ -39,7 +40,7 @@ public class ConstraintReference extends LineComponentReference {
 	@Override
 	protected void setArrowPosition(){
 		if(con != null){
-			Constraint.calculateArrowPosition(this, con.getBehavior());
+			ConstraintUtil.calculateArrowPosition(this, con.getBehavior());
 		}
 	}
 

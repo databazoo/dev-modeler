@@ -27,7 +27,6 @@ import com.databazoo.tools.Usage;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -61,145 +60,9 @@ public class Constraint extends LineComponent implements IModelElement {
 	private static final String ATTR2 = " attr2: ";
 	private static final String ATTR2NAME = " attr2name: ";
 
-	public static void calculateArrowPosition(LineComponent component, Constraint.Behavior behavior) {
-		double angle;
+	public static boolean isDrawStraight = Settings.getBool(Settings.L_LAYOUT_CANV_STRAIGHT);
 
-		Dimension relSize = new Dimension(component.getRel1().getWidth() - Relation.SHADOW_GAP, component.getRel1().getHeight() - Relation.SHADOW_GAP);
-		Dimension conSize = new Dimension(component.getWidth() - 2 - CLICK_TOLERANCE, component.getHeight() - 2 - CLICK_TOLERANCE);
-
-		double relSideRatio = relSize.height * 1.0 / relSize.width;
-		double conSideRatio = conSize.height * 1.0 / conSize.width;
-
-		if (component.getDirection() == LEFT_TOP_RIGHT_BOTTOM) {
-			if (relSideRatio > conSideRatio) {
-				component.arrow1Location = new Point(relSize.width / 2 + CLICK_TOLERANCE / 2, (int) (relSize.width * conSideRatio / 2) + CLICK_TOLERANCE / 2);
-			} else {
-				component.arrow1Location = new Point((int) (relSize.height / conSideRatio / 2) + CLICK_TOLERANCE / 2, relSize.height / 2 + CLICK_TOLERANCE / 2);
-			}
-			component.arrow1Location.x -= 14 + 16;
-			component.arrow1Location.y -= 14 + 16;
-			angle = Math.atan(conSideRatio);
-
-		} else if (component.getDirection() == RIGHT_BOTTOM_LEFT_TOP) {
-			if (relSideRatio > conSideRatio) {
-				component.arrow1Location = new Point(conSize.width - (relSize.width / 2) + CLICK_TOLERANCE / 2, conSize.height - ((int) (relSize.width * conSideRatio / 2)) + CLICK_TOLERANCE / 2);
-			} else {
-				component.arrow1Location = new Point(conSize.width - ((int) (relSize.height / conSideRatio / 2)) + CLICK_TOLERANCE / 2, conSize.height - (relSize.height / 2) + CLICK_TOLERANCE / 2);
-			}
-			component.arrow1Location.x -= 16 + 16;
-			component.arrow1Location.y -= 15 + 16;
-			angle = Math.atan(conSideRatio) + Math.toRadians(180);
-
-		} else if (component.getDirection() == LEFT_BOTTOM_RIGHT_TOP) {
-			if (relSideRatio > conSideRatio) {
-				component.arrow1Location = new Point((relSize.width / 2) + CLICK_TOLERANCE / 2, conSize.height - ((int) (relSize.width * conSideRatio / 2)) + CLICK_TOLERANCE / 2);
-			} else {
-				component.arrow1Location = new Point(((int) (relSize.height / conSideRatio / 2)) + CLICK_TOLERANCE / 2, conSize.height - (relSize.height / 2) + CLICK_TOLERANCE / 2);
-			}
-			component.arrow1Location.x -= 14 + 16;
-			component.arrow1Location.y -= 15 + 16;
-			angle = Math.atan(1 / conSideRatio) + Math.toRadians(-90);
-
-		} else {
-			if (relSideRatio > conSideRatio) {
-				component.arrow1Location = new Point(conSize.width - (relSize.width / 2) + CLICK_TOLERANCE / 2, ((int) (relSize.width * conSideRatio / 2)) + CLICK_TOLERANCE / 2);
-			} else {
-				component.arrow1Location = new Point(conSize.width - ((int) (relSize.height / conSideRatio / 2)) + CLICK_TOLERANCE / 2, (relSize.height / 2) + CLICK_TOLERANCE / 2);
-			}
-			component.arrow1Location.x -= 15 + 16;
-			component.arrow1Location.y -= 15 + 16;
-			angle = Math.atan(1 / conSideRatio) + Math.toRadians(90);
-		}
-		component.arrow1 = rotateCrowsFoot(angle, true, true);
-
-		if ((behavior.attr1 != null && behavior.attr1.getBehavior().isAttNull()) || (Settings.getBool(Settings.L_PERFORM_PARENT_CARD) && behavior.attr2 != null)) {
-			relSize = new Dimension(component.getRel2().getWidth() - Relation.SHADOW_GAP, component.getRel2().getHeight() - Relation.SHADOW_GAP);
-			conSize = new Dimension(component.getWidth() - 2 - CLICK_TOLERANCE, component.getHeight() - 2 - CLICK_TOLERANCE);
-
-			relSideRatio = relSize.height * 1.0 / relSize.width;
-			conSideRatio = conSize.height * 1.0 / conSize.width;
-
-			if (component.getDirection() == RIGHT_BOTTOM_LEFT_TOP) {
-				if (relSideRatio > conSideRatio) {
-					component.arrow2Location = new Point(relSize.width / 2 + CLICK_TOLERANCE / 2, (int) (relSize.width * conSideRatio / 2) + CLICK_TOLERANCE / 2);
-				} else {
-					component.arrow2Location = new Point((int) (relSize.height / conSideRatio / 2) + CLICK_TOLERANCE / 2, relSize.height / 2 + CLICK_TOLERANCE / 2);
-				}
-				component.arrow2Location.x -= 14 + 16;
-				component.arrow2Location.y -= 15 + 16;
-				angle = Math.atan(conSideRatio);
-
-			} else if (component.getDirection() == LEFT_TOP_RIGHT_BOTTOM) {
-				if (relSideRatio > conSideRatio) {
-					component.arrow2Location = new Point(conSize.width - (relSize.width / 2) + CLICK_TOLERANCE / 2, conSize.height - ((int) (relSize.width * conSideRatio / 2)) + CLICK_TOLERANCE / 2);
-				} else {
-					component.arrow2Location = new Point(conSize.width - ((int) (relSize.height / conSideRatio / 2)) + CLICK_TOLERANCE / 2, conSize.height - (relSize.height / 2) + CLICK_TOLERANCE / 2);
-				}
-				component.arrow2Location.x -= 16 + 16;
-				component.arrow2Location.y -= 15 + 16;
-				angle = Math.atan(conSideRatio) + Math.toRadians(180);
-
-			} else if (component.getDirection() == RIGHT_TOP_LEFT_BOTTOM) {
-				if (relSideRatio > conSideRatio) {
-					component.arrow2Location = new Point((relSize.width / 2) + CLICK_TOLERANCE / 2, conSize.height - ((int) (relSize.width * conSideRatio / 2)) + CLICK_TOLERANCE / 2);
-				} else {
-					component.arrow2Location = new Point(((int) (relSize.height / conSideRatio / 2)) + CLICK_TOLERANCE / 2, conSize.height - (relSize.height / 2) + CLICK_TOLERANCE / 2);
-				}
-				component.arrow2Location.x -= 15 + 16;
-				component.arrow2Location.y -= 16 + 16;
-				angle = Math.atan(1 / conSideRatio) + Math.toRadians(-90);
-
-			} else {
-				if (relSideRatio > conSideRatio) {
-					component.arrow2Location = new Point(conSize.width - (relSize.width / 2) + CLICK_TOLERANCE / 2, ((int) (relSize.width * conSideRatio / 2)) + CLICK_TOLERANCE / 2);
-				} else {
-					component.arrow2Location = new Point(conSize.width - ((int) (relSize.height / conSideRatio / 2)) + CLICK_TOLERANCE / 2, (relSize.height / 2) + CLICK_TOLERANCE / 2);
-				}
-				component.arrow2Location.x -= 15 + 16;
-				component.arrow2Location.y -= 15 + 16;
-				angle = Math.atan(1 / conSideRatio) + Math.toRadians(90);
-			}
-			component.arrow2 = rotateCrowsFoot(angle, behavior.attr1.getBehavior().isAttNull(), false);
-		} else {
-			component.arrow2 = null;
-		}
-	}
-
-	private static BufferedImage rotateCrowsFoot(double rads, boolean fromZero, boolean toMany) {
-		BufferedImage dimg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = dimg.createGraphics();
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		graphics.rotate(rads, 32, 32);
-
-		if (toMany) {
-			graphics.setColor(Color.WHITE);
-			graphics.fillRect(0, 31, 45, 3);
-
-			graphics.setColor(Color.BLACK);
-			graphics.drawLine(0, 22, 48, 32);
-			graphics.drawLine(0, 32, 48, 32);
-			graphics.drawLine(0, 42, 48, 32);
-		} else {
-			graphics.setColor(Color.BLACK);
-			graphics.drawLine(41, 28, 41, 37);
-		}
-
-		if (fromZero) {
-			graphics.setColor(Color.WHITE);
-			graphics.fillOval(43, 28, 9, 9);
-
-			graphics.setColor(Color.BLACK);
-			graphics.drawOval(43, 28, 9, 9);
-		} else {
-			graphics.setColor(Color.BLACK);
-			graphics.drawLine(46, 28, 46, 37);
-		}
-
-		return dimg;
-	}
-
-	protected Behavior behavior = new Behavior();
+    protected Behavior behavior = new Behavior();
 
 	public int isDifferent = Comparator.NO_DIFF;
 	private final DB db;
@@ -262,7 +125,11 @@ public class Constraint extends LineComponent implements IModelElement {
 
 	@Override
 	protected void setArrowPosition() {
-		calculateArrowPosition(this, behavior);
+	    if (isDrawStraight) {
+            ConstraintUtil.calculateArrowPosition(this, behavior);
+        } else {
+            ConstraintUtil.calculateZArrowPosition(this, behavior);
+        }
 	}
 
 	@Override
@@ -379,17 +246,73 @@ public class Constraint extends LineComponent implements IModelElement {
 
 	@Override
 	public boolean clickedOnLine(int x, int y) {
-		if(isSelfRelation){
-			int tolerance = 10;
-			boolean inOuterSquare = Geometry.isPointInRectangle(getLocation(), getSize(), new Point(x, y));
-			boolean inInnerSquare = Geometry.isPointInRectangle(
-					new Point(getLocation().x + tolerance, getLocation().y + tolerance),
-					new Dimension(getWidth() - tolerance*2, getHeight() - tolerance*2),
-					new Point(x, y));
-			return inOuterSquare && !inInnerSquare;
-		}else{
+		Point clicked = new Point(x, y);
+		if (isSelfRelation) {
+			return isSelfRelationClicked(clicked);
+
+		} else if (!isDrawStraight) {
+			return isZClicked(clicked);
+
+		} else {
 			return super.clickedOnLine(x, y);
 		}
+	}
+
+	/**
+	 * Decide whether the user clicked the constraint drawn as a straight line.
+	 *
+	 * @param clicked pointer location
+	 * @return clicked?
+	 */
+	private boolean isZClicked(Point clicked) {
+		int tolerance = 5;
+
+		Dimension verticalBoxSize = new Dimension(tolerance * 2 + 1, getHeight() - ONE_PLUS_HALF_TOLERANCE * 2);
+		if (Geometry.isPointInRectangle(
+				new Point(getLocation().x + getWidth() / 2 - tolerance, getLocation().y + ONE_PLUS_HALF_TOLERANCE - tolerance),
+				verticalBoxSize,
+				clicked)) {
+			return true;
+		}
+
+		Dimension horizontalBoxSize = new Dimension(getWidth() / 2 - ONE_PLUS_HALF_TOLERANCE * 2, tolerance * 2 + 1);
+		if (isFlipped) {
+			return Geometry.isPointInRectangle(
+					new Point(getLocation().x + ONE_PLUS_HALF_TOLERANCE - tolerance, getLocation().y + getHeight() - ONE_PLUS_HALF_TOLERANCE - tolerance),
+					horizontalBoxSize,
+					clicked
+			) || Geometry.isPointInRectangle(
+					new Point(getLocation().x + getWidth() / 2 - tolerance, getLocation().y + ONE_PLUS_HALF_TOLERANCE - tolerance),
+					horizontalBoxSize,
+					clicked
+			);
+		} else {
+			return Geometry.isPointInRectangle(
+					new Point(getLocation().x + ONE_PLUS_HALF_TOLERANCE - tolerance, getLocation().y + ONE_PLUS_HALF_TOLERANCE - tolerance),
+					horizontalBoxSize,
+					clicked
+			) || Geometry.isPointInRectangle(
+					new Point(getLocation().x + getWidth() / 2 - tolerance, getLocation().y + getHeight() - ONE_PLUS_HALF_TOLERANCE - tolerance),
+					horizontalBoxSize,
+					clicked
+			);
+		}
+	}
+
+	/**
+	 * Decide whether the user clicked the constraint drawn as a self relation.
+	 *
+	 * @param clicked pointer location
+	 * @return clicked?
+	 */
+	private boolean isSelfRelationClicked(Point clicked) {
+		int tolerance = 10;
+		boolean inOuterSquare = Geometry.isPointInRectangle(getLocation(), getSize(), clicked);
+		boolean inInnerSquare = Geometry.isPointInRectangle(
+				new Point(getLocation().x + tolerance, getLocation().y + tolerance),
+				new Dimension(getWidth() - tolerance * 2, getHeight() - tolerance * 2),
+				clicked);
+		return inOuterSquare && !inInnerSquare;
 	}
 
 	@Override
@@ -775,34 +698,90 @@ public class Constraint extends LineComponent implements IModelElement {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		Graphics2D graphics = (Graphics2D) g;
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		if (isSelfRelation) {
-			Graphics2D graphics = (Graphics2D) g;
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			paintSelfRelation(graphics);
 
-			if(isSelected){
-				graphics.setPaint(Canvas.SELECTION_COLOR_A2);
+		} else if (!isDrawStraight) {
+			paintZ(graphics);
 
-				graphics.setStroke(Canvas.getLineStrokeFull(4));
-				graphics.drawLine(1, 1, getWidth() - 2, 1);
-				graphics.drawLine(getWidth() - 2, 1, getWidth() - 2, getHeight() - 2);
-				graphics.drawLine(getWidth() - 2, getHeight() - 2, 1, getHeight() - 2);
-				graphics.drawLine(1, getHeight() - 2, 1, 1);
+		} else {
+			super.paintComponent(g);
+		}
+	}
 
-				graphics.setStroke(Canvas.getLineStrokeFull(2));
-				graphics.drawLine(1, 1, getWidth() - 2, 1);
-				graphics.drawLine(getWidth() - 2, 1, getWidth() - 2, getHeight() - 2);
-				graphics.drawLine(getWidth() - 2, getHeight() - 2, 1, getHeight() - 2);
-				graphics.drawLine(1, getHeight() - 2, 1, 1);
-			}
+	/**
+	 * Painting procedure for self-relations.
+	 *
+	 * @param graphics graphics reference
+	 */
+	private void paintSelfRelation(Graphics2D graphics) {
+		if(isSelected){
+			graphics.setPaint(Canvas.SELECTION_COLOR_A2);
 
-			graphics.setStroke(isDashed ? Canvas.getLineStrokeDashed() : Canvas.getLineStrokeFull(lineWidth));
-			graphics.setPaint(lineColor);
+			graphics.setStroke(Canvas.getLineStrokeFull(4));
 			graphics.drawLine(1, 1, getWidth() - 2, 1);
 			graphics.drawLine(getWidth() - 2, 1, getWidth() - 2, getHeight() - 2);
 			graphics.drawLine(getWidth() - 2, getHeight() - 2, 1, getHeight() - 2);
 			graphics.drawLine(1, getHeight() - 2, 1, 1);
+
+			graphics.setStroke(Canvas.getLineStrokeFull(2));
+			graphics.drawLine(1, 1, getWidth() - 2, 1);
+			graphics.drawLine(getWidth() - 2, 1, getWidth() - 2, getHeight() - 2);
+			graphics.drawLine(getWidth() - 2, getHeight() - 2, 1, getHeight() - 2);
+			graphics.drawLine(1, getHeight() - 2, 1, 1);
+		}
+
+		graphics.setStroke(isDashed ? Canvas.getLineStrokeDashed() : Canvas.getLineStrokeFull(lineWidth));
+		graphics.setPaint(lineColor);
+		graphics.drawLine(1, 1, getWidth() - 2, 1);
+		graphics.drawLine(getWidth() - 2, 1, getWidth() - 2, getHeight() - 2);
+		graphics.drawLine(getWidth() - 2, getHeight() - 2, 1, getHeight() - 2);
+		graphics.drawLine(1, getHeight() - 2, 1, 1);
+	}
+
+	/**
+	 * Painting procedure for Z-shaped constraints.
+	 *
+	 * @param graphics graphics reference
+	 */
+	private void paintZ(Graphics2D graphics) {
+		if(isSelected){
+			graphics.setPaint(Canvas.SELECTION_COLOR_A2);
+			graphics.setStroke(Canvas.getLineStrokeFull(4));
+			drawZ(graphics, 2);
+			graphics.setStroke(Canvas.getLineStrokeFull(2));
+			drawZ(graphics, 2);
+		}
+		graphics.setPaint(lineColor);
+		graphics.setStroke(isDashed ? Canvas.getLineStrokeDashed() : Canvas.getLineStrokeFull(lineWidth));
+		drawZ(graphics, 0);
+
+        if (arrow1Location != null) {
+            graphics.drawImage(arrow1, arrow1Location.x, arrow1Location.y, null);
+        }
+        if (arrow2Location != null) {
+            graphics.drawImage(arrow2, arrow2Location.x, arrow2Location.y, null);
+        }
+	}
+
+	/**
+	 * Individual strokes for Z-shaped constraints.
+	 *
+	 * @param graphics graphics reference
+	 * @param correction how much space to leave between one stroke ending and the other stroke beginning
+	 */
+	private void drawZ(Graphics2D graphics, int correction) {
+		if (isFlipped) {
+			graphics.drawLine(ONE_PLUS_HALF_TOLERANCE, getHeight() - ONE_PLUS_HALF_TOLERANCE, getWidth() / 2 - correction, getHeight() - ONE_PLUS_HALF_TOLERANCE);
+			graphics.drawLine(getWidth() / 2, getHeight() - ONE_PLUS_HALF_TOLERANCE, getWidth() / 2, TWO_PLUS_HALF_TOLERANCE);
+			graphics.drawLine(getWidth() / 2 + correction, TWO_PLUS_HALF_TOLERANCE, getWidth() - ONE_PLUS_HALF_TOLERANCE, TWO_PLUS_HALF_TOLERANCE);
 		} else {
-			super.paintComponent(g);
+			graphics.drawLine(ONE_PLUS_HALF_TOLERANCE, TWO_PLUS_HALF_TOLERANCE, getWidth() / 2 - correction, TWO_PLUS_HALF_TOLERANCE);
+			graphics.drawLine(getWidth() / 2, TWO_PLUS_HALF_TOLERANCE, getWidth() / 2, getHeight() - ONE_PLUS_HALF_TOLERANCE);
+			graphics.drawLine(getWidth() / 2 + correction, getHeight() - ONE_PLUS_HALF_TOLERANCE, getWidth() - ONE_PLUS_HALF_TOLERANCE, getHeight() - ONE_PLUS_HALF_TOLERANCE);
 		}
 	}
 

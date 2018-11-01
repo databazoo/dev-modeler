@@ -125,7 +125,7 @@ public class DesignGUI {
                 // Canvas
                 canvasScroll = new JScrollPane(Canvas.instance);
                 canvasScroll.setMinimumSize(new Dimension(0, 0));
-                if(Settings.getBool(Settings.L_LAYOUT_SCROLLS)){
+                if(Settings.getBool(Settings.L_LAYOUT_CANV_SCROLLS)){
                     canvasScroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
                     canvasScroll.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
                 }

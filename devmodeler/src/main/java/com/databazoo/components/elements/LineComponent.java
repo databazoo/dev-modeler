@@ -14,14 +14,14 @@ import java.awt.image.BufferedImage;
  * @author bobus
  */
 public abstract class LineComponent extends EnvironmentComponent {
-	protected static final int CLICK_TOLERANCE = 15;
-	protected static final int LEFT_TOP_RIGHT_BOTTOM = 1;
-	protected static final int LEFT_BOTTOM_RIGHT_TOP = 2;
-	protected static final int RIGHT_TOP_LEFT_BOTTOM = 3;
-	protected static final int RIGHT_BOTTOM_LEFT_TOP = 4;
+	public static final int CLICK_TOLERANCE = 15;
+	public static final int LEFT_TOP_RIGHT_BOTTOM = 1;
+	public static final int LEFT_BOTTOM_RIGHT_TOP = 2;
+	public static final int RIGHT_TOP_LEFT_BOTTOM = 3;
+	public static final int RIGHT_BOTTOM_LEFT_TOP = 4;
 
-	private static final int TWO_PLUS_HALF_TOLERANCE = 2 + CLICK_TOLERANCE / 2;
-	private static final int ONE_PLUS_HALF_TOLERANCE = 1 + CLICK_TOLERANCE / 2;
+	public static final int TWO_PLUS_HALF_TOLERANCE = 2 + CLICK_TOLERANCE / 2;
+    public static final int ONE_PLUS_HALF_TOLERANCE = 1 + CLICK_TOLERANCE / 2;
 
 	protected Color lineColor = Color.BLACK;
 	protected DraggableComponent rel1, rel2;
@@ -85,6 +85,10 @@ public abstract class LineComponent extends EnvironmentComponent {
 		return direction;
 	}
 
+	public boolean isDashed() {
+		return isDashed;
+	}
+
 	/**
 	 * Update size, location, direction, etc. on object move
 	 */
@@ -139,9 +143,9 @@ public abstract class LineComponent extends EnvironmentComponent {
 					}
 				}
 			}
-			if(Settings.getBool(Settings.L_PERFORM_CARDINALITY) && Canvas.getZoomNotTooSmall()){
+			if (Settings.getBool(Settings.L_PERFORM_CARDINALITY) && Canvas.getZoomNotTooSmall()){
 				setArrowPosition();
-			}else{
+			} else {
 				arrow1Location = null;
 				arrow2Location = null;
 			}
@@ -158,7 +162,7 @@ public abstract class LineComponent extends EnvironmentComponent {
 	/**
 	 * Paint overridden
 	 *
-	 * @param g the <code>Graphics</code> object to protect
+	 * @param g graphics reference
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -189,6 +193,11 @@ public abstract class LineComponent extends EnvironmentComponent {
 		}
 	}
 
+	/**
+	 * Paint a straight line
+	 *
+	 * @param graphics graphics reference
+	 */
     private void drawLine(Graphics2D graphics) {
 		if (isFlipped) {
             graphics.drawLine(ONE_PLUS_HALF_TOLERANCE, getHeight() - TWO_PLUS_HALF_TOLERANCE, getWidth() - TWO_PLUS_HALF_TOLERANCE, ONE_PLUS_HALF_TOLERANCE);

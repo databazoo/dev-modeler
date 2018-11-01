@@ -3,6 +3,9 @@ package com.databazoo.devmodeler.config;
 
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.icons.IconedPath;
+import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DBTree;
+import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
@@ -43,8 +46,9 @@ public class Settings {
 	public static final String L_LAYOUT_DB_TREE_WIDTH	= "GUI.Layout.DB Tree width";
 	public static final String L_LAYOUT_INFOPANEL		= "GUI.Layout.Show Info panel";
 	public static final String L_LAYOUT_DB_TREE			= "GUI.Layout.Show DB Tree";
-	public static final String L_LAYOUT_GRID			= "GUI.Layout.Show Grid";
-	public static final String L_LAYOUT_SCROLLS			= "GUI.Layout.Hide scrolls";
+	public static final String L_LAYOUT_CANV_STRAIGHT 	= "GUI.Layout.Canvas.Draw straight constraints";
+	public static final String L_LAYOUT_CANV_GRID 		= "GUI.Layout.Canvas.Show Grid";
+	public static final String L_LAYOUT_CANV_SCROLLS 	= "GUI.Layout.Canvas.Hide scrolls";
 	public static final String L_LAYOUT_NAV_TRANSPARENT	= "GUI.Layout.Navigator.Transparent navigator";
 	public static final String L_LAYOUT_NAV_SIZE		= "GUI.Layout.Navigator.Size";
 	public static final String L_LAYOUT_NAV_ZOOM_TICKS	= "GUI.Layout.Navigator.Show zoom ticks";
@@ -142,6 +146,7 @@ public class Settings {
 	static final String EN_UK = "en-UK";
 
 	private static DefaultMutableTreeNode root;
+	private static boolean isInitialized = false;
 
 	/**
 	 * Fill basic setup
@@ -161,10 +166,12 @@ public class Settings {
 		put(L_LAYOUT_NEIGHBORHOOD, "a", "Visibility of selected object's neighborhood", getNeighborhoodOptions());
 		put(L_LAYOUT_INFOPANEL, true, "Display service info?");
 		put(L_LAYOUT_DB_TREE, true, "Show DB Tree after start?");
-		put(L_LAYOUT_GRID, true, "Show Grid after start?");
-		put(L_LAYOUT_SCROLLS, true, "Hide scrollbars of Canvas?");
 		put(L_LAYOUT_TREE_PROJECT_N, false, "Display project name hologram on object tree? (helps distinguish windows of different projects)");
 		put(L_LAYOUT_PROJECT_SIMPLE, true, "Use a simple new project wizard that does not show advanced project configuration options?");
+
+		put(L_LAYOUT_CANV_STRAIGHT, true, "Draw constraints as straight lines?");
+		put(L_LAYOUT_CANV_GRID, true, "Show Grid after start?");
+		put(L_LAYOUT_CANV_SCROLLS, true, "Hide scrollbars of Canvas?");
 
 		put(L_LAYOUT_NAV_SIZE, 200, "Navigator's size in pixels", new Point(50, 400));
 		put(L_LAYOUT_NAV_TRANSPARENT, true, "Should Navigator's background be semi-transparent?");
@@ -251,12 +258,27 @@ public class Settings {
 		put(L_PERFORM_COMPARE_LIMIT, 500, "Do not compare table content when row number is higher", new Point(1, 100000));
 
 		loadFromDisk();
+
+		isInitialized = true;
+
 		updateReferences();
 	}
 
 	private static void updateReferences() {
-		Dbg.sendCrashReports = getBool(L_ERRORS_CRASH_REPORTS);
-		Usage.sendUsageReports = getBool(L_ERRORS_USAGE_REPORTS);
+		if (isInitialized) {
+			Schedule.inEDT(1000, () -> {
+				Dbg.sendCrashReports = getBool(L_ERRORS_CRASH_REPORTS);
+				Usage.sendUsageReports = getBool(L_ERRORS_USAGE_REPORTS);
+				Canvas.instance.gridEnabled = getBool(L_LAYOUT_CANV_GRID);
+				Canvas.instance.repaint();
+				DBTree.instance.repaint();
+                boolean isDrawStraight = getBool(L_LAYOUT_CANV_STRAIGHT);
+                if (isDrawStraight != Constraint.isDrawStraight) {
+                    Constraint.isDrawStraight = isDrawStraight;
+                    Canvas.instance.drawProject(true);
+                }
+			});
+		}
 	}
 
 	/**

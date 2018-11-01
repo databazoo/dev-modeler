@@ -22,7 +22,6 @@ import com.databazoo.devmodeler.wizards.ExportImportWizard;
 import com.databazoo.devmodeler.wizards.SettingsWizard;
 import com.databazoo.devmodeler.wizards.project.ProjectWizard;
 import com.databazoo.devmodeler.wizards.server.ServerAdministrationWizard;
-import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 import com.databazoo.tools.Usage;
 
@@ -63,6 +62,7 @@ public class Menu extends JPanel {
 
     private static final String L_DB_TREE = "Show database tree";
     private static final String L_GRID = "Show grid";
+    private static final String L_STRAIGHT_CON = "Draw straight constraints";
     private static final String L_ZOOM_IN = "Zoom in";
     private static final String L_ZOOM_OUT = "Zoom out";
 
@@ -345,11 +345,22 @@ public class Menu extends JPanel {
             case L_DB_TREE:
                 Usage.log(LEFT_MENU_TGL_TREE);
                 DesignGUI.get().toggleDBView();
+                Settings.put(Settings.L_LAYOUT_DB_TREE, item.isSelected());
+                Settings.save();
                 break;
             case L_GRID:
                 Usage.log(LEFT_MENU_TGL_GRID);
                 Canvas.instance.gridEnabled = item.isSelected();
                 Canvas.instance.repaint();
+                Settings.put(Settings.L_LAYOUT_CANV_GRID, item.isSelected());
+                Settings.save();
+                break;
+            case L_STRAIGHT_CON:
+                //Usage.log(LEFT_MENU_TGL_GRID);
+                Constraint.isDrawStraight = item.isSelected();
+                Canvas.instance.drawProject(true);
+                Settings.put(Settings.L_LAYOUT_CANV_STRAIGHT, item.isSelected());
+                Settings.save();
                 break;
 
             case L_TABLES:
@@ -409,7 +420,8 @@ public class Menu extends JPanel {
             JMenu viewMenuElem = new JMenu(" View ");
             viewMenuElem.add(dbTreeMenuItem = new MyCheckboxMenuItem(L_DB_TREE, Theme.getSmallIcon(Theme.ICO_DB_TREE),
                     Settings.getBool(Settings.L_LAYOUT_DB_TREE)));
-            viewMenuElem.add(new MyCheckboxMenuItem(L_GRID, Theme.getSmallIcon(Theme.ICO_GRID), Settings.getBool(Settings.L_LAYOUT_GRID)));
+            viewMenuElem.add(new MyCheckboxMenuItem(L_GRID, Theme.getSmallIcon(Theme.ICO_GRID), Settings.getBool(Settings.L_LAYOUT_CANV_GRID)));
+            viewMenuElem.add(new MyCheckboxMenuItem(L_STRAIGHT_CON, null, Settings.getBool(Settings.L_LAYOUT_CANV_STRAIGHT)));
             viewMenuElem.addSeparator();
             viewMenuElem.add(drawElementsMenu());
             viewMenuElem.addSeparator();
