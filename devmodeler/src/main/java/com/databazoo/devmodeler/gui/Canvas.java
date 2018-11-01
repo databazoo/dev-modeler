@@ -141,7 +141,7 @@ public class Canvas extends ClickableComponent {
 	}
 
 	public volatile boolean quirksMode = false;
-	public boolean gridEnabled = Settings.getBool(Settings.L_LAYOUT_GRID);
+	public boolean gridEnabled = Settings.getBool(Settings.L_LAYOUT_CANV_GRID);
 
 	private JScrollPane scrollPane;
 	private final Dimension size = new Dimension(3000, 2000);

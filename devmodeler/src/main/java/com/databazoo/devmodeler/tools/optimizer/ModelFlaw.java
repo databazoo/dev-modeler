@@ -14,6 +14,30 @@ public class ModelFlaw {
 	public static final String L_SEVERITY_WARNING	= "Warning";
 	public static final String L_SEVERITY_NOTICE	= "Notice";
 
+	public static ModelFlaw error(IModelElement element, String title, String description) {
+		return error(element, title, description, null, null);
+	}
+
+	public static ModelFlaw error(IModelElement element, String title, String description, String forwardSQL, String backwardSQL) {
+		return new ModelFlaw(element, L_SEVERITY_ERROR, title, description, forwardSQL, backwardSQL);
+	}
+
+	public static ModelFlaw warning(IModelElement element, String title, String description) {
+		return warning(element, title, description, null, null);
+	}
+
+	public static ModelFlaw warning(IModelElement element, String title, String description, String forwardSQL, String backwardSQL) {
+		return new ModelFlaw(element, L_SEVERITY_WARNING, title, description, forwardSQL, backwardSQL);
+	}
+
+	public static ModelFlaw notice(IModelElement element, String title, String description) {
+		return notice(element, title, description, null, null);
+	}
+
+	public static ModelFlaw notice(IModelElement element, String title, String description, String forwardSQL, String backwardSQL) {
+		return new ModelFlaw(element, L_SEVERITY_NOTICE, title, description, forwardSQL, backwardSQL);
+	}
+
 	public final IModelElement element;
 	public final String severity;
 	public final String title;
@@ -22,12 +46,8 @@ public class ModelFlaw {
 	public final String forwardSQL;
 	public final String backwardSQL;
 
-	ModelFlaw (IModelElement element, String severity, String title, String description) {
-		this(element, severity, title, description, null, null);
-	}
 
-
-	ModelFlaw (IModelElement element, String severity, String title, String description, String forwardSQL, String backwardSQL) {
+	private ModelFlaw (IModelElement element, String severity, String title, String description, String forwardSQL, String backwardSQL) {
 		this.element = element;
 		this.severity = severity;
 		this.title = title;
