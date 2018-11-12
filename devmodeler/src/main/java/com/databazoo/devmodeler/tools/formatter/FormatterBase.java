@@ -163,7 +163,7 @@ public abstract class FormatterBase implements Serializable {
 		StyleConstants.setForeground(styleComment, UIConstants.COLOR_GRAY);
 
 		styleParen = doc.addStyle("paren", styleRegular);
-		StyleConstants.setBackground(styleParen, UIConstants.COLOR_HILIGHT_CHANGE);
+		StyleConstants.setBackground(styleParen, UIConstants.COLOR_HILIGHT_CHANGE_DARK);
 		StyleConstants.setBold(styleParen, true);
 
 		Style styleError = doc.addStyle(STR_STYLE_ERROR, styleRegular);

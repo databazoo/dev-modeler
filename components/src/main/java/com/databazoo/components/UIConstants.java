@@ -41,6 +41,9 @@ public class UIConstants {
     public static final Color COLOR_HILIGHT_INSERT = Color.decode("#AAFFAA");
     public static final Color COLOR_HILIGHT_DELETE = Color.decode("#FFCCCC");
     public static final Color COLOR_HILIGHT_CHANGE = Color.decode("#CCCCFF");
+    public static final Color COLOR_HILIGHT_INSERT_DARK = Color.decode("#225522");
+    public static final Color COLOR_HILIGHT_DELETE_DARK = Color.decode("#552222");
+    public static final Color COLOR_HILIGHT_CHANGE_DARK = Color.decode("#222255");
 
     public static final boolean DEBUG = getProperty("app.debug") != null && getProperty("app.debug").equalsIgnoreCase("true");
     public static final String APP_VERSION = "app.version";
