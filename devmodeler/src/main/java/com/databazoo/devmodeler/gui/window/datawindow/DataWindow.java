@@ -34,6 +34,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -78,7 +79,7 @@ public class DataWindow extends DataWindowOutputMessages {
 	private static final String L_FAVORITE_EDITED_TITLE = "Favourite edited";
 	private static final String L_FAVORITE_EDITED_MESSAGE = "Favourite query was edited.\n\nDo you wish to save it?";
 
-	public static DataWindow get(){
+	public static synchronized DataWindow get(){
 		return new DataWindow();
 	}
 
@@ -189,6 +190,7 @@ public class DataWindow extends DataWindowOutputMessages {
 
 		runQuery();
 		cacheFKsForColumns();
+		Dbg.info("drawRelationData complete");
 	}
 
 	void drawRelationData(IConnection conn, Relation rel, boolean desc) {
@@ -200,6 +202,7 @@ public class DataWindow extends DataWindowOutputMessages {
 
 		runQuery();
 		cacheFKsForColumns();
+		Dbg.info("drawRelationData(conn) complete");
 	}
 
 	private void prepareRelationData(Relation rel, boolean desc) {
@@ -211,6 +214,7 @@ public class DataWindow extends DataWindowOutputMessages {
 			order = order.replaceAll(", ", " DESC, ") + " DESC";
 		}
 		queryInput.setQuery(connection.getQuerySelect(rel, where, order, limit));
+		Dbg.info("prepareRelationData complete");
 	}
 
 	public DataWindow setWhere(String where) {
@@ -218,6 +222,9 @@ public class DataWindow extends DataWindowOutputMessages {
 		return this;
 	}
 
+	/**
+	 * Drawing data window, already in EDT.
+	 */
 	private void draw(String fullName) {
 		windowBaseName = fullName;
 		drawFrame();

@@ -210,8 +210,10 @@ public class Canvas extends ClickableComponent {
 				scrollPane.getHorizontalScrollBar().getMaximum() - viewportSize.width,
 				scrollPane.getVerticalScrollBar().getMaximum() - viewportSize.height));
 
-		Schedule.inEDT(() -> scrollPane.getViewport().setViewPosition(newPos));
-		checkInfoPanelAndOverviewLocation();
+		Schedule.inEDT(() -> {
+			scrollPane.getViewport().setViewPosition(newPos);
+			checkInfoPanelAndOverviewLocation();
+		});
 	}
 
 	public synchronized void drawProject(boolean forceCompleteRedraw) {
