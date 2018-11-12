@@ -48,6 +48,7 @@ public class UIConstants {
 
     private static Boolean performant;
     private static AffineTransform transform;
+    private static boolean lafWithRotatedTabs;
 
     /**
      * Check platform.
@@ -144,5 +145,13 @@ public class UIConstants {
                     (performant ? "positive" : "negative") + " result of " + sum + ".");
         }
         return performant;
+    }
+
+    public static boolean isLafWithRotatedTabs() {
+        return lafWithRotatedTabs;
+    }
+
+    public static void setLafWithRotatedTabs(boolean lafWithRotatedTabs) {
+        UIConstants.lafWithRotatedTabs = lafWithRotatedTabs;
     }
 }

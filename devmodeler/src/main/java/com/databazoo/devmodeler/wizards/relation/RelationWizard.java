@@ -535,7 +535,7 @@ public class RelationWizard extends RelationWizardPagesSequence {
 		outputTabs.addTab("SQL", queryScrollPane);
 		addPanel(outputTabs, "span, width 100%, height 100%");
 
-		Schedule.inWorker(Schedule.TYPE_DELAY, () -> {
+		Schedule.inEDT(Schedule.TYPE_DELAY, () -> {
 			HistoryTableModel historyTableModel = new HistoryTableModel(editableElement);
 			EditableTable historyTable = new EditableTable(historyTableModel) {
 				@Override

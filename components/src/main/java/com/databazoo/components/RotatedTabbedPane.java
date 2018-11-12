@@ -27,7 +27,7 @@ public class RotatedTabbedPane extends JTabbedPane {
     }
 
     @Override public void addTab(String title, Component component) {
-        if(!(UIConstants.isRetina() && UIConstants.isMac())) {
+        if(!(UIConstants.isRetina() && UIConstants.isMac()) && !UIConstants.isLafWithRotatedTabs()) {
             switch (getTabPlacement()) {
             case JTabbedPane.RIGHT:
                 super.addTab("", VerticalTextIcon.rotateClockwiseAlways(title), component);

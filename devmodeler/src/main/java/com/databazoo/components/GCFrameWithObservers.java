@@ -23,6 +23,6 @@ public class GCFrameWithObservers extends GCFrame {
 		super.dispose();
 		AutocompleteObserver.unregister(this);
 		QueryErrorPositionObserver.remove(this);
-		AutocompletePopupMenu.get().dispose();
+		AutocompletePopupMenu.disposeNow();
 	}
 }

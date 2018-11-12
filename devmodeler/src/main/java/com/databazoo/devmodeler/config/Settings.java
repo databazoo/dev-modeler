@@ -5,6 +5,8 @@ import com.databazoo.components.UIConstants;
 import com.databazoo.components.icons.IconedPath;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.DBTree;
+import com.databazoo.devmodeler.gui.DesignGUI;
+import com.databazoo.devmodeler.gui.SkinnedSubstanceLAF;
 import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.tools.Dbg;
@@ -32,6 +34,7 @@ import java.util.Map;
  * @author bobus
  */
 public class Settings {
+	public static final String L_THEME_COLORS			= "GUI.Theme.Color palette";
 	public static final String L_THEME_ICONS			= "GUI.Theme.Icon set";
 
 	public static final String L_FONT_TAB_SIZE			= "GUI.Fonts.Tab size";
@@ -152,6 +155,7 @@ public class Settings {
 	 * Fill basic setup
 	 */
 	public static void init(){
+		put(L_THEME_COLORS, null, "Overall color theme", SkinnedSubstanceLAF.getThemes());
 		put(L_THEME_ICONS, null, "Icon set", Theme.getIconThemes());
 
 		put(L_FONT_MONO_SIZE, 11, "Size of monowidth font", new Point(8, 16));
@@ -277,6 +281,8 @@ public class Settings {
                     Constraint.isDrawStraight = isDrawStraight;
                     Canvas.instance.drawProject(true);
                 }
+				DesignGUI.instance.setLAF();
+                DesignGUI.instance.frame.repaint();
 			});
 		}
 	}
@@ -496,7 +502,7 @@ public class Settings {
 	 * @param descr description
 	 * @param opts options list
 	 */
-	private static void put(String key, String value, String descr, HashMap<String,String> opts){
+	private static void put(String key, String value, String descr, Map<String,String> opts){
 		put(key, value);
 		descrs.put(key, descr);
 		options.put(key, opts);
