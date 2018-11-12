@@ -26,6 +26,10 @@ public class FormatterDiff extends FormatterSQL {
 	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_DELETE);
 	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_CHANGE);
 
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_INSERT_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_INSERT_DARK);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_DELETE_DARK);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_CHANGE_DARK);
+
 	public FormatterDiff(List<Delta> deltas, boolean isSource) {
 		super();
 		this.deltaList = deltas;
@@ -71,15 +75,15 @@ public class FormatterDiff extends FormatterSQL {
 				Delta delta = deltaList.get(nextDelta);
 				if (isSource) {
 					if (delta instanceof DeleteDelta) {
-						currentPainter = PAINTER_DELETE;
+						currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_DELETE_DARK : PAINTER_DELETE;
 					} else {
-						currentPainter = PAINTER_CHANGE;
+						currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_CHANGE_DARK : PAINTER_CHANGE;
 					}
 				} else {
 					if (delta instanceof InsertDelta) {
-						currentPainter = PAINTER_INSERT;
+						currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_INSERT_DARK : PAINTER_INSERT;
 					} else {
-						currentPainter = PAINTER_CHANGE;
+						currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_CHANGE_DARK : PAINTER_CHANGE;
 					}
 				}
 				currentDeltaLasts--;
@@ -98,13 +102,13 @@ public class FormatterDiff extends FormatterSQL {
 							}
 							nextDelta++;
 						} else if (delta instanceof DeleteDelta) {
-							currentPainter = PAINTER_DELETE;
+							currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_DELETE_DARK : PAINTER_DELETE;
 							currentDeltaLasts = delta.getOriginal().getLines().size() - 1;
 							if (currentDeltaLasts == 0) {
 								nextDelta++;
 							}
 						} else {
-							currentPainter = PAINTER_CHANGE;
+							currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_CHANGE_DARK : PAINTER_CHANGE;
 							currentDeltaLasts = delta.getOriginal().getLines().size() - 1;
 							currentDeltaMore = delta.getRevised().getLines().size() - delta.getOriginal().getLines().size();
 							if (currentDeltaLasts == 0) {
@@ -121,13 +125,13 @@ public class FormatterDiff extends FormatterSQL {
 							}
 							nextDelta++;
 						} else if (delta instanceof InsertDelta) {
-							currentPainter = PAINTER_INSERT;
+							currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_INSERT_DARK : PAINTER_INSERT;
 							currentDeltaLasts = delta.getRevised().getLines().size() - 1;
 							if (currentDeltaLasts == 0) {
 								nextDelta++;
 							}
 						} else {
-							currentPainter = PAINTER_CHANGE;
+							currentPainter = UIConstants.isLafWithDarkSkin() ? PAINTER_CHANGE_DARK : PAINTER_CHANGE;
 							currentDeltaLasts = delta.getRevised().getLines().size() - 1;
 							currentDeltaMore = delta.getOriginal().getLines().size() - delta.getRevised().getLines().size();
 							if (currentDeltaLasts == 0) {

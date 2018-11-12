@@ -215,7 +215,7 @@ public class DiffWizard extends SQLEnabledWizard {
 	public void valueChanged(final TreeSelectionEvent tse) {
 		Schedule.inEDT(() -> {
 			if (btnDelete != null && tse.getNewLeadSelectionPath() != null) {
-				boolean relationDataChange = diffElement != null && diffElement instanceof Relation && ((Relation) diffElement).getDataChanged() != null;
+				boolean relationDataChange = diffElement instanceof Relation && ((Relation) diffElement).getDataChanged() != null;
 				if (tse.getNewLeadSelectionPath().getPath().length == 1) {
 					if (revision != null) {
 						loadRevisionPage1();
@@ -570,6 +570,7 @@ public class DiffWizard extends SQLEnabledWizard {
 		synchronizeScrolls(scroll1, scroll2);
 
 		setButtonsVisible(false);
+		validate();
 	}
 
 	private void loadNewChangePage() {

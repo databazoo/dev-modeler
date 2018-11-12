@@ -494,6 +494,11 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 			buttonPane.setVisible(b);
 		}
 	}
+
+	void validate() {
+		(placementPanel != null ? placementPanel : pageContent).validate();
+	}
+
 	protected void setTreeVisible(boolean b) {
 		treeScroll.setVisible(b);
 		JSplitPane splitPane = (JSplitPane)frame.getContentPane();
