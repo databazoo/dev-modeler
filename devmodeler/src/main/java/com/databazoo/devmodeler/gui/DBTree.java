@@ -2,6 +2,7 @@
 package com.databazoo.devmodeler.gui;
 
 import com.databazoo.components.FontFactory;
+import com.databazoo.components.UIConstants;
 import com.databazoo.components.WizardTree;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponent;
@@ -57,7 +58,7 @@ public class DBTree extends WizardTree {
 		return elems;
 	}
 
-	int splitWidth = Config.DB_TREE_SPLIT_WIDTH + Settings.getInt(Settings.L_LAYOUT_DB_TREE_WIDTH)*44;
+	int splitWidth = Config.DB_TREE_SPLIT_WIDTH + Settings.getInt(Settings.L_LAYOUT_DB_TREE_WIDTH) * UIConstants.MENU_BUTTON_SIZE.width;
 
 	private final transient List<IModelElement> elements = new ArrayList<>();
 	private String[] elementNames;

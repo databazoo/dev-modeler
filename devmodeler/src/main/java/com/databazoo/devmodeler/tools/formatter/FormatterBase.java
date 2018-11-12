@@ -118,6 +118,60 @@ public abstract class FormatterBase implements Serializable {
 
 
 	public void addStylesToDocument(StyledDocument doc) {
+		if (UIConstants.isLafWithDarkSkin()) {
+			addDarkColorSet(doc);
+		} else {
+			addBrightColorSet(doc);
+		}
+	}
+
+	private void addDarkColorSet(StyledDocument doc) {
+		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+
+		styleRegular = doc.addStyle("regular", def);
+		StyleConstants.setFontFamily(def, FontFactory.getMonospacedName());
+		StyleConstants.setFontSize(def, Settings.getInt(Settings.L_FONT_MONO_SIZE));
+		StyleConstants.setForeground(def, Color.LIGHT_GRAY);
+
+		styleKeyword = doc.addStyle("kw", styleRegular);
+		StyleConstants.setForeground(styleKeyword, UIConstants.COLOR_BLUE_GRAY);
+
+		styleNumber = doc.addStyle("nums", styleRegular);
+		StyleConstants.setForeground(styleNumber, UIConstants.COLOR_PINK);
+
+		styleString = doc.addStyle("strings", styleRegular);
+		StyleConstants.setForeground(styleString, UIConstants.COLOR_BROWN);
+
+		styleTableCol = doc.addStyle("table_col", styleRegular);
+		StyleConstants.setForeground(styleTableCol, UIConstants.COLOR_GREEN_BRIGHT);
+		StyleConstants.setItalic(styleTableCol, true);
+
+		styleLocalVar = doc.addStyle("local_var", styleRegular);
+		StyleConstants.setForeground(styleLocalVar, UIConstants.COLOR_BLUE_GRAY);
+		StyleConstants.setItalic(styleLocalVar, true);
+
+		styleTableColUl = doc.addStyle("table_col_ul", styleRegular);
+		StyleConstants.setForeground(styleTableColUl, UIConstants.COLOR_GREEN_BRIGHT);
+		StyleConstants.setItalic(styleTableColUl, true);
+		StyleConstants.setUnderline(styleTableColUl, true);
+
+		styleDatatype = doc.addStyle("datatype", styleRegular);
+		StyleConstants.setForeground(styleDatatype, UIConstants.COLOR_PINK);
+		StyleConstants.setItalic(styleDatatype, true);
+
+		styleComment = doc.addStyle("comment", styleRegular);
+		StyleConstants.setForeground(styleComment, UIConstants.COLOR_GRAY);
+
+		styleParen = doc.addStyle("paren", styleRegular);
+		StyleConstants.setBackground(styleParen, UIConstants.COLOR_HILIGHT_CHANGE);
+		StyleConstants.setBold(styleParen, true);
+
+		Style styleError = doc.addStyle(STR_STYLE_ERROR, styleRegular);
+		StyleConstants.setForeground(styleError, UIConstants.COLOR_RED);
+		StyleConstants.setUnderline(styleError, true);
+	}
+
+	private void addBrightColorSet(StyledDocument doc) {
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
 		styleRegular = doc.addStyle("regular", def);
@@ -163,7 +217,7 @@ public abstract class FormatterBase implements Serializable {
 		StyleConstants.setUnderline(styleError, true);
 	}
 
-    class FormatProcess {
+	class FormatProcess {
 		private final boolean isEditable;
 		StringTokenizer tokens;
 		String lastToken;

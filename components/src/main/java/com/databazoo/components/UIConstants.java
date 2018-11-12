@@ -22,13 +22,16 @@ public class UIConstants {
     public static final Color COLOR_RED_SELECTED = Color.decode("#FF7777");
     public static final Color COLOR_GREEN = Color.decode("#009900");
     public static final Color COLOR_GREEN_DARK = Color.decode("#003300");
+    public static final Color COLOR_GREEN_BRIGHT = Color.decode("#77FF77");
     public static final Color COLOR_BLUE = Color.BLUE;
     public static final Color COLOR_BLUE_DARK = Color.decode("#000055");
+    public static final Color COLOR_BLUE_GRAY = Color.decode("#7777FF");
     public static final Color COLOR_YELLOW = Color.YELLOW;
     public static final Color COLOR_GRAY = Color.decode("#999999");
     public static final Color COLOR_LIGHT_GRAY = Color.decode("#CCCCCC");
     public static final Color COLOR_BROWN = Color.decode("#CE7B00");
     public static final Color COLOR_AMBER = Color.decode("#770000");
+    public static final Color COLOR_PINK = Color.decode("#FF7777");
     // TODO: select from environment
     public static final Color COLOR_BG_DARK = Color.decode("#9297A1");
     public static final Color COLOR_BG_LIGHT = Color.decode("#F2F2F2");
@@ -42,13 +45,19 @@ public class UIConstants {
     public static final boolean DEBUG = getProperty("app.debug") != null && getProperty("app.debug").equalsIgnoreCase("true");
     public static final String APP_VERSION = "app.version";
 
+    public static final int MENU_HEIGHT = 34;
+    public static final int MENU_COMPONENT_HEIGHT = 32;
+    public static final Dimension MENU_BUTTON_SIZE = new Dimension(MENU_COMPONENT_HEIGHT + 4, MENU_COMPONENT_HEIGHT);
+
     public static volatile Properties PROPERTIES;
 
     private static volatile String versionWithEnvironment;
 
     private static Boolean performant;
     private static AffineTransform transform;
+
     private static boolean lafWithRotatedTabs;
+    private static boolean lafWithDarkSkin;
 
     /**
      * Check platform.
@@ -153,5 +162,13 @@ public class UIConstants {
 
     public static void setLafWithRotatedTabs(boolean lafWithRotatedTabs) {
         UIConstants.lafWithRotatedTabs = lafWithRotatedTabs;
+    }
+
+    public static boolean isLafWithDarkSkin() {
+        return lafWithDarkSkin;
+    }
+
+    public static void setLafWithDarkSkin(boolean lafWithDarkSkin) {
+        UIConstants.lafWithDarkSkin = lafWithDarkSkin;
     }
 }

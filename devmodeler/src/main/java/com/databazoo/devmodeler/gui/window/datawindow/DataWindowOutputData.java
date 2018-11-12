@@ -42,6 +42,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static com.databazoo.components.UIConstants.MENU_BUTTON_SIZE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ORDER_BY;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.SELECT;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.WHERE;
@@ -52,8 +53,6 @@ abstract class DataWindowOutputData extends DataWindowBase {
 	static final String L_ALL_CELLS = "All cells";
 	static final String L_SELECTED_ROWS_ALL_COLUMNS = "Selected rows (all columns)";
 	static final String L_SELECTED_COLUMNS_ALL_ROWS = "Selected columns (all rows)";
-
-	static final Dimension BUTTON_SIZE = new Dimension(36,32);
 
 	protected Result result;
 
@@ -87,7 +86,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 	void prepareButtons(){
 		btnSave = new JButton(Theme.getSmallIcon(Theme.ICO_SAVE));
 		btnSave.setToolTipText("Save edited row");
-		btnSave.setPreferredSize(BUTTON_SIZE);
+		btnSave.setPreferredSize(MENU_BUTTON_SIZE);
 		btnSave.setFocusable(false);
 		btnSave.setEnabled(false);
 		btnSave.addActionListener(ev -> {
@@ -99,7 +98,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 
 		btnExport = new JButton(Theme.getSmallIcon(Theme.ICO_EXPORT));
 		btnExport.setToolTipText("Export selected data");
-		btnExport.setPreferredSize(BUTTON_SIZE);
+		btnExport.setPreferredSize(MENU_BUTTON_SIZE);
 		btnExport.setFocusable(false);
 		btnExport.setEnabled(false);
 		btnExport.addActionListener(ev -> DataExportWizard.get().drawExport(outputData.getModel()));
