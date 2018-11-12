@@ -35,6 +35,9 @@ import java.awt.event.ItemListener;
 import java.util.stream.Collectors;
 
 import static com.databazoo.devmodeler.conn.SupportedElement.SERVER_ADMINISTRATION;
+import static com.databazoo.components.UIConstants.MENU_BUTTON_SIZE;
+import static com.databazoo.components.UIConstants.MENU_COMPONENT_HEIGHT;
+import static com.databazoo.components.UIConstants.MENU_HEIGHT;
 import static com.databazoo.devmodeler.gui.UsageElement.*;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_FUNCTIONS;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_PACKAGES;
@@ -82,7 +85,6 @@ public class Menu extends JPanel {
     private static final String L_IMPORT = "Import";
 
     private static final int SIDE_MENU_WIDTH = 390;
-    static final int COMPONENT_HEIGHT = 28;
 
     private static final Menu INSTANCE = new Menu();
 
@@ -382,11 +384,11 @@ public class Menu extends JPanel {
 
     private class LeftMenu extends JPanel {
 
-        private static final int MENU_WIDTH = 180;
+        private static final int MENU_WIDTH = 208;
 
         private LeftMenu() {
             setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-            setPreferredSize(new Dimension(SIDE_MENU_WIDTH - 10, COMPONENT_HEIGHT));
+            setPreferredSize(new Dimension(SIDE_MENU_WIDTH - 10, MENU_HEIGHT));
             draw();
         }
 
@@ -394,7 +396,7 @@ public class Menu extends JPanel {
             JMenuBar menuBar = new JMenuBar();
 
             menuBar.setBorder(new EmptyBorder(4, 8, 0, 8));
-            menuBar.setPreferredSize(new Dimension(MENU_WIDTH, COMPONENT_HEIGHT));
+            menuBar.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
             menuBar.setLayout(new GridLayout(1, 0, 0, 0));
 
             menuBar.add(drawFileMenu());
@@ -477,6 +479,7 @@ public class Menu extends JPanel {
                 ProjectWizard.getInstance();
             });
             menuBtnProject.setFocusable(false);
+            menuBtnProject.setPreferredSize(MENU_BUTTON_SIZE);
             return menuBtnProject;
         }
 
@@ -488,6 +491,7 @@ public class Menu extends JPanel {
                 DataWindow.get().drawQueryWindow();
             });
             menuBtnQuery.setFocusable(false);
+            menuBtnQuery.setPreferredSize(MENU_BUTTON_SIZE);
             return menuBtnQuery;
         }
     }
@@ -495,12 +499,12 @@ public class Menu extends JPanel {
     private class CenterMenu extends JPanel {
 
         private CenterMenu() {
-            setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            setLayout(new FlowLayout(FlowLayout.CENTER, 0, 4));
             draw();
         }
 
         private void draw() {
-            JPanel viewMenu = new JPanel(new GridLayout(1, 0, 0, 0));
+            JPanel viewMenu = new JPanel(new GridLayout(1, 0, 3, 0));
 
             viewMenu.add(drawDesignerButton());
             viewMenu.add(drawOptimizerButton());
@@ -564,14 +568,13 @@ public class Menu extends JPanel {
         private static final int SYNC_WIDTH = 75;
         private static final int SYNC_BUTTON_HEIGHT = 16;
         private static final int SYNC_CHECKBOX_HEIGHT = 14;
-        private static final int SERVER_STATUS_WIDTH = COMPONENT_HEIGHT + 8;
         private JPanel syncPanel;
         private String dbSelected;
         private String connSelected;
 
         private RightMenu() {
             setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-            setPreferredSize(new Dimension(SIDE_MENU_WIDTH, COMPONENT_HEIGHT));
+            setPreferredSize(new Dimension(SIDE_MENU_WIDTH, MENU_HEIGHT));
             draw();
             redraw();
         }
@@ -591,14 +594,15 @@ public class Menu extends JPanel {
         }
 
         private void draw() {
-            syncPanel = new JPanel(new GridLayout(0, 1, 0, -2));
+            syncPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            syncPanel.setPreferredSize(new Dimension(80, MENU_COMPONENT_HEIGHT));
             syncPanel.add(drawSyncCheckbox());
             syncPanel.add(getSyncNowButton());
 
             menuBtnAdmin = new JButton(Theme.getSmallIcon(Theme.ICO_SETTINGS));
             menuBtnAdmin.setToolTipText("Administration tools");
             menuBtnAdmin.addActionListener(e -> {
-                RightClickMenu.setLocationTo(menuBtnAdmin, new Point(2, COMPONENT_HEIGHT - 2));
+                RightClickMenu.setLocationTo(menuBtnAdmin, new Point(2, MENU_COMPONENT_HEIGHT - 2));
                 RightClickMenu.get((type, selectedValue) -> {
                     switch (type) {
                     case 10:
@@ -623,7 +627,7 @@ public class Menu extends JPanel {
                         .addItem(L_USERS_AND_ROLES, 12);
             });
             menuBtnAdmin.setFocusable(false);
-            menuBtnAdmin.setPreferredSize(new Dimension(SERVER_STATUS_WIDTH, COMPONENT_HEIGHT));
+            menuBtnAdmin.setPreferredSize(MENU_BUTTON_SIZE);
         }
 
         private JButton getSyncNowButton() {
@@ -681,12 +685,12 @@ public class Menu extends JPanel {
                 dbCombo.setSelectedItem(dbSelected);
             }
 
-            dbCombo.setPreferredSize(new Dimension(NORMAL_DB_COMBO_WIDTH, COMPONENT_HEIGHT));
-            connCombo.setPreferredSize(new Dimension(NORMAL_CONN_COMBO_WIDTH, COMPONENT_HEIGHT));
+            dbCombo.setPreferredSize(new Dimension(NORMAL_DB_COMBO_WIDTH, MENU_COMPONENT_HEIGHT));
+            connCombo.setPreferredSize(new Dimension(NORMAL_CONN_COMBO_WIDTH, MENU_COMPONENT_HEIGHT));
 
             if (ProjectManager.getInstance() != null && Project.getCurrent() != null && Project.getCurrent().getType() == Project.TYPE_ABSTRACT) {
                 add(dbCombo);
-                dbCombo.setPreferredSize(new Dimension(ABSTRACT_DB_COMBO_WIDTH, COMPONENT_HEIGHT));
+                dbCombo.setPreferredSize(new Dimension(ABSTRACT_DB_COMBO_WIDTH, MENU_COMPONENT_HEIGHT));
             } else {
                 add(syncPanel);
                 add(dbCombo);
@@ -701,6 +705,7 @@ public class Menu extends JPanel {
                 Project.getCurrent().setCurrentDB(Project.getCurrent().getDatabases().get(dbCombo.getSelectedIndex()));
                 Canvas.instance.drawProject(true);
             });
+            Menu.this.validate();
         }
 
         private void draw2ConnectionCombos() {
@@ -713,8 +718,8 @@ public class Menu extends JPanel {
                 connCombo2.setSelectedIndex(DifferenceView.instance.getConnSelected());
             }
 
-            connCombo2.setPreferredSize(new Dimension(COMPARE_CONN_COMBO_WIDTH, COMPONENT_HEIGHT));
-            connCombo.setPreferredSize(new Dimension(COMPARE_CONN_COMBO_WIDTH, COMPONENT_HEIGHT));
+            connCombo2.setPreferredSize(new Dimension(COMPARE_CONN_COMBO_WIDTH, MENU_COMPONENT_HEIGHT));
+            connCombo.setPreferredSize(new Dimension(COMPARE_CONN_COMBO_WIDTH, MENU_COMPONENT_HEIGHT));
 
             add(connCombo2);
             add(connCombo);
@@ -732,19 +737,16 @@ public class Menu extends JPanel {
                 dbSelected = p.getCurrentDB() != null ? p.getCurrentDB().getFullName() : "";
                 dbComboOptions = p.getDatabases().stream()
                         .map(DB::getFullName)
-                        .collect(Collectors.toList())
-                        .toArray(new String[0]);
+                        .toArray(String[]::new);
 
                 connSelected = p.getCurrentConn() != null ? p.getCurrentConn().getFullName() : "";
                 connComboOptions = p.getConnections().stream()
                         .map(IConnection::getFullName)
-                        .collect(Collectors.toList())
-                        .toArray(new String[0]);
+                        .toArray(String[]::new);
 
                 connComboOptions2 = p.getConnections().stream()
                         .map(IConnection::getFullName)
-                        .collect(Collectors.toList())
-                        .toArray(new String[0]);
+                        .toArray(String[]::new);
             }
 
             redrawConnCombo();

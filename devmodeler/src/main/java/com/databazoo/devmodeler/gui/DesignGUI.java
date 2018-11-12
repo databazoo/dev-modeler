@@ -80,10 +80,12 @@ public class DesignGUI {
 		}
 
 		UIConstants.setLafWithRotatedTabs(false);
+		UIConstants.setLafWithDarkSkin(false);
 		if (!Settings.getStr(Settings.L_THEME_COLORS).equals(SKIN_NIMBUS)) {
 			try {
 				UIManager.setLookAndFeel(new SkinnedSubstanceLAF());
 				UIConstants.setLafWithRotatedTabs(true);
+				UIConstants.setLafWithDarkSkin(SkinnedSubstanceLAF.isCurrentSkinDark());
 				return;
 			} catch (UnsupportedLookAndFeelException e) {
 				Dbg.fixme("Switching to SkinnedSubstanceLAF failed, trying Nimbus.", e);

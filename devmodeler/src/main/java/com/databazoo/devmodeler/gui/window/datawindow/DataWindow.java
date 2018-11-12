@@ -2,6 +2,7 @@ package com.databazoo.devmodeler.gui.window.datawindow;
 
 import com.databazoo.components.GCFrameWithObservers;
 import com.databazoo.components.RotatedTabbedPane;
+import com.databazoo.components.UIConstants;
 import com.databazoo.components.combo.IconableComboBox;
 import com.databazoo.components.containers.HorizontalContainer;
 import com.databazoo.components.containers.VerticalContainer;
@@ -842,7 +843,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		private Component drawQueryButton() {
 			JButton btnQuery = new JButton(Theme.getSmallIcon(Theme.ICO_SQL_WINDOW));
 			btnQuery.setToolTipText("Open new query window");
-			btnQuery.setPreferredSize(BUTTON_SIZE);
+			btnQuery.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 			btnQuery.setFocusable(false);
 			btnQuery.addActionListener(e -> {
 				DataWindow win = DataWindow.get();
@@ -862,7 +863,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		private Component drawAddToRevisionButton() {
 			JButton btnRev = new JButton(Theme.getSmallIcon(Theme.ICO_REVISION));
 			btnRev.setToolTipText("Add current query to some revision");
-			btnRev.setPreferredSize(BUTTON_SIZE);
+			btnRev.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 			btnRev.setFocusable(false);
 			btnRev.addActionListener(ev -> DiffWizard.get().drawAddChange(queryInput.getText(), database, connection));
 			return btnRev;
@@ -871,7 +872,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		private Component drawAddToFavoritesButton() {
 			JButton btnFav = new JButton(Theme.getSmallIcon(Theme.ICO_FAVORITE_ADD));
 			btnFav.setToolTipText("Add current query to favorites");
-			btnFav.setPreferredSize(BUTTON_SIZE);
+			btnFav.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 			btnFav.setFocusable(false);
 			btnFav.addActionListener(ev -> Schedule.inWorker(() -> {
                 String[] opts = new String[]{"Overwrite current", "Create new favorite"};
@@ -907,7 +908,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		private Component drawExplainButton() {
 			btnExplain = new JButton(Theme.getSmallIcon(Theme.ICO_EXPLAIN));
 			btnExplain.setToolTipText("Explain query");
-			btnExplain.setPreferredSize(BUTTON_SIZE);
+			btnExplain.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 			btnExplain.setFocusable(false);
 			btnExplain.addActionListener(ev -> explainQuery());
 			return btnExplain;
@@ -916,7 +917,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		private Component drawRunButton() {
 			btnRun = new JButton(Theme.getSmallIcon(Theme.ICO_RUN));
 			btnRun.setToolTipText("Run query");
-			btnRun.setPreferredSize(BUTTON_SIZE);
+			btnRun.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 			btnRun.setFocusable(false);
 			btnRun.addActionListener(ev -> runQuery());
 			return btnRun;
@@ -925,7 +926,7 @@ public class DataWindow extends DataWindowOutputMessages {
 		private Component drawStopButton() {
 			btnStop = new JButton(Theme.getSmallIcon(Theme.ICO_STOP));
 			btnStop.setToolTipText("Stop running query");
-			btnStop.setPreferredSize(BUTTON_SIZE);
+			btnStop.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 			btnStop.setFocusable(false);
 			btnStop.setEnabled(false);
 			btnStop.addActionListener(ev -> {

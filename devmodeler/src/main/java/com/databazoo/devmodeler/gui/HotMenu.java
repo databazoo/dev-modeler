@@ -15,7 +15,7 @@ import com.databazoo.tools.Usage;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.databazoo.devmodeler.gui.Menu.COMPONENT_HEIGHT;
+import static com.databazoo.components.UIConstants.MENU_COMPONENT_HEIGHT;
 import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_DATA;
 import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_EDIT;
 
@@ -66,7 +66,7 @@ public final class HotMenu extends JComponent {
             }
             add(Buttons.COPY);
 
-            setSize(new Dimension(45 * getComponentCount(), COMPONENT_HEIGHT));
+            setSize(new Dimension(45 * getComponentCount(), MENU_COMPONENT_HEIGHT));
             setVisible(true);
 
             checkLocation(element);

@@ -80,6 +80,7 @@ public class SearchPanel extends JPanel {
                 menu.addItem(searchHistory.get(i), i);
             }
         });
+        historyButton.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 
         searchButton = new JButton(Theme.getSmallIcon(Theme.ICO_SEARCH));
         searchButton.setFocusable(false);
@@ -90,6 +91,7 @@ public class SearchPanel extends JPanel {
             searchNotMatching.setSelected(false);
             triggerSearch();
         });
+        searchButton.setPreferredSize(UIConstants.MENU_BUTTON_SIZE);
 
         JPanel buttonPanel = new JPanel(new GridLayout(1,0,0,0));
         buttonPanel.add(searchButton);

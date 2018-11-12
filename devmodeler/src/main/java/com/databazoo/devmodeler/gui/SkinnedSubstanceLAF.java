@@ -16,9 +16,6 @@ import org.pushingpixels.substance.api.skin.MistSilverSkin;
 import org.pushingpixels.substance.api.skin.ModerateSkin;
 import org.pushingpixels.substance.api.skin.NebulaBrickWallSkin;
 import org.pushingpixels.substance.api.skin.NebulaSkin;
-import org.pushingpixels.substance.api.skin.OfficeBlack2007Skin;
-import org.pushingpixels.substance.api.skin.OfficeBlue2007Skin;
-import org.pushingpixels.substance.api.skin.OfficeSilver2007Skin;
 import org.pushingpixels.substance.api.skin.RavenSkin;
 import org.pushingpixels.substance.api.skin.TwilightSkin;
 
@@ -27,39 +24,47 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SkinnedSubstanceLAF extends SubstanceLookAndFeel {
-    private static final Map<SkinDescriptor, SubstanceSkin> SKINS = new LinkedHashMap<>();
+    private static final Map<String, SkinDescriptor> SKINS = new LinkedHashMap<>();
+    private static SkinDescriptor selectedSkin;
 
-    public static final String SKIN_NIMBUS = "Nimbus";
+    static final String SKIN_NIMBUS = "Nimbus";
     private static final String SKIN_BRIGHT = "Business Blue Steel";
     private static final String SKIN_DARK = "Graphite Glass";
 
     static {
-        SKINS.put(new SkinDescriptor("Business Black Steel", true, false), new BusinessBlackSteelSkin());  // Good one
-        SKINS.put(new SkinDescriptor("Business Blue Steel", true, false), new BusinessBlueSteelSkin());    // Good one
-        SKINS.put(new SkinDescriptor("Cerulean", true, false), new CeruleanSkin());
-        SKINS.put(new SkinDescriptor("Creme", true, false), new CremeSkin());
+        SKINS.put("Business Black Steel", new SkinDescriptor("Business Black Steel", new BusinessBlackSteelSkin(), true, false));   // Good one
+        SKINS.put("Business Blue Steel", new SkinDescriptor("Business Blue Steel", new BusinessBlueSteelSkin(), true, false));      // Good one
+        SKINS.put("Cerulean", new SkinDescriptor("Cerulean", new CeruleanSkin(), true, false));
+        SKINS.put("Creme", new SkinDescriptor("Creme", new CremeSkin(), true, false));
 
-        SKINS.put(new SkinDescriptor("Mariner", true, false), new MarinerSkin());
-        SKINS.put(new SkinDescriptor("Mist Aqua Skin", true, false), new MistAquaSkin());
-        SKINS.put(new SkinDescriptor("Mist Silver", true, false), new MistSilverSkin());
+        SKINS.put("Mariner", new SkinDescriptor("Mariner", new MarinerSkin(), true, false));
+        SKINS.put("Mist Aqua", new SkinDescriptor("Mist Aqua", new MistAquaSkin(), true, false));
+        SKINS.put("Mist Silver", new SkinDescriptor("Mist Silver", new MistSilverSkin(), true, false));
 
-        SKINS.put(new SkinDescriptor("Moderate", true, false), new ModerateSkin());                        // Good one
-        SKINS.put(new SkinDescriptor("Nebula Brick Wall", true, false), new NebulaBrickWallSkin());        // Generic - may be a good choice
-        SKINS.put(new SkinDescriptor("Nebula", true, false), new NebulaSkin());                            // Good one - no setup required
+        SKINS.put("Moderate", new SkinDescriptor("Moderate", new ModerateSkin(), true, false));                                     // Good one
+        SKINS.put("Nebula Brick Wall", new SkinDescriptor("Nebula Brick Wall", new NebulaBrickWallSkin(), true, false));            // Generic - may be a good choice
+        SKINS.put("Nebula", new SkinDescriptor("Nebula", new NebulaSkin(), true, false));                                           // Good one - no setup required
 
-
-        SKINS.put(new SkinDescriptor("Graphite", true, true), new GraphiteSkin());
-        SKINS.put(new SkinDescriptor("Graphite Glass", true, true), new GraphiteGlassSkin());
-        SKINS.put(new SkinDescriptor("Graphite Gold", true, true), new GraphiteGoldSkin());
-        SKINS.put(new SkinDescriptor("Raven", true, true), new RavenSkin());
-        SKINS.put(new SkinDescriptor("Twilight", true, true), new TwilightSkin());
+        SKINS.put("Graphite", new SkinDescriptor("Graphite", new GraphiteSkin(), true, true));
+        SKINS.put("Graphite Glass", new SkinDescriptor("Graphite Glass", new GraphiteGlassSkin(), true, true));
+        SKINS.put("Graphite Gold", new SkinDescriptor("Graphite Gold", new GraphiteGoldSkin(), true, true));
+        SKINS.put("Raven", new SkinDescriptor("Raven", new RavenSkin(), true, true));
+        SKINS.put("Twilight", new SkinDescriptor("Twilight", new TwilightSkin(), true, true));
     }
 
     private static SubstanceSkin getSkin() {
-        String themeCode = Settings.getStr(Settings.L_THEME_COLORS);
-        SkinDescriptor skinDescriptor = new SkinDescriptor((themeCode != null ? themeCode : SKIN_BRIGHT), false, false);
-        SubstanceSkin skin = SKINS.get(skinDescriptor);
-        return skin != null ? skin : SKINS.get(new SkinDescriptor(SKIN_BRIGHT, false, false));
+        selectedSkin = SKINS.get(Settings.getStr(Settings.L_THEME_COLORS));
+        if (selectedSkin == null) {
+            selectedSkin = SKINS.get(SKIN_BRIGHT);
+        }
+        return selectedSkin.substanceSkin;
+    }
+
+    public static boolean isCurrentSkinDark() {
+        if (selectedSkin != null) {
+            return selectedSkin.isDark;
+        }
+        return false;
     }
 
     SkinnedSubstanceLAF() {
@@ -75,15 +80,15 @@ public class SkinnedSubstanceLAF extends SubstanceLookAndFeel {
         LinkedHashMap<String, String> ret = new LinkedHashMap<>();
         ret.put("Nimbus (fallback)", SKIN_NIMBUS);
         ret.put("Bright", SKIN_BRIGHT);
-        for (Map.Entry<SkinDescriptor, SubstanceSkin> entry : SKINS.entrySet()) {
-            if (!entry.getKey().isDark) {
-                ret.put("        " + entry.getKey().getName(), entry.getKey().getName());
+        for (Map.Entry<String, SkinDescriptor> entry : SKINS.entrySet()) {
+            if (!entry.getValue().isDark) {
+                ret.put("        " + entry.getKey(), entry.getKey());
             }
         }
         ret.put("Dark", SKIN_DARK);
-        for (Map.Entry<SkinDescriptor, SubstanceSkin> entry : SKINS.entrySet()) {
-            if (entry.getKey().isDark) {
-                ret.put("        " + entry.getKey().getName(), entry.getKey().getName());
+        for (Map.Entry<String, SkinDescriptor> entry : SKINS.entrySet()) {
+            if (entry.getValue().isDark) {
+                ret.put("        " + entry.getKey(), entry.getKey());
             }
         }
 
@@ -92,11 +97,13 @@ public class SkinnedSubstanceLAF extends SubstanceLookAndFeel {
 
     private static class SkinDescriptor {
         private final String name;
+        private final SubstanceSkin substanceSkin;
         private final boolean requiresBorderedTextFields;
         private final boolean isDark;
 
-        SkinDescriptor(String name, boolean requiresBorderedTextFields, boolean isDark) {
+        SkinDescriptor(String name, SubstanceSkin businessBlackSteelSkin, boolean requiresBorderedTextFields, boolean isDark) {
             this.name = name;
+            this.substanceSkin = businessBlackSteelSkin;
             this.requiresBorderedTextFields = requiresBorderedTextFields;
             this.isDark = isDark;
         }

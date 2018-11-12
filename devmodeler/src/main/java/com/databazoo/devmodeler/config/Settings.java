@@ -165,8 +165,8 @@ public class Settings {
 		put(L_FONT_TAB_SIZE, 4, "Size of TAB symbol", new Point(1, 8));
 		put(L_FONT_FORCE_UPPER, true, "Automatically convert keywords like SELECT, UPDATE, DELETE, etc. to upper case?");
 
-		put(L_LAYOUT_WIZARD_TREE_W, 3, "How wide should option tree in wizards be?", new Point(1,4));
-		put(L_LAYOUT_DB_TREE_WIDTH, 3, "How wide should DB Tree be?", new Point(1,4));
+		put(L_LAYOUT_WIZARD_TREE_W, 3, "How wide should option tree in wizards be?", new Point(1,5));
+		put(L_LAYOUT_DB_TREE_WIDTH, 3, "How wide should DB Tree be?", new Point(1,5));
 		put(L_LAYOUT_NEIGHBORHOOD, "a", "Visibility of selected object's neighborhood", getNeighborhoodOptions());
 		put(L_LAYOUT_INFOPANEL, true, "Display service info?");
 		put(L_LAYOUT_DB_TREE, true, "Show DB Tree after start?");
