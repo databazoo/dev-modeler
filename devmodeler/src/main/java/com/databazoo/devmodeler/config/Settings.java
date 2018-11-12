@@ -270,7 +270,7 @@ public class Settings {
 
 	private static void updateReferences() {
 		if (isInitialized) {
-			Schedule.inEDT(1000, () -> {
+			Schedule.inEDT(2000, () -> {
 				Dbg.sendCrashReports = getBool(L_ERRORS_CRASH_REPORTS);
 				Usage.sendUsageReports = getBool(L_ERRORS_USAGE_REPORTS);
 				Canvas.instance.gridEnabled = getBool(L_LAYOUT_CANV_GRID);

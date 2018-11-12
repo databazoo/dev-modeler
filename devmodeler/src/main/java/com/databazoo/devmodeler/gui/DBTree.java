@@ -163,6 +163,7 @@ public class DBTree extends WizardTree {
 		if(!treeInitiatedClick){
 			DefaultTreeModel model = (DefaultTreeModel) getModel();
 			TreeNode root = (TreeNode)model.getRoot();
+			if (root != null)
 			for(int g=0; g<root.getChildCount(); g++){
 				TreeNode dbNode = root.getChildAt(g);
 				if(dbNode.toString().equals(dbName)){
