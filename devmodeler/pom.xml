@@ -144,11 +144,11 @@
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.insubstantial/substance -->
+
         <dependency>
-            <groupId>com.github.insubstantial</groupId>
-            <artifactId>substance</artifactId>
-            <version>7.3</version>
+            <groupId>org.pushing-pixels</groupId>
+            <artifactId>radiance-substance</artifactId>
+            <version>1.0.2</version>
         </dependency>
 
         <dependency>

@@ -220,7 +220,7 @@ public class Theme {
 	 *
 	 * @return themes
 	 */
-	public static HashMap<String,String> getIconThemes(){
+	static Map<String,String> getIconThemes(){
 		LinkedHashMap<String, String> ret = new LinkedHashMap<>();
 		ret.put("Default", null);
 

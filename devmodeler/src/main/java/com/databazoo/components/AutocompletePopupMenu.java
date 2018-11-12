@@ -52,6 +52,15 @@ public class AutocompletePopupMenu extends JWindow {
 		return instance != null && instance.isVisible() && instance.selectedRow >= 0;
 	}
 
+	/**
+	 * Dispose of any left menus.
+	 */
+	public static synchronized void disposeNow(){
+		if(instance != null){
+			instance.dispose();
+		}
+	}
+
 	private int selectedRow;
 	JMenuItem selectedItem;
 

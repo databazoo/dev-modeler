@@ -26,6 +26,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.databazoo.devmodeler.gui.SkinnedSubstanceLAF.SKIN_NIMBUS;
+
 /**
  * Main GUI controller.
  *
@@ -67,39 +69,32 @@ public class DesignGUI {
 	private JScrollPane dbScrl;
 	private JScrollPane canvasScroll;
 
-	//private HashMap<KeyStroke, Action> actionMap = new HashMap<KeyStroke, Action>();
 	private boolean dbViewOn = !Settings.getBool(Settings.L_LAYOUT_DB_TREE);
 
 	private JSplitPane diffSplitPane, optimizerSplitPane;
 	private final Map<KeyStroke,Action> actionMap = new HashMap<>();
 
-	private void setLAF(){
+	public void setLAF(){
 		if(UIConstants.isRetina()){
 			return;
 		}
-		/*Dbg.info(UIConstants.getJREVersion());
-		if(UIConstants.getJREVersion().startsWith("1.")) {
+
+		UIConstants.setLafWithRotatedTabs(false);
+		if (!Settings.getStr(Settings.L_THEME_COLORS).equals(SKIN_NIMBUS)) {
 			try {
-				UIManager.setLookAndFeel(new SubstanceLAF());
+				UIManager.setLookAndFeel(new SkinnedSubstanceLAF());
+				UIConstants.setLafWithRotatedTabs(true);
 				return;
 			} catch (UnsupportedLookAndFeelException e) {
-				Dbg.fixme("Switching to SubstanceLAF failed, trying Nimbus.", e);
+				Dbg.fixme("Switching to SkinnedSubstanceLAF failed, trying Nimbus.", e);
 			}
-		}*/
+		}
 
-		boolean found = false;
 		try {
-			for(String desiredName : new String[]{/*"Windows", "CDE/Motif", "GTK+",*/ "Nimbus"}){	// ALL NATIVE LOOKS ARE PRETTY SHITTY, USING NIMBUS INSTEAD
-				if(found){
+			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if (SKIN_NIMBUS.equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
 					break;
-				}
-				for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-					//System.out.println(info.getName());
-					if (desiredName.equals(info.getName())) {
-						UIManager.setLookAndFeel(info.getClassName());
-						found = true;
-						break;
-					}
 				}
 			}
 		} catch (Exception er) {
@@ -113,10 +108,10 @@ public class DesignGUI {
 	}
 
 	public void drawMainWindow(){
-		setLAF();
-		Splash.get().partLoaded();
 		try {
 			SwingUtilities.invokeAndWait(() -> {
+				setLAF();
+				Splash.get().partLoaded();
 
                 // Window
                 frame = new GCFrame(Config.APP_NAME);
@@ -176,7 +171,7 @@ public class DesignGUI {
                 });
                 frame.getContentPane().add(splitPane, BorderLayout.CENTER);
 
-                Schedule.inWorker(Schedule.TYPE_DELAY, () -> {
+                Schedule.inEDT(Schedule.TYPE_DELAY, () -> {
                     toggleDBView();
                     switchView(ViewMode.DESIGNER);
                 });
