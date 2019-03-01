@@ -461,6 +461,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 		private int column;
 
 		private String columnName;
+		private String escapedColumnName;
 		private String cellValue;
 		private String cellValueEscaped;
 		private boolean isEscapedType;
@@ -491,15 +492,15 @@ abstract class DataWindowOutputData extends DataWindowBase {
 
 		private void createSQLs() {
 			if(cellValue != null) {
-				conditionEq = columnName + " = " + cellValueEscaped;
-				conditionNeq = columnName + " != " + cellValueEscaped;
+				conditionEq = escapedColumnName + " = " + cellValueEscaped;
+				conditionNeq = escapedColumnName + " != " + cellValueEscaped;
 			} else {
 				conditionEq = null;
 				conditionNeq = null;
 			}
 
-			conditionNull = columnName + " IS NULL";
-			conditionNotNull = columnName + " IS NOT NULL";
+			conditionNull = escapedColumnName + " IS NULL";
+			conditionNotNull = escapedColumnName + " IS NOT NULL";
 
 			if (outputData.getSelectedColumnCount() > 1) {
 				StringBuilder sqlParts = new StringBuilder();
@@ -514,10 +515,10 @@ abstract class DataWindowOutputData extends DataWindowBase {
 				if (!comma.isEmpty()) {
 					conditionSelect = sqlParts.toString();
 				} else {
-					conditionSelect = columnName;
+					conditionSelect = escapedColumnName;
 				}
 			} else {
-				conditionSelect = columnName;
+				conditionSelect = escapedColumnName;
 			}
 
 			if (outputData.getSelectedRowCount() > 1) {
@@ -539,8 +540,8 @@ abstract class DataWindowOutputData extends DataWindowBase {
 					comma = ",";
 				}
 				if (!comma.isEmpty()) {
-					conditionIn = columnName + " IN (" + sqlParts + ")";
-					conditionNotIn = columnName + " NOT" + conditionIn;
+					conditionIn = escapedColumnName + " IN (" + sqlParts + ")";
+					conditionNotIn = escapedColumnName + " NOT" + conditionIn;
 				} else {
 					conditionIn = null;
 					conditionNotIn = null;
@@ -551,8 +552,8 @@ abstract class DataWindowOutputData extends DataWindowBase {
 			}
 
 			if (isEscapedType && cellValue != null) {
-				conditionLike = columnName + " LIKE '%" + cellValue.replace("'", "''") + "%'";
-				conditionNotLike = columnName + " NOT LIKE '%" + cellValue.replace("'", "''") + "%'";
+				conditionLike = escapedColumnName + " LIKE '%" + cellValue.replace("'", "''") + "%'";
+				conditionNotLike = escapedColumnName + " NOT LIKE '%" + cellValue.replace("'", "''") + "%'";
 			} else {
 				conditionLike = null;
 				conditionNotLike = null;
@@ -622,7 +623,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 			}
 
 			menu.addItem(WHERE + " ... NULL", RightClickMenu.ICO_SQL, 20, new String[]{ conditionNull, conditionNotNull });
-			menu.separator().addItem(ORDER_BY + " ...", RightClickMenu.ICO_ORDER, 30, new String[]{ columnName + " ASC", columnName + " DESC" });
+			menu.separator().addItem(ORDER_BY + " ...", RightClickMenu.ICO_ORDER, 30, new String[]{ escapedColumnName + " ASC", escapedColumnName + " DESC" });
 			menu.separator().
 					addItem("Generate INSERT", RightClickMenu.ICO_SQL, 50, scriptOptionString1).
 					addItem("Generate UPDATE", RightClickMenu.ICO_SQL, 51, scriptOptionString2);
@@ -646,6 +647,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 			// Get column name and cell value
 			model = (Result) outputData.getModel();
 			columnName = model.getColumnName(column);
+			escapedColumnName = getDB().getConnection().escape(columnName);
 			cellValue = model.getValueAt(row, column) == null ? null : model.getValueAt(row, column).toString();
 
 			isEscapedType = cellValue != null && !cellValue.matches(ConnectionUtils.IS_NUMBER_REGEX);
