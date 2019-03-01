@@ -57,7 +57,7 @@ public class Menu extends JPanel {
     public static final String L_HELP = "How-to's and UI reference";
     private static final String L_EXIT = "Exit";
     private static final String L_RUNNING_TASKS = "Running tasks";
-    private static final String L_USERS_AND_ROLES = "Users and roles";
+    private static final String L_USERS_AND_ROLES = "Users";
     private static final String L_DATABASES = "Databases";
 
     private static final String L_DB_TREE = "Show database tree";
