@@ -68,7 +68,7 @@ abstract class ConnectionMyReverse extends ConnectionMyForward {
 	}
 
 	@Override
-	public CopyOnWriteArrayList<DB> getDatabases() throws DBCommException {
+	public List<DB> getDatabases() throws DBCommException {
 		int log = DesignGUI.getInfoPanel().write("Loading databases...");
 		List<DB> dbs = new ArrayList<>();
 		Query q = new Query("SHOW DATABASES", getDefaultDB()).run();
@@ -78,6 +78,19 @@ abstract class ConnectionMyReverse extends ConnectionMyForward {
 		q.close();
 		q.log(log);
 		return new CopyOnWriteArrayList<>(dbs);
+	}
+
+	@Override
+	public List<User> getUsers() throws DBCommException {
+		int log = DesignGUI.getInfoPanel().write("Loading users...");
+		List<User> users = new ArrayList<>();
+		Query q = new Query("SELECT User FROM mysql.user", getDefaultDB()).run();
+		while (q.next()) {
+			users.add(new User(q.getString(1)));
+		}
+		q.close();
+		q.log(log);
+		return new CopyOnWriteArrayList<>(users);
 	}
 
 	@Override

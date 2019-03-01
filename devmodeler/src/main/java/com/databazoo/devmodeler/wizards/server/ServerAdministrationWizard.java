@@ -39,7 +39,6 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
 
     private static final int REFRESH_DB = 31;
     private static final int REFRESH_USER = 32;
-    private static final int REFRESH_ROLE = 33;
 
     private static final String L_SERVER_ADMINISTRATION = "Server administration";
     private static final String L_DATABASES = "Databases";
@@ -70,25 +69,19 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         }
     };
 
-    private EditableTable userTable = new EditableTable(new UserTableModel()) {
+    private UserTableModel userTableModel = new UserTableModel(this);
+    private EditableTable userTable = new EditableTable(userTableModel) {
         @Override
         protected boolean isColEditable(int colIndex) {
             return true;
         }
     };
-    private EditableTable roleTable = new EditableTable(new RoleTableModel()) {
-        @Override
-        protected boolean isColEditable(int colIndex) {
-            return true;
-        }
-    };
+
     private JScrollPane dbScrollPane = new JScrollPane(dbsTable);
     private JScrollPane userScrollPane = new JScrollPane(userTable);
-    private JScrollPane roleScrollPane = new JScrollPane(roleTable);
 
     private JButton dbLoadButton;
     private JButton userLoadButton;
-    private JButton roleLoadButton;
 
     private ServerAdministrationWizard() {
         this.connection = project.copyConnection(connection);
@@ -106,25 +99,29 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
                 deleteSelectedDB();
             }
         });
-        setDBsTableCols();
+
         dbLoadButton = new JButton(L_LOAD_REFRESH, Theme.getSmallIcon(Theme.ICO_RUN));
         dbLoadButton.addActionListener(e -> refreshDatabases());
         dbScrollPane.setPreferredSize(new Dimension(50, 450));
 
         userLoadButton = new JButton(L_LOAD_REFRESH, Theme.getSmallIcon(Theme.ICO_RUN));
         userLoadButton.addActionListener(e -> refreshUsers());
-        userScrollPane.setPreferredSize(new Dimension(50, 400));
+        userScrollPane.setPreferredSize(new Dimension(50, 450));
 
-        roleLoadButton = new JButton(L_LOAD_REFRESH, Theme.getSmallIcon(Theme.ICO_RUN));
-        roleLoadButton.addActionListener(e -> refreshRoles());
-        roleScrollPane.setPreferredSize(new Dimension(50, 400));
+        setTableCols();
     }
 
-    private void setDBsTableCols() {
-        TableColumnModel columnModel = dbsTable.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(35);
-        columnModel.getColumn(0).setMaxWidth(35);
-        columnModel.getColumn(1).setCellEditor(new UnfocusableTableCellEditor());
+    private void setTableCols() {
+        TableColumnModel dbsColumnModel = dbsTable.getColumnModel();
+        dbsColumnModel.getColumn(0).setPreferredWidth(35);
+        dbsColumnModel.getColumn(0).setMaxWidth(35);
+        dbsColumnModel.getColumn(1).setCellEditor(new UnfocusableTableCellEditor());
+
+        TableColumnModel userColumnModel = userTable.getColumnModel();
+        userColumnModel.getColumn(0).setPreferredWidth(35);
+        userColumnModel.getColumn(0).setMaxWidth(35);
+        userColumnModel.getColumn(1).setCellEditor(new UnfocusableTableCellEditor());
+        userColumnModel.getColumn(2).setCellEditor(new UnfocusableTableCellEditor());
     }
 
     private void deleteSelectedDB() {
@@ -177,7 +174,6 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
             DefaultMutableTreeNode serverNode = new DefaultMutableTreeNode(s);
             serverNode.add(new DefaultMutableTreeNode(L_DATABASES));
             serverNode.add(new DefaultMutableTreeNode(L_USERS));
-            serverNode.add(new DefaultMutableTreeNode(L_ROLES));
             // Optional: tablespaces, aliases, db links
             root.add(serverNode);
         });
@@ -199,9 +195,6 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
                 case L_USERS:
                     loadUsersPage();
                     break;
-                case L_ROLES:
-                    loadRolesPage();
-                    break;
                 default:
                     loadWelcomePage();
                     break;
@@ -220,6 +213,8 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         addText(L_DOUBLECLICK_TO_EDIT, SPAN);
 
         setNextButton(L_REFRESH, true, REFRESH_DB);
+
+        //refreshDatabases();
     }
 
     private void loadUsersPage() {
@@ -230,16 +225,8 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         addText(L_DOUBLECLICK_TO_EDIT, SPAN);
 
         setNextButton(L_REFRESH, true, REFRESH_USER);
-    }
 
-    private void loadRolesPage() {
-        resetContent();
-        addTitle(L_ROLES);
-        addAdminPanel(roleLoadButton);
-        addPanel(roleScrollPane, SPAN_GROW);
-        addText(L_DOUBLECLICK_TO_EDIT, SPAN);
-
-        setNextButton(L_REFRESH, true, REFRESH_ROLE);
+        //refreshUsers();
     }
 
     private void addAdminPanel(JButton loadButton) {
@@ -307,9 +294,6 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
 
         } else if (type == REFRESH_USER) {
             refreshUsers();
-
-        } else if (type == REFRESH_ROLE) {
-            refreshRoles();
         }
     }
 
@@ -325,11 +309,13 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
     }
 
     private void refreshUsers() {
-
-    }
-
-    private void refreshRoles() {
-
+        Schedule.inWorker(() -> {
+            try {
+                ((UserTableModel) userTable.getModel()).setUsers(connection.getUsers());
+            } catch (DBCommException e) {
+                Dbg.fixme("Server Admin Wizard failed", e);
+            }
+        });
     }
 
     @Override public void notifyChange(String elementName, String value) {

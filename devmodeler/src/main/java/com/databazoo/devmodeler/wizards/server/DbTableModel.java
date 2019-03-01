@@ -11,7 +11,7 @@ import static com.databazoo.tools.Schedule.Named.SERVER_ADMIN_TABLE_EDIT;
 
 public class DbTableModel extends AbstractTableModel {
 
-    final ServerAdministrationWizard wizard;
+    private final ServerAdministrationWizard wizard;
     List<DB> databases = new ArrayList<>();
 
     DbTableModel(ServerAdministrationWizard wizard) {
@@ -40,12 +40,11 @@ public class DbTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        switch (columnIndex) {
-            case 1:
-                if (rowIndex < databases.size()) {
+        if (rowIndex < databases.size()) {
+            switch (columnIndex) {
+                case 1:
                     return databases.get(rowIndex).getName();
-                }
-                break;
+            }
         }
         return "";
     }
@@ -57,13 +56,13 @@ public class DbTableModel extends AbstractTableModel {
                 if (rowIndex == databases.size()) {
                     wizard.createDB(new DB(null, aValue.toString()));
                 } else {
-                    // TODO
+                    // TODO: edit existing database - rename?
                 }
             });
         }
     }
 
-    public synchronized void setDatabases(List<DB> newRows) {
+    synchronized void setDatabases(List<DB> newRows) {
         databases.clear();
         databases.addAll(newRows);
 

@@ -73,7 +73,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 	}
 
 	@Override
-	public CopyOnWriteArrayList<DB> getDatabases() throws DBCommException {
+	public List<DB> getDatabases() throws DBCommException {
 		int log = DesignGUI.getInfoPanel().write("Loading databases...");
 		List<DB> dbs = new ArrayList<>();
 		Query q = new Query("SELECT datname FROM pg_database WHERE NOT datistemplate ORDER BY datname", getDefaultDB()).run();
@@ -83,6 +83,19 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 		q.close();
 		q.log(log);
 		return new CopyOnWriteArrayList<>(dbs);
+	}
+
+	@Override
+	public List<User> getUsers() throws DBCommException {
+		int log = DesignGUI.getInfoPanel().write("Loading users...");
+		List<User> users = new ArrayList<>();
+		Query q = new Query("SELECT usename, passwd, usecreatedb, usesuper FROM pg_user ORDER BY usename", getDefaultDB()).run();
+		while (q.next()) {
+			users.add(new User(q.getString(1), q.getString(2), (q.getString(3).equals("t") ? "CreateDB " : "") + (q.getString(4).equals("t") ? "Superuser " : "")));
+		}
+		q.close();
+		q.log(log);
+		return new CopyOnWriteArrayList<>(users);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.devmodeler.model.Schema;
 import com.databazoo.devmodeler.model.Sequence;
 import com.databazoo.devmodeler.model.Trigger;
+import com.databazoo.devmodeler.model.User;
 import com.databazoo.devmodeler.model.View;
 import com.databazoo.devmodeler.model.explain.ExplainOperation;
 
@@ -128,6 +129,7 @@ public interface IConnection extends IColoredConnection, Serializable {
 	void runManualRollbackAndWait(String sql, DB db);
 
 	List<DB> getDatabases() throws DBCommException;
+	List<User> getUsers() throws DBCommException;
 
 	void loadEnvironment() throws DBCommException;
 	void loadDB(DB db) throws DBCommException;
