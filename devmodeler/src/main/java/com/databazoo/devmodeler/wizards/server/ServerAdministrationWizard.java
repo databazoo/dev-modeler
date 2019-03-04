@@ -47,7 +47,6 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
     private static final String L_REFRESH = "Refresh";
     private static final String L_TEMPLATE = "Template";
     private static final String L_LOAD_REFRESH = "Load / Refresh";
-    private DB defaultDB;
 
     public static synchronized ServerAdministrationWizard getInstance() {
         return new ServerAdministrationWizard();
@@ -140,14 +139,14 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
                     options[0]
             ) : 0;
             if (n == 0) {
-                runSingleQuery(connection, sql, defaultDB, this::refreshDatabases, null, "Failed to remove a DB from server " + connection.getHost());
+                runSingleQuery(connection, sql, database, this::refreshDatabases, null, "Failed to remove a DB from server " + connection.getHost());
             }
         }
     }
 
     void createDB(DB db) {
         // TODO: allow altering the SQL
-        runSingleQuery(connection, connection.getQueryCreate(db, null), defaultDB, this::refreshDatabases, null, "Failed to create a DB on server " + connection.getHost());
+        runSingleQuery(connection, connection.getQueryCreate(db, null), database, this::refreshDatabases, null, "Failed to create a DB on server " + connection.getHost());
     }
 
     /**
