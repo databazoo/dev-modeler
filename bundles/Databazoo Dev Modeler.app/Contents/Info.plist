@@ -33,7 +33,7 @@
         <key>JVMMainClassName</key>
         <string>com.databazoo.devmodeler.DevModeler</string>
         <key>JVMVersion</key>
-        <string>1.7+</string>
+        <string>1.8+</string>
         <key>JVMOptions</key>
         <array>
             <string>-Xdock:name=Databazoo Dev Modeler</string>
