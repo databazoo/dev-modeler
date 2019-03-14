@@ -37,7 +37,7 @@ import com.databazoo.devmodeler.tools.formatter.FormatterBase;
 import com.databazoo.devmodeler.tools.formatter.FormatterDataType;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
-import net.miginfocom.MigLayout;
+import net.miginfocom.swing.MigLayout;
 
 
 public abstract class MigWizard implements TreeSelectionListener, Serializable {

@@ -52,7 +52,7 @@ import com.databazoo.devmodeler.wizards.MigWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.FileFilterFactory;
 import com.databazoo.tools.Schedule;
-import net.miginfocom.MigLayout;
+import net.miginfocom.swing.MigLayout;
 
 import static com.databazoo.components.table.EditableTable.L_DOUBLECLICK_TO_EDIT;
 

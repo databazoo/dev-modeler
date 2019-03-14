@@ -25,7 +25,7 @@ import com.databazoo.devmodeler.tools.formatter.FormatterSQL;
 import com.databazoo.devmodeler.wizards.DiffWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
-import net.miginfocom.MigLayout;
+import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import plugins.api.IDataWindowResult;
 import plugins.api.IModelTable;

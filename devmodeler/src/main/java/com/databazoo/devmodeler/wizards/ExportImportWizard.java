@@ -44,7 +44,7 @@ import com.databazoo.devmodeler.tools.formatter.FormatterSQL;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.FileFilterFactory;
 import com.databazoo.tools.Schedule;
-import net.miginfocom.MigLayout;
+import net.miginfocom.swing.MigLayout;
 
 import static com.databazoo.devmodeler.conn.SQLOutputConfigExport.LINE_LENGHT;
 import static com.databazoo.devmodeler.conn.SQLOutputConfigExport.padCenter;

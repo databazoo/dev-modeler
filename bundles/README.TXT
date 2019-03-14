@@ -13,9 +13,10 @@ About Databazoo Dev Modeler
 
 Version
 
-	2.1.x Stable release
+	3.0-SNAPSHOT
 
-	Any encountered misbehavior may be reported to tech@devmodeler.com
+	This is a "cutting edge" version. It contains latest features that may be incomplete or undocumented. Stability of the application in global
+	should not be affected. Any encountered misbehavior may be reported to tech@devmodeler.com
 
 
 To install Databazoo Dev Modeler:

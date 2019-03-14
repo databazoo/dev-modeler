@@ -11,7 +11,7 @@ import com.databazoo.components.containers.VerticalContainer;
 import com.databazoo.devmodeler.project.RecentQuery;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.tools.Schedule;
-import net.miginfocom.MigLayout;
+import net.miginfocom.swing.MigLayout;
 
 abstract class DataWindowOutputRecentQueries extends DataWindowOutputFavorites {
 
