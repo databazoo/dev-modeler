@@ -34,6 +34,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.stream.Collectors;
 
+import static com.databazoo.devmodeler.conn.SupportedElement.SERVER_ADMINISTRATION;
 import static com.databazoo.devmodeler.gui.UsageElement.*;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_FUNCTIONS;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_PACKAGES;
@@ -690,7 +691,9 @@ public class Menu extends JPanel {
                 add(syncPanel);
                 add(dbCombo);
                 add(connCombo);
-                add(menuBtnAdmin);
+                if (Project.getCurrent().getCurrentConn().isSupported(SERVER_ADMINISTRATION)) {
+                    add(menuBtnAdmin);
+                }
             }
             setBorder(new EmptyBorder(0, 0, 0, 0));
             dbCombo.addActionListener(e -> {

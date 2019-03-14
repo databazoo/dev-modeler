@@ -109,6 +109,7 @@ public class ConnectionMy extends ConnectionMyReverse {
 			case TRANSACTION_AUTO_ROLLBACK: return false;
 			case GRAPHICAL_EXPLAIN: return true;
 			case GENERATE_DDL: return false;
+			case SERVER_ADMINISTRATION: return true;
 			default: return true;
 		}
 	}
