@@ -136,6 +136,18 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         userColumnModel.getColumn(2).setCellEditor(new UnfocusableTableCellEditor());
     }
 
+    void createDB(DB db) {
+        // TODO: allow altering the SQL
+        runSingleQuery(connection, connection.getQueryCreate(db, null), database, this::refreshDatabases, null, "Failed to create a DB on server " + connection.getHost());
+    }
+
+    void updateDB(DB db) {
+        String changed = connection.getQueryChanged(db);
+        if (!changed.isEmpty()) {
+            runSingleQuery(connection, changed, database, this::refreshDatabases, null, "Failed to update a DB on server " + connection.getHost());
+        }
+    }
+
     private void deleteSelectedDB() {
         if (dbsTable.getSelectedRowCount() > 0) {
             int selectedRow = dbsTable.getSelectedRow();
@@ -157,6 +169,18 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         }
     }
 
+    void createUser(User user) {
+        // TODO: allow altering the SQL
+        runSingleQuery(connection, connection.getQueryCreate(user, null), database, this::refreshUsers, null, "Failed to create a user on server " + connection.getHost());
+    }
+
+    void updateUser(User user) {
+        String changed = connection.getQueryChanged(user);
+        if (!changed.isEmpty()) {
+            runSingleQuery(connection, changed, database, this::refreshUsers, null, "Failed to update a user on server " + connection.getHost());
+        }
+    }
+
     private void deleteSelectedUser() {
         if (userTable.getSelectedRowCount() > 0) {
             int selectedRow = userTable.getSelectedRow();
@@ -173,20 +197,8 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
                     options[0]
             ) : 0;
             if (n == 0) {
-                runSingleQuery(connection, sql, database, this::refreshDatabases, null, "Failed to remove a DB from server " + connection.getHost());
+                runSingleQuery(connection, sql, database, this::refreshUsers, null, "Failed to remove a user from server " + connection.getHost());
             }
-        }
-    }
-
-    void createDB(DB db) {
-        // TODO: allow altering the SQL
-        runSingleQuery(connection, connection.getQueryCreate(db, null), database, this::refreshDatabases, null, "Failed to create a DB on server " + connection.getHost());
-    }
-
-    void updateDB(DB db) {
-        String changed = connection.getQueryChanged(db);
-        if (!changed.isEmpty()) {
-            runSingleQuery(connection, changed, database, this::refreshDatabases, null, "Failed to update a DB on server " + connection.getHost());
         }
     }
 
