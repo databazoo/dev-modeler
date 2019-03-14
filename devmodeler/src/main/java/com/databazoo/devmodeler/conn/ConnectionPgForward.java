@@ -193,7 +193,7 @@ abstract class ConnectionPgForward extends Connection {
 				ret.a(ALTER_USER).a(fullNameEscaped).a(RENAME_TO).a(escape(n.getName())).semicolon();
 			}
 			if (!o.getPassword().equals(n.getPassword())) {
-				ret.a(ALTER_USER).a(escape(n.getName())).a(" PASSWORD ").quotedEscaped(n.getPassword()).semicolon();
+				ret.nlIfNotEmpty().a(ALTER_USER).a(escape(n.getName())).a(" PASSWORD ").quotedEscaped(n.getPassword()).semicolon();
 			}
 			if (!n.getDescr().equals(o.getDescr())) {
 				ret.nlIfNotEmpty().a(COMMENT_ON_USER).a(escape(n.getName())).a(IS).quotedEscapedOrNull(n.getDescr()).semicolon();

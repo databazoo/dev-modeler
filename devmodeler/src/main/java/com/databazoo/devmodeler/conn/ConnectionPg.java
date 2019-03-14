@@ -86,6 +86,7 @@ public class ConnectionPg extends ConnectionPgReverse {
 			case TRANSACTION_AUTO_ROLLBACK: return true;
 			case GRAPHICAL_EXPLAIN: return true;
 			case GENERATE_DDL: return false;
+			case SERVER_ADMINISTRATION: return true;
 			default: return true;
 		}
 	}
