@@ -21,6 +21,7 @@ import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.DBCommException;
 import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.model.DB;
+import com.databazoo.devmodeler.model.User;
 import com.databazoo.devmodeler.tools.Geometry;
 import com.databazoo.devmodeler.wizards.ConnectionChecker;
 import com.databazoo.devmodeler.wizards.SQLEnabledWizard;
@@ -28,6 +29,7 @@ import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 
 import static com.databazoo.components.table.EditableTable.L_DOUBLECLICK_TO_EDIT;
+import static com.databazoo.devmodeler.conn.SupportedElement.DATABASE_RENAME;
 import static com.databazoo.devmodeler.wizards.ConnectionChecker.L_HOST;
 import static com.databazoo.devmodeler.wizards.ConnectionChecker.L_PASS;
 import static com.databazoo.devmodeler.wizards.ConnectionChecker.L_USER;
@@ -43,7 +45,6 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
     private static final String L_SERVER_ADMINISTRATION = "Server administration";
     private static final String L_DATABASES = "Databases";
     private static final String L_USERS = "Users";
-    private static final String L_ROLES = "Roles";
     private static final String L_REFRESH = "Refresh";
     private static final String L_TEMPLATE = "Template";
     private static final String L_LOAD_REFRESH = "Load / Refresh";
@@ -52,7 +53,7 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         return new ServerAdministrationWizard();
     }
 
-    WizardTree tree;
+    private WizardTree tree;
     private final ConnectionChecker checker;
     private IconableComboBox inputTemplate;
     private JTextField inputHost;
@@ -64,7 +65,7 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
     private EditableTable dbsTable = new EditableTable(dbsTableModel) {
         @Override
         protected boolean isColEditable(int colIndex) {
-            return colIndex == 1;
+            return colIndex == 1 && project.getCurrentConn().isSupported(DATABASE_RENAME);
         }
     };
 
@@ -72,7 +73,7 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
     private EditableTable userTable = new EditableTable(userTableModel) {
         @Override
         protected boolean isColEditable(int colIndex) {
-            return true;
+            return 1 <= colIndex && colIndex <= 2;
         }
     };
 
@@ -81,6 +82,9 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
 
     private JButton dbLoadButton;
     private JButton userLoadButton;
+
+    private boolean isLoadedUsers = false;
+    private boolean isLoadedDBs = false;
 
     private ServerAdministrationWizard() {
         this.connection = project.copyConnection(connection);
@@ -96,6 +100,15 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         dbsTable.getActionMap().put("deleteSelectedDB", new AbstractAction("del") {
             @Override public void actionPerformed(ActionEvent e) {
                 deleteSelectedDB();
+            }
+        });
+
+        userTable.setRowSelectionAllowed(true);
+        userTable.setColumnSelectionAllowed(false);
+        userTable.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, true), "deleteSelectedUser");
+        userTable.getActionMap().put("deleteSelectedUser", new AbstractAction("del") {
+            @Override public void actionPerformed(ActionEvent e) {
+                deleteSelectedUser();
             }
         });
 
@@ -144,9 +157,37 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
         }
     }
 
+    private void deleteSelectedUser() {
+        if (userTable.getSelectedRowCount() > 0) {
+            int selectedRow = userTable.getSelectedRow();
+            User user = userTableModel.users.get(selectedRow);
+            String sql = connection.getQueryDrop(user);
+            Object[] options = { "Remove", "Cancel" };
+            int n = GCFrame.SHOW_GUI ? JOptionPane.showOptionDialog(GCFrame.getActiveWindow(),
+                    "Remove user " + user.getName() + " from server " + connection.getHost() + "?\n\n" + sql,
+                    "Remove user",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            ) : 0;
+            if (n == 0) {
+                runSingleQuery(connection, sql, database, this::refreshDatabases, null, "Failed to remove a DB from server " + connection.getHost());
+            }
+        }
+    }
+
     void createDB(DB db) {
         // TODO: allow altering the SQL
         runSingleQuery(connection, connection.getQueryCreate(db, null), database, this::refreshDatabases, null, "Failed to create a DB on server " + connection.getHost());
+    }
+
+    void updateDB(DB db) {
+        String changed = connection.getQueryChanged(db);
+        if (!changed.isEmpty()) {
+            runSingleQuery(connection, changed, database, this::refreshDatabases, null, "Failed to update a DB on server " + connection.getHost());
+        }
     }
 
     /**
@@ -213,7 +254,10 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
 
         setNextButton(L_REFRESH, true, REFRESH_DB);
 
-        //refreshDatabases();
+        if (!isLoadedDBs) {
+            Schedule.inWorker(this::refreshDatabases);
+            isLoadedDBs = true;
+        }
     }
 
     private void loadUsersPage() {
@@ -225,7 +269,10 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
 
         setNextButton(L_REFRESH, true, REFRESH_USER);
 
-        //refreshUsers();
+        if (!isLoadedUsers) {
+            Schedule.inWorker(this::refreshUsers);
+            isLoadedUsers = true;
+        }
     }
 
     private void addAdminPanel(JButton loadButton) {
@@ -233,8 +280,8 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
                 Geometry.concat(new String[] { " " },
                         project.getDedicatedConnections().values().stream()
                                 .map(this::getTemplateName)
-                                .collect(Collectors.toSet())
-                                .toArray(new String[0])
+                                .distinct()
+                                .toArray(String[]::new)
                 ),
                 getTemplateName(connection));
         inputHost = addPlainTextInput(L_HOST, connection.getHost());

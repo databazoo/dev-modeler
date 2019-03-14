@@ -14,8 +14,16 @@ import java.util.Enumeration;
 public interface ConnectionUtils {
 
     // DATABASE
+    String ORIGINAL_USER = "/** ORIGINAL USER **/";
+    String CREATE_USER = "CREATE USER ";
+    String ALTER_USER = "ALTER USER ";
+    String DROP_USER = "DROP USER ";
+    String COMMENT_ON_USER = "COMMENT ON USER ";
+
+    // DATABASE
     String ORIGINAL_DATABASE = "/** ORIGINAL DATABASE **/";
     String CREATE_DATABASE = "CREATE DATABASE ";
+    String ALTER_DATABASE = "ALTER DATABASE ";
     String DROP_DATABASE = "DROP DATABASE ";
     String COMMENT_ON_DATABASE = "COMMENT ON DATABASE ";
 

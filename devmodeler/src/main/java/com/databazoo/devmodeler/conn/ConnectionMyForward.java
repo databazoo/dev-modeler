@@ -14,29 +14,35 @@ import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.devmodeler.model.Schema;
 import com.databazoo.devmodeler.model.Sequence;
 import com.databazoo.devmodeler.model.Trigger;
+import com.databazoo.devmodeler.model.User;
 import com.databazoo.devmodeler.model.View;
 import com.databazoo.tools.Dbg;
 
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ADD_COLUMN;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ADD_CONSTRAINT;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.ALTER_DATABASE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ALTER_SCHEMA;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ALTER_TABLE;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.ALTER_USER;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.COLLATE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.COMMA;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.COMMENT;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.COMMENT_ON_DATABASE;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.COMMENT_ON_USER;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.CONSTRAINT;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.CREATE_DATABASE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.CREATE_OR_REPLACE_VIEW;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.CREATE_SCHEMA;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.CREATE_TABLE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.CREATE_TRIGGER;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.CREATE_USER;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_COLUMN;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_DATABASE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_INDEX;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_SCHEMA;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_TABLE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_TRIGGER;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_USER;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.DROP_VIEW;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.FULLTEXT_LC;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.FUNCTION;
@@ -48,6 +54,7 @@ import static com.databazoo.devmodeler.conn.ConnectionUtils.ORIGINAL_FUNCTION;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ORIGINAL_SCHEMA;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ORIGINAL_TABLE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ORIGINAL_TRIGGER;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.ORIGINAL_USER;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.ORIGINAL_VIEW;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.PROCEDURE;
 import static com.databazoo.devmodeler.conn.ConnectionUtils.RENAME_TO;
@@ -139,12 +146,62 @@ abstract class ConnectionMyForward extends Connection {
 		}
 	}
 
+	//////////
+	// USER //
+	//////////
+	@Override
+	public String getQueryCreate(User user, SQLOutputConfig config) {
+		if (config == null) {
+			config = SQLOutputConfig.DEFAULT;
+		}
+
+		SQLBuilder ret = new SQLBuilder(config);
+		if(config.exportOriginal){
+			ret.a(ORIGINAL_USER).nl();
+		}
+		if(config.exportDrop){
+			ret.a(config.getDropComment(getQueryDrop(user))).nl();
+		}
+
+		ret.a(CREATE_USER).quotedEscaped(user.getName())
+				.a(" IDENTIFIED BY ").quotedEscaped(user.getBehavior().getPassword())
+				.semicolon();
+
+		if (config.exportOriginal) {
+			ret.nl().commentLine(ORIGINAL_USER);
+		}
+		return ret.toString();
+	}
+
+	@Override
+	public String getQueryDrop(User user) {
+		return DROP_USER + escape(user.getName()) + ";";
+	}
+
+	@Override
+	public String getQueryChanged(User user) {
+		User.Behavior o = user.getBehavior();
+		User.Behavior n = user.getBehavior().getValuesForEdit();
+		if (n.isDropped()) {
+			return getQueryDrop(user);
+		} else {
+			SQLBuilder ret = new SQLBuilder();
+			if (!o.getName().equals(n.getName())) {
+				ret.a("RENAME USER ").quotedEscaped(o.getName()).a(" TO ").quotedEscaped(n.getName()).semicolon();
+			}
+			if (!o.getPassword().equals(n.getPassword())) {
+				ret.a(ALTER_USER).quotedEscaped(o.getName()).a(" IDENTIFIED BY ").quotedEscaped(n.getPassword()).semicolon();
+			}
+			return ret.toString();
+		}
+	}
+
 	//////////////
 	// DATABASE //
 	//////////////
 	@Override
 	public String getQueryCreate(DB db, SQLOutputConfig config) {
-		if(config == null){
+		if (config == null) {
 			config = SQLOutputConfig.DEFAULT;
 		}
 
@@ -161,10 +218,10 @@ abstract class ConnectionMyForward extends Connection {
 
 		ret.a(CREATE_DATABASE).a(escape(db.getName())).semicolon();
 
-		if(!db.getDescr().isEmpty()){
+		if (!db.getDescr().isEmpty()) {
 			ret.nl().a(COMMENT_ON_DATABASE).a(escapeFullName(db.getFullName())).a(IS).quotedEscapedOrNull(db.getDescr()).semicolon();
 		}
-		if(config.exportOriginal){
+		if (config.exportOriginal) {
 			ret.nl().commentLine(ORIGINAL_DATABASE);
 		}
 		return ret.toString();
@@ -173,6 +230,25 @@ abstract class ConnectionMyForward extends Connection {
 	@Override
 	public String getQueryDrop(DB db) {
 		return DROP_DATABASE + escape(db.getName()) + ";";
+	}
+
+	@Override
+	public String getQueryChanged(DB db) {
+		String fullNameEscaped = escapeFullName(db.getFullName());
+		DB.Behavior o = db.getBehavior();
+		DB.Behavior n = db.getBehavior().getValuesForEdit();
+		if (n.isDropped()) {
+			return getQueryDrop(db);
+		} else {
+			SQLBuilder ret = new SQLBuilder();
+			if (!o.getName().equals(n.getName())) {
+				ret.a(ALTER_DATABASE).a(fullNameEscaped).a(RENAME_TO).a(escape(n.getName())).semicolon();
+			}
+			if (!n.getDescr().equals(o.getDescr())) {
+				ret.nlIfNotEmpty().a(COMMENT_ON_DATABASE).a(fullNameEscaped).a(IS).quotedEscapedOrNull(n.getDescr()).semicolon();
+			}
+			return ret.toString();
+		}
 	}
 
 	////////////

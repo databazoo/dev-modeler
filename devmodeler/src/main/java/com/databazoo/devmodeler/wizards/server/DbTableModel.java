@@ -22,7 +22,7 @@ public class DbTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         switch (column) {
             case 1:
-                return "Database";
+                return DB.Behavior.L_NAME;
             default:
                 return "";
         }
@@ -56,7 +56,10 @@ public class DbTableModel extends AbstractTableModel {
                 if (rowIndex == databases.size()) {
                     wizard.createDB(new DB(null, aValue.toString()));
                 } else {
-                    // TODO: edit existing database - rename?
+                    DB db = databases.get(rowIndex);
+                    db.getBehavior().prepareForEdit()
+                            .notifyChange(DB.Behavior.L_NAME, aValue.toString());
+                    wizard.updateDB(db);
                 }
             });
         }
