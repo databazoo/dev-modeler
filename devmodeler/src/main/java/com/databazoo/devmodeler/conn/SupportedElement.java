@@ -4,6 +4,7 @@ package com.databazoo.devmodeler.conn;
  * Supported option list
  */
 public enum SupportedElement {
+    DATABASE_RENAME,
     SCHEMA,
     SCHEMA_CREATE,
     RELATION,

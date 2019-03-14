@@ -67,6 +67,7 @@ public class ConnectionMy extends ConnectionMyReverse {
 	@Override
 	public boolean isSupported(SupportedElement elemType) {
 		switch(elemType){
+			case DATABASE_RENAME: return false;
 			case SCHEMA: return false;
 			case SCHEMA_CREATE: return false;
 			case RELATION: return true;

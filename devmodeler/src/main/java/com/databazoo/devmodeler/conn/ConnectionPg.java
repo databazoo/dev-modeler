@@ -44,6 +44,7 @@ public class ConnectionPg extends ConnectionPgReverse {
 	@Override
 	public boolean isSupported(SupportedElement elemType) {
 		switch(elemType){
+			case DATABASE_RENAME: return true;
 			case SCHEMA: return true;
 			case SCHEMA_CREATE: return true;
 			case RELATION: return true;

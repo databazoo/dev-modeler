@@ -1,7 +1,12 @@
 package com.databazoo.devmodeler.model;
 
 import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.devmodeler.conn.*;
+import com.databazoo.devmodeler.conn.ConnectionUtils;
+import com.databazoo.devmodeler.conn.DBCommException;
+import com.databazoo.devmodeler.conn.IConnection;
+import com.databazoo.devmodeler.conn.SQLOutputConfig;
+import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
+import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.Menu;
@@ -18,8 +23,12 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -33,20 +42,20 @@ public class DB implements IModelElement {
 
 	private static final Map<String, Map<String,Point>> KNOWN_LOCATIONS = new HashMap<>();
 
-	private String name;
 	private final List<Schema> schemas = new ArrayList<>();
 	private final List<Constraint> constraints = new ArrayList<>();
 	private final List<Trigger> triggers = new ArrayList<>();
 	private IConnection conn;
 	private boolean assignLines = false;
 	private Project project;
+	private Behavior behavior = new Behavior();
 
 	public DB(Project p, String name) {
-		this.name = name;
+		behavior.name = name;
 		this.project = p;
 	}
 	public DB(Project p, IConnection conn, String name) {
-		this.name = name;
+		behavior.name = name;
 		this.conn = conn;
 		this.project = p;
 	}
@@ -148,22 +157,22 @@ public class DB implements IModelElement {
 
 	@Override
 	public String getName(){
-		return name;
+		return behavior.name;
 	}
 
 	@Override
 	public String getFullName(){
-		return name;
+		return behavior.name;
 	}
 
 	@Override
 	public String getEditedFullName() {
-		return name;
+		return behavior.name;
 	}
 
 	@Override
 	public String getQueryCreate(IConnection conn) {
-		return conn.getQueryCreate(this, SQLOutputConfig.WIZARD);
+		return conn.getQueryCreate(this, behavior.isNew ? null : SQLOutputConfig.WIZARD);
 	}
 	@Override
 	public String getQueryCreateClear(IConnection conn) {
@@ -171,11 +180,29 @@ public class DB implements IModelElement {
 	}
 	@Override
 	public String getQueryChanged(IConnection conn) {
-		return "";
+		if(behavior.isNew){
+			Behavior o = behavior;
+			behavior = behavior.valuesForEdit;
+			String ret = conn.getQueryCreate(this, null);
+			behavior = o;
+			return ret;
+		}else{
+			return conn.getQueryChanged(this);
+		}
 	}
 	@Override
 	public String getQueryChangeRevert(IConnection conn) {
-		return "";
+		if(behavior.isNew){
+			behavior.isDropped = true;
+		}else if(behavior.valuesForEdit.isDropped){
+			return conn.getQueryCreate(this, null);
+		}
+		Behavior o = behavior;
+		behavior = behavior.valuesForEdit;
+		behavior.valuesForEdit = o;
+		String change = conn.getQueryChanged(this);
+		behavior = o;
+		return change;
 	}
 	@Override
 	public String getQueryRecursive(SQLOutputConfigExport config){
@@ -212,7 +239,9 @@ public class DB implements IModelElement {
 
 	@Override public void setDifferent(int isDifferent) {}
 	@Override public int getDifference(){ return 0; }
-	@Override public void drop(){}
+	@Override public void drop(){
+		// Not supported
+	}
 	@Override public void setSelected(boolean sel) {}
 	@Override public void clicked(){}
 	@Override public void doubleClicked(){}
@@ -293,7 +322,7 @@ public class DB implements IModelElement {
 	@Override
 	public IConnection getConnection(){
 		if(conn == null){
-			return ConnectionUtils.getCurrent(name);
+			return ConnectionUtils.getCurrent(behavior.name);
 		}else {
 			//Dbg.info("Using pre-defined connection "+conn.getFullName());
 			return conn;
@@ -466,16 +495,7 @@ public class DB implements IModelElement {
 	}
 
 	public void setName(String newName) {
-		name = newName;
-	}
-
-	@Override
-	public IModelBehavior getBehavior(){
-		return null;
-	}
-
-	@Override
-	public void setBehavior(IModelBehavior behavior) {
+		behavior.name = newName;
 	}
 
 	public Map<String, Point> getLocations(){
@@ -508,5 +528,83 @@ public class DB implements IModelElement {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Behavior getBehavior() {
+		return behavior;
+	}
+
+	@Override
+	public void setBehavior(IModelBehavior behavior) {
+		this.behavior = (Behavior) behavior;
+	}
+
+	public class Behavior extends AbstractModelBehavior<Behavior> {
+
+		public static final String L_NAME = "Name";
+		public static final String L_DESCR = "Comment";
+
+		private String name;
+		private String descr = "";
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getDescr() {
+			return descr != null ? descr : "";
+		}
+
+		public void setDescr(String descr) {
+			this.descr = descr;
+		}
+
+		@Override
+		public Behavior prepareForEdit() {
+			valuesForEdit = new Behavior();
+			valuesForEdit.name = name;
+			valuesForEdit.descr = descr;
+			return valuesForEdit;
+		}
+
+		@Override
+		public void saveEdited() {
+			if (isDropped) {
+				drop();
+			} else {
+				behavior.name = name;
+				behavior.descr = descr;
+				if (behavior.isNew) {
+					behavior.valuesForEdit.isNew = true;
+					behavior.isNew = false;
+					behavior.isDropped = false;
+				}
+			}
+		}
+
+		@Override
+		public void notifyChange(String elementName, String value) {
+			switch (elementName) {
+				case L_NAME:
+					name = getConnection().isSupported(SupportedElement.ALL_UPPER) ? value.toUpperCase() : value;
+					break;
+				case L_DESCR:
+					descr = value;
+					break;
+			}
+		}
+
+		@Override
+		public void notifyChange(String elementName, boolean value) {
+		}
+
+		@Override
+		public void notifyChange(String elementName, boolean[] values) {
+		}
 	}
 }

@@ -488,6 +488,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 		behavior = o;
 		return change;
 	}
+
 	@Override
 	public String getQueryRecursive(SQLOutputConfigExport config) throws SQLOutputConfigExport.LimitReachedException {
 		if(config.exportSchemata){

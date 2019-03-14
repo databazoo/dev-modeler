@@ -58,8 +58,13 @@ public interface IConnection extends IColoredConnection, Serializable {
 	String getQueryTerminate(int selectedPID);
 	String getQueryCancel(int selectedPID);
 
+	String getQueryCreate(User user, SQLOutputConfig config);
+	String getQueryDrop(User user);
+	String getQueryChanged(User user);
+
 	String getQueryCreate(DB db, SQLOutputConfig config);
 	String getQueryDrop(DB db);
+	String getQueryChanged(DB db);
 
 	String getQueryCreate(Schema schema, SQLOutputConfig config);
 	String getQueryDrop(Schema schema);
