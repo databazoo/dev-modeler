@@ -41,7 +41,7 @@ To run Databazoo Dev Modeler (for Mac OS X) execute:
 
 Minimum requirements
 
-    Java Runtime 8
+    Java Runtime 11
     2GB RAM
     Internet connection
     Good attitude and a comfy chair
