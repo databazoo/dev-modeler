@@ -50,7 +50,7 @@ public class UserTableModel extends AbstractTableModel {
                 case 1:
                     return users.get(rowIndex).getName();
                 case 2:
-                    return users.get(rowIndex).getBehavior().getPassword();
+                    return users.get(rowIndex).getBehavior().getPassword().replaceAll(".", "*");
                 case 3:
                     return users.get(rowIndex).getBehavior().getExtra();
             }
@@ -63,9 +63,44 @@ public class UserTableModel extends AbstractTableModel {
         if (aValue != null && !aValue.toString().isEmpty()) {
             Schedule.reInvokeInWorker(SERVER_ADMIN_TABLE_EDIT, Schedule.CLICK_DELAY, () -> {
                 if (rowIndex == users.size()) {
-                    wizard.createDB(new DB(null, aValue.toString()));
+                    String name;
+                    String password;
+                    if (columnIndex == 1) {
+                        name = aValue.toString();
+                        password = "";
+                    } else {
+                        name = "";
+                        password = aValue.toString();
+                    }
+
+                    User user = new User(name, password);
+                    user.getBehavior().setNew();
+                    users.add(user);
+
+                    if (!name.isEmpty()) {
+                        wizard.createUser(user);
+                    } else {
+                        fireTableDataChanged();
+                    }
                 } else {
-                    // TODO: edit existing database - rename?
+                    User user = users.get(rowIndex);
+                    if (user.getBehavior().isNew()) {
+                        if (columnIndex == 1) {
+                            user.setName(aValue.toString());
+                            wizard.createUser(user);
+                        } else {
+                            user.getBehavior().setPassword(aValue.toString());
+                            fireTableDataChanged();
+                        }
+                    } else {
+                        User.Behavior behavior = user.getBehavior().prepareForEdit();
+                        if (columnIndex == 1) {
+                            behavior.notifyChange(User.Behavior.L_NAME, aValue.toString());
+                        } else {
+                            behavior.notifyChange(User.Behavior.L_PASSWORD, aValue.toString());
+                        }
+                        wizard.updateUser(user);
+                    }
                 }
             });
         }

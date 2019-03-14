@@ -88,6 +88,8 @@ public class User {
         public Behavior prepareForEdit() {
             valuesForEdit = new Behavior();
             valuesForEdit.name = name;
+            valuesForEdit.password = password;
+            valuesForEdit.extra = extra;
             valuesForEdit.descr = descr;
             return valuesForEdit;
         }
@@ -98,6 +100,8 @@ public class User {
                 drop();
             } else {
                 behavior.name = name;
+                behavior.password = password;
+                behavior.extra = extra;
                 behavior.descr = descr;
                 if (behavior.isNew) {
                     behavior.valuesForEdit.isNew = true;

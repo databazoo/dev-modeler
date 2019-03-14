@@ -13,6 +13,7 @@ import com.databazoo.devmodeler.conn.ConnectionUtils;
 import com.databazoo.devmodeler.conn.DBCommException;
 import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.conn.IConnectionQuery;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.model.DB;
 import com.databazoo.tools.Dbg;
 
@@ -109,6 +110,7 @@ public abstract class SQLEnabledWizard extends MigWizard {
 
 	protected void runSingleQuery(IConnection connection, String sql, DB db, Runnable onSuccess, Runnable onError, String errorString) {
 		java.util.Timer t = new Timer("LongQueryTimer");
+		int write = DesignGUI.getInfoPanel().write(sql);
 		try {
 			IConnectionQuery running = connection.prepare(sql, db);
 			running.useExecuteUpdate(true);
@@ -123,12 +125,14 @@ public abstract class SQLEnabledWizard extends MigWizard {
 
 			t.cancel();
 			hideLongQueryWindow();
+			DesignGUI.getInfoPanel().writeOK(write);
 			if (onSuccess != null) {
 				onSuccess.run();
 			}
 		} catch (DBCommException ex) {
 			t.cancel();
 			hideLongQueryWindow();
+			DesignGUI.getInfoPanel().writeFailed(write, ex.getLocalizedMessage());
 			if (onError != null) {
 				onError.run();
 			}
