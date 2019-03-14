@@ -12,7 +12,7 @@ databases Databazoo Dev Modeler will support you in your activities.
 
 ## Requires
 
-- JDK 8+
+- JDK 11+
 - Maven 3.5+
 - Launch4J
 - Internet connection (to maven repositories)
