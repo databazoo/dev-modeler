@@ -33,4 +33,3 @@ Run tests in ***devmodeler*** module with IntelliJ IDEA coverage runner.
 
 - Community edition is licensed under GNU AGPL 3.0.
 - Commercial edition is covered by a proprietary license agreement.
-- All open-source libraries used in the project must be either imported through maven or added to ***external*** module.
