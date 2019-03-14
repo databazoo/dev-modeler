@@ -5,15 +5,15 @@
     <artifactId>components</artifactId>
     <packaging>jar</packaging>
 
-    <version>2.1</version>
+    <version>3.0</version>
 
     <name>Databazoo Components</name>
     <url>www.databazoo.com</url>
 
     <parent>
         <groupId>com.databazoo</groupId>
-        <artifactId>databazoo-parent</artifactId>
-        <version>2.1</version>
+        <artifactId>databazoo-base</artifactId>
+        <version>3.0</version>
     </parent>
 
     <properties>
@@ -22,7 +22,12 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/us.monoid.web/resty -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout</artifactId>
+            <version>3.7.4</version>
+        </dependency>
+
         <dependency>
             <groupId>us.monoid.web</groupId>
             <artifactId>resty</artifactId>
@@ -35,7 +40,6 @@
             <version>1.54</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.github.markusbernhardt/proxy-vole -->
         <dependency>
             <groupId>com.github.markusbernhardt</groupId>
             <artifactId>proxy-vole</artifactId>

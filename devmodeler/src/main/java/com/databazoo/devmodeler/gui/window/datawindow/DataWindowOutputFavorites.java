@@ -12,7 +12,7 @@ import com.databazoo.devmodeler.project.RecentQuery;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.tools.Schedule;
-import net.miginfocom.MigLayout;
+import net.miginfocom.swing.MigLayout;
 
 abstract class DataWindowOutputFavorites extends DataWindowOutputExplain {
 
