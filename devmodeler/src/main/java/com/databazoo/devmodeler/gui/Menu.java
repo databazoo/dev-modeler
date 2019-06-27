@@ -691,7 +691,7 @@ public class Menu extends JPanel {
                 add(syncPanel);
                 add(dbCombo);
                 add(connCombo);
-                if (Project.getCurrent().getCurrentConn().isSupported(SERVER_ADMINISTRATION)) {
+                if (Project.getCurrent() != null && Project.getCurrent().getCurrentConn().isSupported(SERVER_ADMINISTRATION)) {
                     add(menuBtnAdmin);
                 }
             }
