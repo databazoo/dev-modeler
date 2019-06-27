@@ -859,6 +859,7 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 		HashMap<String, IConnection> dedicatedConnections = new HashMap<>();
 		for(DB db : p.getDatabases()){
 			for(IConnection con : p.getConnections()) {
+				con.setDbAlias(db.getName());
 				dedicatedConnections.put(db.getName()+"~"+con.getName(), con);
 			}
 		}
