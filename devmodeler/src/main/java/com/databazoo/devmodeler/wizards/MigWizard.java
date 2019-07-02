@@ -90,11 +90,15 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 	}
 
 	private void preparePageLayout(int insets, int middleGap){
-		JPanel panel = placementPanel==null ? pageContent : placementPanel;
+		JPanel panel = getPanel();
 
 		int left = 80;
 		int minLeft = left-middleGap/2;
 		panel.setLayout(new MigLayout("insets "+insets+", wrap 4", "["+minLeft+"px::][100::50%-"+left+"px,grow,fill]"+middleGap+"["+minLeft+"px::][100::50%-"+left+"px,grow,fill]", "[]1[]"));
+	}
+
+	public JPanel getPanel() {
+		return placementPanel==null ? pageContent : placementPanel;
 	}
 
 	protected JPanel createPlacementPanel(int insets, int middleGap){
@@ -208,7 +212,7 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 	}
 	protected JLabel addText(String text, String placement){
 		JLabel lab = new JLabel("<html>"+text+"</html>");
-		(placementPanel==null ? pageContent : placementPanel).add(lab, placement);
+		getPanel().add(lab, placement);
 		return lab;
 	}
 
@@ -227,10 +231,10 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 
 	// EMPTY SPACES
 	protected void addEmptyLine(){
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(" "), "span, height 16px!");
+		getPanel().add(new JLabel(" "), "span, height 16px!");
 	}
 	protected void addEmptySlot(){
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(" "), "span 2, height 16px!");
+		getPanel().add(new JLabel(" "), "span 2, height 16px!");
 	}
 
 	// TEXT FIELDS
@@ -251,8 +255,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 			}
 		});
 
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(input, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(input, placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
@@ -269,8 +273,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 			}
 		});
 
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(input, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(input, placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
@@ -289,8 +293,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 			}
 		});
 
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(input, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(input, placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
@@ -304,8 +308,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		final JSpinner input = new JSpinner(new SpinnerNumberModel(value, minMax.x, minMax.y, minMax.y<100 ? 1 : 10));
 		input.addChangeListener(ce -> Schedule.reInvokeInWorker(Schedule.Named.MIG_WIZARD_INPUT_NOTIFICATION, UIConstants.TYPE_TIMEOUT, () -> notifyChange(title, input.getValue().toString())));
 
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(input, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(input, placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
@@ -328,8 +332,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		JButton btnBrowse = new JButton("...");
 		btnBrowse.addActionListener(new PathInputListener(title, input, typeFilter));
 
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(new HorizontalContainer(null, input, btnBrowse), placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(new HorizontalContainer(null, input, btnBrowse), placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
@@ -344,8 +348,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		input.addActionListener(ae -> notifyChange(title, input.isSelected()));
 		//cbComponent.setPreferredSize(new Dimension(cbComponent.getPreferredSize().width,14));
 
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(input, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(input, placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
@@ -380,8 +384,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 
 			//NextFieldObserver.get(this).registerObserver(input);
 		}
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(cont, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(cont, placement);
 	}
 
 	// ANY CONTAINER
@@ -389,14 +393,14 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		addPanel(panel, SPAN);
 	}
 	protected void addPanel(Container panel, String placement) {
-		(placementPanel==null ? pageContent : placementPanel).add(panel, placement);
+		getPanel().add(panel, placement);
 	}
 	protected void addPanel(String title, Container panel) {
 		addPanel(title, panel, "");
 	}
 	protected void addPanel(String title, Container panel, String placement) {
-		(placementPanel==null ? pageContent : placementPanel).add(new JLabel(title));
-		(placementPanel==null ? pageContent : placementPanel).add(panel, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(panel, placement);
 	}
 
 	// COMBOBOXES
@@ -417,8 +421,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		}
 		input.addActionListener(e -> notifyChange(title, (String)input.getSelectedItem()));
 
-		(placementPanel != null ? placementPanel : pageContent).add(new JLabel(title));
-		(placementPanel != null ? placementPanel : pageContent).add(input, placement);
+		getPanel().add(new JLabel(title));
+		getPanel().add(input, placement);
 
 		NextFieldObserver.get(this).registerObserver(input);
 		return input;
