@@ -794,15 +794,21 @@ abstract class Connection extends ConnectionBase {
         String rel1Alias = getTableAlias(con.getRel1().getName());
         String rel2Alias = getTableAlias(con.getRel2().getName());
 
+        int matchingCharCount = getMatchingCharCount(rel1Alias, rel2Alias);
+        if (matchingCharCount > 0) {
+			rel1Alias = rel1Alias.substring(matchingCharCount);
+			rel2Alias = rel2Alias.substring(matchingCharCount);
+		}
+
         if(rel1Alias.equals(rel2Alias)){
             rel1Alias += "1";
             rel2Alias += "2";
         }
 
         return "SELECT *\n" +
-				FROM + escapeFullName(rel1FullName) + " " + rel1Alias + "\n" +
-				(con.getAttr1().getBehavior().isAttNull() ? "LEFT " : "") +
-				"JOIN " + escapeFullName(rel2FullName) + " " + rel2Alias + " " +
+				FROM + escapeFullName(rel2FullName) + " " + rel2Alias + "\n" +
+				(con.getAttr1().getBehavior().isAttNull() ? "RIGHT " : "") +
+				"JOIN " + escapeFullName(rel1FullName) + " " + rel1Alias + " " +
 				(con.getAttr1().getName().equalsIgnoreCase(con.getAttr2().getName()) ? "USING (" + escape(con.getAttr1().getName()) + ")"
 						: "ON " + rel1Alias + "." + escape(con.getAttr1().getName()) + " = " + rel2Alias + "." + escape(con.getAttr2().getName()))
 				+ "\n" +
@@ -810,7 +816,15 @@ abstract class Connection extends ConnectionBase {
 				";";
 	}
 
-    String getTableAlias(String name) {
+	private int getMatchingCharCount(String rel1Alias, String rel2Alias) {
+		for (int i = 0; true; i++) {
+			if (rel1Alias.charAt(i) != rel2Alias.charAt(i) || i == rel1Alias.length()-1  || i == rel2Alias.length()-1) {
+				return i;
+			}
+		}
+	}
+
+	String getTableAlias(String name) {
 
         // Splitting camel case and inline alphanumerics
         name = name
