@@ -541,7 +541,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 				}
 				if (!comma.isEmpty()) {
 					conditionIn = escapedColumnName + " IN (" + sqlParts + ")";
-					conditionNotIn = escapedColumnName + " NOT" + conditionIn;
+					conditionNotIn = escapedColumnName + " NOT " + conditionIn;
 				} else {
 					conditionIn = null;
 					conditionNotIn = null;
@@ -572,11 +572,11 @@ abstract class DataWindowOutputData extends DataWindowBase {
 				case 40: DataWindow.get().drawRelationData(connection, constraintColumnUsage.get(columnName).getRel(), false); break;
 				case 41:
 					final DataWindow dataWindow = DataWindow.get();
-					final Attribute attribute = constraintColumnUsage.get(columnName);
+					final Attribute attr = constraintColumnUsage.get(columnName);
 					if (selectedValue.equals("Row")) {
-						dataWindow.setWhere(attribute + " = " + cellValueEscaped);
+						dataWindow.setWhere(attr + " = " + cellValueEscaped);
 					}
-					dataWindow.drawRelationData(connection, attribute.getRel(), false);
+					dataWindow.drawRelationData(connection, attr.getRel(), false);
 					break;
 				case 50: appendQuery(dataScriptGenerator.generateInsertScript(
 						dataScriptGenerator.getSelectedRows(selectedValue, row),
@@ -591,12 +591,19 @@ abstract class DataWindowOutputData extends DataWindowBase {
 				));
 					break;
 				case 60: setQuerySelect(conditionSelect); break;
+				case 61:
+					final Attribute attr2 = constraintColumnUsage.get(columnName);
+					setQueryJoin(attr2.getRel(), attr2.getName(), columnName);
+					break;
 				default: throw new IllegalArgumentException("Menu option " + type + " is not known");
 				}
 			});
 		}
 
 		private void createMenuItems() {
+
+			// REFERENCES
+			String referencedTableName = null;
 			if(constraintColumnUsage != null){
 				Attribute attr = constraintColumnUsage.get(columnName);
 				if(attr != null){
@@ -605,13 +612,19 @@ abstract class DataWindowOutputData extends DataWindowBase {
 					} else {
 						menu.addItem("Show referenced table", Relation.ico16, 40);
 					}
+					referencedTableName = attr.getRel().getName();
 					menu.separator();
 				}
 			}
 
-			menu.addItem(SELECT + conditionSelect, RightClickMenu.ICO_SQL, 60)
-					.separator();
+			// SELECT, JOIN
+			menu.addItem(SELECT + conditionSelect, RightClickMenu.ICO_SQL, 60);
+			if (referencedTableName != null) {
+				menu.addItem("JOIN " + referencedTableName, RightClickMenu.ICO_SQL, 61);
+			}
+			menu.separator();
 
+			// WHERE and ORDER BY
 			if (conditionIn != null) {
 				menu.addItem(WHERE + " ... IN", RightClickMenu.ICO_SQL, 20, new String[] { conditionIn, conditionNotIn });
 			} else if (conditionEq != null) {
@@ -624,10 +637,13 @@ abstract class DataWindowOutputData extends DataWindowBase {
 
 			menu.addItem(WHERE + " ... NULL", RightClickMenu.ICO_SQL, 20, new String[]{ conditionNull, conditionNotNull });
 			menu.separator().addItem(ORDER_BY + " ...", RightClickMenu.ICO_ORDER, 30, new String[]{ escapedColumnName + " ASC", escapedColumnName + " DESC" });
+
+			// INSERT and UPDATE scripts
 			menu.separator().
 					addItem("Generate INSERT", RightClickMenu.ICO_SQL, 50, scriptOptionString1).
 					addItem("Generate UPDATE", RightClickMenu.ICO_SQL, 51, scriptOptionString2);
 
+			// DELETE
 			if(!getPKeyValues((Result) outputData.getModel(), 0).isEmpty()){
 				menu.separator();
 				final int rowCount = outputData.getSelectedRows().length;

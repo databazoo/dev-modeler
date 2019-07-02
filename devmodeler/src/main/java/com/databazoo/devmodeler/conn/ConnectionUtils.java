@@ -139,6 +139,8 @@ public interface ConnectionUtils {
     String FULL_NAME_REGEX = "(.+)\\.(.+)";
     String ESC_KEYWORDS = "(database|user|from|to|schema|table|relation|function|trigger|constraint|index|date|time|default|null|language)";
 
+    String ONE_TWO = "$1_$2";
+
     static IConnection getCurrent(String name) {
         return Connection.getCurrent(name);
     }
@@ -193,5 +195,33 @@ public interface ConnectionUtils {
                 Connection.DB2_SUPPORTED = true;
             }
         }
+    }
+
+    static int getMatchingCharCount(String rel1Alias, String rel2Alias) {
+        for (int i = 0; true; i++) {
+            if (rel1Alias.charAt(i) != rel2Alias.charAt(i) || i == rel1Alias.length()-1  || i == rel2Alias.length()-1) {
+                return i;
+            }
+        }
+    }
+
+    static String getTableAlias(String name) {
+
+        // Splitting camel case and inline alphanumerics
+        name = name
+                .replaceAll("([a-z])([A-Z0-9])", ONE_TWO)
+                .replaceAll("([0-9])([a-z0-9])", ONE_TWO)
+                .replaceAll("([0-9])([a-z0-9])", ONE_TWO);
+
+        // Splitting by special chars
+        String[] split = name.toLowerCase().split("[^a-z0-9]+");
+
+        StringBuilder result = new StringBuilder();
+        for(String part : split){
+            if(part.length() > 0){
+                result.append(part.charAt(0));
+            }
+        }
+        return result.toString();
     }
 }

@@ -43,15 +43,15 @@ public class ConnectionPgTest extends TestProjectSetup {
 
 	@Test
 	public void getTableAliasTest(){
-		assertEquals("m", CONNECTION.getTableAlias("mytable"));
-		assertEquals("mt", CONNECTION.getTableAlias("myTable"));
-		assertEquals("mt", CONNECTION.getTableAlias("MyTable"));
-		assertEquals("mt", CONNECTION.getTableAlias("my_table"));
-		assertEquals("mt", CONNECTION.getTableAlias("My_Table"));
-		assertEquals("mt", CONNECTION.getTableAlias("MY_TABLE"));
-		assertEquals("msr1", CONNECTION.getTableAlias("my_special_relation1"));
-        assertEquals("msr1", CONNECTION.getTableAlias("my_special_relation_1"));
-        assertEquals("s23r54", CONNECTION.getTableAlias("schema23relation54"));
+		assertEquals("m", ConnectionUtils.getTableAlias("mytable"));
+		assertEquals("mt", ConnectionUtils.getTableAlias("myTable"));
+		assertEquals("mt", ConnectionUtils.getTableAlias("MyTable"));
+		assertEquals("mt", ConnectionUtils.getTableAlias("my_table"));
+		assertEquals("mt", ConnectionUtils.getTableAlias("My_Table"));
+		assertEquals("mt", ConnectionUtils.getTableAlias("MY_TABLE"));
+		assertEquals("msr1", ConnectionUtils.getTableAlias("my_special_relation1"));
+        assertEquals("msr1", ConnectionUtils.getTableAlias("my_special_relation_1"));
+        assertEquals("s23r54", ConnectionUtils.getTableAlias("schema23relation54"));
 	}
 
 	@Test
