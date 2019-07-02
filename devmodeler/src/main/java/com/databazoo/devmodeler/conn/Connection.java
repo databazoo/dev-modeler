@@ -45,8 +45,6 @@ abstract class Connection extends ConnectionBase {
 	private static final String L_WHERE = " WHERE ";
 	private static final String L_NULL = "NULL";
 
-	private static final String ONE_TWO = "$1_$2";
-
 	//static final String[] TYPE_COMBO = {TYPE_DIRECT, TYPE_PHP, TYPE_ASP};
 	static final int INIT_TIMEOUT = 3000; // milliseconds
 	static boolean POSTGRES_SUPPORTED = false;
@@ -791,10 +789,10 @@ abstract class Connection extends ConnectionBase {
         String rel1FullName = con.getRel1().getFullName();
         String rel2FullName = con.getRel2().getFullName();
 
-        String rel1Alias = getTableAlias(con.getRel1().getName());
-        String rel2Alias = getTableAlias(con.getRel2().getName());
+        String rel1Alias = ConnectionUtils.getTableAlias(con.getRel1().getName());
+        String rel2Alias = ConnectionUtils.getTableAlias(con.getRel2().getName());
 
-        int matchingCharCount = getMatchingCharCount(rel1Alias, rel2Alias);
+        int matchingCharCount = ConnectionUtils.getMatchingCharCount(rel1Alias, rel2Alias);
         if (matchingCharCount > 0) {
 			rel1Alias = rel1Alias.substring(matchingCharCount);
 			rel2Alias = rel2Alias.substring(matchingCharCount);
@@ -815,34 +813,6 @@ abstract class Connection extends ConnectionBase {
 				getQueryLimitOffset(Settings.getInt(Settings.L_DATA_DEFAULT_LIMIT), 0) +
 				";";
 	}
-
-	private int getMatchingCharCount(String rel1Alias, String rel2Alias) {
-		for (int i = 0; true; i++) {
-			if (rel1Alias.charAt(i) != rel2Alias.charAt(i) || i == rel1Alias.length()-1  || i == rel2Alias.length()-1) {
-				return i;
-			}
-		}
-	}
-
-	String getTableAlias(String name) {
-
-        // Splitting camel case and inline alphanumerics
-        name = name
-                .replaceAll("([a-z])([A-Z0-9])", ONE_TWO)
-                .replaceAll("([0-9])([a-z0-9])", ONE_TWO)
-                .replaceAll("([0-9])([a-z0-9])", ONE_TWO);
-
-        // Splitting by special chars
-        String[] split = name.toLowerCase().split("[^a-z0-9]+");
-
-        StringBuilder result = new StringBuilder();
-        for(String part : split){
-            if(part.length() > 0){
-                result.append(part.charAt(0));
-            }
-        }
-        return result.toString();
-    }
 
     @Override
 	public void setAutocheckEnabled(boolean doCheck) {

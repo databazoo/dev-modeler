@@ -701,6 +701,41 @@ public class DataWindow extends DataWindowOutputMessages {
 	}
 
 	@Override
+	public void setQueryJoin(Relation rel2, String attr2, String attr1) {
+		String rel2Alias = ConnectionUtils.getTableAlias(rel2.getName());
+		final String text = queryInput.getText();
+		String sqlJoin = "JOIN " + connection.escapeFullName(rel2.getFullName()) + " " + rel2Alias + " ON " + rel2Alias + "." + connection.escape(attr2) + " = " + connection.escape(attr1) + "\n";
+		if (StringUtils.countMatches(text, "SELECT") == 1) {
+			int location = -1;
+			if ((location = text.indexOf("WHERE")) > 0) {
+				if (StringUtils.countMatches(text, "WHERE") > 1) {
+					location = -1;
+				}
+			} else if ((location = text.indexOf("ORDER BY")) > 0) {
+				if (StringUtils.countMatches(text, "ORDER BY") > 1) {
+					location = -1;
+				}
+			} else if ((location = text.indexOf("OFFSET")) > 0) {
+				if (StringUtils.countMatches(text, "OFFSET") > 1) {
+					location = -1;
+				}
+			} else if ((location = text.indexOf("LIMIT")) > 0) {
+				if (StringUtils.countMatches(text, "LIMIT") > 1) {
+					location = -1;
+				}
+			}
+			if (location > 0) {
+				queryInput.setText(text.substring(0, location) + sqlJoin + text.substring(location));
+				queryInput.format();
+				runQuery();
+				return;
+			}
+		}
+		queryInput.setText(queryInput.getText() + NEWLINE_NN_COMMENTED_OUT + sqlJoin);
+		queryInput.format();
+	}
+
+	@Override
 	public void setQueryOrder(String orderBy) {
 		final String text = queryInput.getText();
 		if (StringUtils.countMatches(text, "ORDER BY") <= 1 && StringUtils.countMatches(text, "SELECT") == 1) {
