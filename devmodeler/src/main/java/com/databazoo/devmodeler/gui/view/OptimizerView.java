@@ -299,14 +299,12 @@ public class OptimizerView extends AbstractView {
     private static class StaticFlawMouseHandler extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            //DifferenceView.DiffTableModel model = (DifferenceView.DiffTableModel) staticFlawTable.getModel();
             if (e.getClickCount() == 2) {
-                /*IModelElement elem = model.getDifference(staticFlawTable.getSelectedRow());
-                if(elem instanceof Relation && ((Relation)elem).getDataChanged() != null){
-                    DiffWizard.get().drawDataDifference((Relation)elem, localName, remoteName);
-                }else{
-                    DiffWizard.get().drawDifference(elem, localName, remoteName);
-                }*/
+                JTable table = OptimizerView.instance.staticFlawTable;
+                Runnable onClick = ((StaticFlawTableModel) table.getModel()).flaws.get(table.getSelectedRow()).onClick;
+                if (onClick != null) {
+                    Schedule.inEDT(onClick);
+                }
             }
         }
     }

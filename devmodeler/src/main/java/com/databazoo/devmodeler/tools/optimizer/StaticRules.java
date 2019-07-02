@@ -1,10 +1,20 @@
 package com.databazoo.devmodeler.tools.optimizer;
 
 import com.databazoo.components.UIConstants;
+import com.databazoo.components.combo.IconableComboBox;
+import com.databazoo.components.textInput.FormattedClickableTextField;
+import com.databazoo.devmodeler.gui.window.datawindow.DataWindow;
 import com.databazoo.devmodeler.model.Attribute;
 import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.model.Index;
 import com.databazoo.devmodeler.model.Relation;
+import com.databazoo.devmodeler.wizards.relation.RelationWizard;
+import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 class StaticRules {
 
@@ -28,7 +38,8 @@ class StaticRules {
         optimizer.addFlaw(ModelFlaw.error(r,
                 "Missing primary key",
                 "Tables should always use primary keys to uniquely identify rows in the table. "
-                + "Tables without primary keys are carrying great performance risks."
+                + "Tables without primary keys are carrying great performance risks.",
+                () -> RelationWizard.get(null).drawProperties(r, Relation.L_NEW_PK)
         ));
     }
 
@@ -42,7 +53,8 @@ class StaticRules {
             optimizer.addFlaw(ModelFlaw.warning(r,
                     "Too many indexes",
                     StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + value(r.getIndexes().size()) + " indexes. " +
-                            "Data manipulation on tables with too many indexes may be slow."
+                            "Data manipulation on tables with too many indexes may be slow.",
+                    () -> r.getIndexes().get(0).doubleClicked()
             ));
         }
     }
@@ -57,7 +69,8 @@ class StaticRules {
             optimizer.addFlaw(ModelFlaw.warning(r,
                     "Too many triggers",
                     StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + value(r.getTriggers().size()) + " triggers. " +
-                            "Data manipulation on tables with too many triggers may be slow."
+                            "Data manipulation on tables with too many triggers may be slow.",
+                    () -> r.getTriggers().get(0).doubleClicked()
             ));
         }
     }
@@ -72,14 +85,16 @@ class StaticRules {
             optimizer.addFlaw(ModelFlaw.warning(r,
                     "Too many columns",
                     StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + value(r.getAttributes().size()) + " columns. " +
-                            "Tables with too many columns have inefficient storage and may be performing slow."
+                            "Tables with too many columns have inefficient storage and may be performing slow.",
+                    () -> r.getAttributes().get(0).doubleClicked()
             ));
         }
         if(r.getAttributes().size() < 2){
             optimizer.addFlaw(ModelFlaw.warning(r,
                     "Useless table",
                     StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + (r.getAttributes().isEmpty() ? "no columns" : "only 1 column") +
-                            ". Tables with so few attributes are generally useless."
+                            ". Tables with so few attributes are generally useless.",
+                    r::doubleClicked
             ));
         }
     }
@@ -98,7 +113,8 @@ class StaticRules {
                             optimizer.addFlaw(ModelFlaw.error(r,
                                     "Primary key on time column",
                                     StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + " has primary key defined on time column. " +
-                                            "Inserting data into such table will create duplicities under heavy load."
+                                            "Inserting data into such table will create duplicities under heavy load.",
+                                    attr::doubleClicked
                             ));
                             return;
                         }
@@ -122,7 +138,8 @@ class StaticRules {
                                 "Unique key on time column",
                                 StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(index.getName()) +
                                         " unique key defined on time column. Inserting data into such table " +
-                                        "will create duplicities under heavy load."
+                                        "will create duplicities under heavy load.",
+                                attr::doubleClicked
                         ));
                         break;
                     }
@@ -152,11 +169,32 @@ class StaticRules {
                     optimizer.addFlaw(ModelFlaw.warning(r,
                             "Foreign key not covered by index",
                             StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(c.getName()) +
-                                    " foreign key that is not covered by any index. Data manipulation on parent table may be slow."
+                                    " foreign key that is not covered by any index. Data manipulation on parent table may be slow.",
+                            () -> addIndexForFK(r, c)
                     ));
                 }
             }
         }
+    }
+
+    private void addIndexForFK(Relation r, Constraint c) {
+        RelationWizard wizard = RelationWizard.get(null);
+        wizard.drawProperties(r, Relation.L_NEW_INDEX);
+        Schedule.inEDT(Schedule.TYPE_DELAY, () -> {
+            Component[] components = wizard.getPanel().getComponents();
+            boolean labelFound = false;
+            for (Component component : components) {
+                if (component instanceof JLabel && ((JLabel) component).getText().equals(Index.Behavior.L_COLUMNS)) {
+                    labelFound = true;
+                } else if (component instanceof FormattedClickableTextField && labelFound) {
+                    ((FormattedClickableTextField)component).setText(c.getAttr1().getName());
+                    for (KeyListener listener : component.getKeyListeners()) {
+                        listener.keyTyped(null);
+                    }
+                    break;
+                }
+            }
+        });
     }
 
     /**
@@ -194,7 +232,8 @@ class StaticRules {
                         optimizer.addFlaw(ModelFlaw.warning(r,
                                 "ID column has no foreign key",
                                 StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(a.getName()) +
-                                        " column with no foreign key. There should be a foreign key constraint defined."
+                                        " column with no foreign key. There should be a foreign key constraint defined.",
+                                () -> addForeignKeyForColumn(r, a)
                         ));
                     }
                 }else if (aName.startsWith("ID") || aName.startsWith("id") || aName.startsWith("Id") ||
@@ -212,12 +251,33 @@ class StaticRules {
                         optimizer.addFlaw(ModelFlaw.notice(r,
                                 "ID column has no foreign key",
                                 StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(a.getName()) +
-                                        " column with no foreign key. There could be a foreign key constraint defined."
+                                        " column with no foreign key. There could be a foreign key constraint defined.",
+                                () -> addForeignKeyForColumn(r, a)
                         ));
                     }
                 }
             }
         }
+    }
+
+    private void addForeignKeyForColumn(Relation r, Attribute a) {
+        RelationWizard wizard = RelationWizard.get(null);
+        wizard.drawProperties(r, Relation.L_NEW_FK);
+        Schedule.inEDT(Schedule.TYPE_DELAY, () -> {
+            Component[] components = wizard.getPanel().getComponents();
+            boolean labelFound = false;
+            for (Component component : components) {
+                if (component instanceof JLabel && ((JLabel) component).getText().equals(Constraint.Behavior.L_LOC_ATTR)) {
+                    labelFound = true;
+                } else if (component instanceof IconableComboBox && labelFound) {
+                    ((IconableComboBox)component).setSelectedItem(a.getName());
+                    for (ActionListener listener : ((IconableComboBox) component).getActionListeners()) {
+                        listener.actionPerformed(null);
+                    }
+                    break;
+                }
+            }
+        });
     }
 
     /**
@@ -238,7 +298,8 @@ class StaticRules {
                         optimizer.addFlaw(ModelFlaw.warning(r,
                                 "Bi-directional reference",
                                 "There is a 2-way reference between " + elementName(r.getName()) + " and " + elementName(rel2.getName()) +
-                                ". 2-way references make models too complicated and are a sign of poor design."
+                                ". 2-way references make models too complicated and are a sign of poor design.",
+                                c2::doubleClicked
                         ));
                         break;
                     }
@@ -260,7 +321,8 @@ class StaticRules {
                             "Duplicate indexes",
                             StaticFlawOptimizer.L_TABLE + elementName(r.getName()) +
                             " has indexes " + elementName(index.getName()) + " and " + elementName(index2.getName()) +
-                            " operating on same columns. One of the indexes should be removed."
+                            " operating on same columns. One of the indexes should be removed.",
+                            index::doubleClicked
                     ));
                     break;
                 }
@@ -282,7 +344,8 @@ class StaticRules {
                                 "Unique key on NULL column",
                                 StaticFlawOptimizer.L_TABLE +
                                 elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(index.getName()) + " unique key defined on nullable column " +
-                                elementName(attr.getName()) + ". NULL values may easily result in duplicities."
+                                elementName(attr.getName()) + ". NULL values may easily result in duplicities.",
+                                attr::doubleClicked
                         ));
                         break;
                     }
@@ -310,7 +373,8 @@ class StaticRules {
                     optimizer.addFlaw(ModelFlaw.notice(r,
                             "Primary key not on first column",
                             StaticFlawOptimizer.L_TABLE + elementName(r.getName()) +
-                            " has primary key defined in the middle of the table. PK column should be moved to the beginning."
+                            " has primary key defined in the middle of the table. PK column should be moved to the beginning.",
+                            () -> index.getAttributes().get(0).doubleClicked()
                     ));
                 }
             }
@@ -325,11 +389,25 @@ class StaticRules {
         return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
     }
 
-    void checkPrimaryKeyWrongDatatype(Relation r) {
-        // TODO
+    /**
+     * Check for columns with both a DEFAULT property and a NULL property.
+     *
+     * @param r relation to check
+     */
+    void checkAttributeDefaultAndNull(Relation r) {
+        for(Attribute a : r.getAttributes()) {
+            if (!a.getBehavior().getDefaultValue().isEmpty() && a.getBehavior().isAttNull()) {
+                optimizer.addFlaw(ModelFlaw.warning(r,
+                                "Column with DEFAULT and NULL",
+                                StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(a.getName()) +
+                                        " column with both DEFAULT and NULL properties. You should only provide one type of default behavior.",
+                                a::doubleClicked
+                        ));
+            }
+        }
     }
 
-    void checkAttributeDefaultAndNull(Relation r) {
+    void checkPrimaryKeyWrongDatatype(Relation r) {
         // TODO
     }
 
