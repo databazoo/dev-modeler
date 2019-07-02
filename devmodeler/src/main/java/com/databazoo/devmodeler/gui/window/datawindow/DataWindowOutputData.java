@@ -471,20 +471,22 @@ abstract class DataWindowOutputData extends DataWindowBase {
 		private String conditionNeq;
 		private String conditionNull;
 		private String conditionNotNull;
+		private String conditionReferenceIn;
 		private String conditionIn;
 		private String conditionNotIn;
 		private String conditionLike;
 		private String conditionNotLike;
 
-		@Override public void mouseClicked(MouseEvent e) {
-            if((e.getModifiers() & MouseEvent.BUTTON3_MASK) == MouseEvent.BUTTON3_MASK){
-				updateSelectedCellInfo(e);
-				createSQLs();
-				createMenu(e);
-				createMenuItems();
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (e.getButton() == MouseEvent.BUTTON3) {
+                updateSelectedCellInfo(e);
+                createSQLs();
+                createMenu(e);
+                createMenuItems();
 
-			}else if((e.getModifiers() & MouseEvent.BUTTON1_MASK) == MouseEvent.BUTTON1_MASK){
-                if(outputData.getRowSelectionAllowed()){
+            } else if (e.getButton() == MouseEvent.BUTTON1) {
+                if (outputData.getRowSelectionAllowed()) {
                     outputData.setCellSelectionEnabled(true);
                 }
             }
@@ -540,13 +542,16 @@ abstract class DataWindowOutputData extends DataWindowBase {
 					comma = ",";
 				}
 				if (!comma.isEmpty()) {
+					conditionReferenceIn = " IN (" + sqlParts + ")";
 					conditionIn = escapedColumnName + " IN (" + sqlParts + ")";
-					conditionNotIn = escapedColumnName + " NOT " + conditionIn;
+					conditionNotIn = escapedColumnName + " NOT IN (" + sqlParts + ")";
 				} else {
+                    conditionReferenceIn = null;
 					conditionIn = null;
 					conditionNotIn = null;
 				}
 			} else {
+                conditionReferenceIn = null;
 				conditionIn = null;
 				conditionNotIn = null;
 			}
@@ -573,9 +578,11 @@ abstract class DataWindowOutputData extends DataWindowBase {
 				case 41:
 					final DataWindow dataWindow = DataWindow.get();
 					final Attribute attr = constraintColumnUsage.get(columnName);
-					if (selectedValue.equals("Row")) {
-						dataWindow.setWhere(attr + " = " + cellValueEscaped);
-					}
+                    if (selectedValue.equals("Row")) {
+                        dataWindow.setWhere(attr + " = " + cellValueEscaped);
+                    } else if (selectedValue.equals("Rows")) {
+                        dataWindow.setWhere(attr + conditionReferenceIn);
+                    }
 					dataWindow.drawRelationData(connection, attr.getRel(), false);
 					break;
 				case 50: appendQuery(dataScriptGenerator.generateInsertScript(
@@ -608,7 +615,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
 				Attribute attr = constraintColumnUsage.get(columnName);
 				if(attr != null){
 					if(cellValue != null) {
-						menu.addItem("Show referenced ...", Relation.ico16, 41, new String[]{"Row", "Table"});
+						menu.addItem("Show referenced ...", Relation.ico16, 41, new String[]{outputData.getSelectedRowCount() > 1 ? "Rows" : "Row", "Table"});
 					} else {
 						menu.addItem("Show referenced table", Relation.ico16, 40);
 					}
