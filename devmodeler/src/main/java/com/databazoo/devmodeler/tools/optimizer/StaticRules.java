@@ -15,8 +15,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 class StaticRules {
+    private static final Pattern PATTERN_PK_DATATYPES = Pattern.compile("(big|small)?(int|serial|uuid).*");
+    private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(
+            "raise", "left", "right", "full", "inner", "outer", "cross", "group", "order", "partition", "offset", "vacuum",
+            "create", "replace", "user", "database", "schema", "table", "sequence", "column", "trigger", "function",
+            "package", "body", "view", "constraint", "index", "primary", "foreign", "key", "references", "match", "simple",
+            "comment", "alter", "add", "drop", "before", "after", "check", "unique", "default", "rename", "change", "modify",
+            "collate", "exec", "grant", "revoke", "generated", "always", "where", "set", "having", "join", "from", "to",
+            "by", "into", "union", "limit", "desc", "asc", "except", "top", "for", "foreach", "loop", "using", "query",
+            "start", "begin", "commit", "rollback", "declare", "increment", "return", "returns", "returning", "perform",
+            "execute", "verbose", "analyze", "optimize", "repair", "cycle", "restart", "minvalue", "maxvalue", "nulls",
+            "first", "last", "action", "restrict", "cascade", "storage", "plain", "main", "external", "extended", "security",
+            "definer", "language", "volatile", "stable", "immutable", "cost", "rows", "each", "row", "statement", "procedure",
+            "oids", "materialized", "and", "or", "case", "when", "then", "else", "end", "if", "elsif", "of", "between",
+            "values", "window", "like", "ilike", "in", "all", "exists", "some", "any", "on", "as", "is", "with", "without",
+            "null", "not", "no", "only", "distinct", "recursive", "notice", "exception", "sqlstate", "fulltext", "found",
+            "authorization", "engine", "role", "identified", "password", "select", "insert", "update", "delete", "truncate"));
 
     private final AbstractOptimizer optimizer;
 
@@ -385,6 +405,10 @@ class StaticRules {
         return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_GREEN.getRGB()).substring(2) + "\">" + name + "</font>";
     }
 
+    private String value(String val) {
+        return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
+    }
+
     private String value(int val) {
         return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
     }
@@ -408,7 +432,21 @@ class StaticRules {
     }
 
     void checkPrimaryKeyWrongDatatype(Relation r) {
-        // TODO
+        for (Index index : r.getIndexes()) {
+            if (index.getBehavior().isPrimary() && index.getAttributes().size() == 1) {
+                Attribute a = index.getAttributes().get(0);
+                String attType = a.getBehavior().getAttType();
+                if (!PATTERN_PK_DATATYPES.matcher(attType).matches()) {
+                    optimizer.addFlaw(ModelFlaw.warning(r,
+                            "PK on wrong datatype",
+                            StaticFlawOptimizer.L_TABLE + elementName(r.getName()) +
+                                    " has primary key defined on column of type " + value(attType) + ". You should use a simple datatype (i.e. INTEGER) for primary keys.",
+                            a::doubleClicked
+                    ));
+                }
+            }
+        }
+
     }
 
     void checkRepeatedAttributes(Relation r) {
@@ -416,6 +454,25 @@ class StaticRules {
     }
 
     void checkReservedKeywords(Relation r) {
-        // TODO
+        for (Attribute a : r.getAttributes()) {
+            if (KEYWORDS.contains(a.getName())) {
+                optimizer.addFlaw(ModelFlaw.warning(r,
+                        "Reserved word is used as a column name",
+                        StaticFlawOptimizer.L_TABLE + elementName(r.getName()) + StaticFlawOptimizer.L_HAS + elementName(a.getName()) +
+                                " column which is named as a reserved word. You should not use SQL keywords as column names.",
+                        a::doubleClicked
+                ));
+            }
+        }
+
+        if (KEYWORDS.contains(r.getName())) {
+            optimizer.addFlaw(ModelFlaw.warning(r,
+                    "Reserved word is used as a table name",
+                    StaticFlawOptimizer.L_TABLE + elementName(r.getName()) +
+                            " is named as a reserved word. You should not use SQL keywords as table names.",
+                    r::doubleClicked
+            ));
+        }
+
     }
 }
