@@ -2,7 +2,6 @@ package com.databazoo.devmodeler.wizards;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
@@ -39,6 +38,9 @@ import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 import net.miginfocom.swing.MigLayout;
 
+import static java.awt.Frame.MAXIMIZED_BOTH;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+
 
 public abstract class MigWizard implements TreeSelectionListener, Serializable {
 	private static final long serialVersionUID = 1905122041950000001L;
@@ -59,6 +61,8 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 	protected static final String SPAN				= "span";
 	protected static final String SPAN_CENTER		= "span, align center";
 	protected static final String SPAN_GROW			= "span, grow";
+
+	protected static String notificationText;
 
 	protected Project project;
 	protected DB database;
@@ -94,23 +98,28 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 
 		int left = 80;
 		int minLeft = left-middleGap/2;
-		panel.setLayout(new MigLayout("insets "+insets+", wrap 4", "["+minLeft+"px::][100::50%-"+left+"px,grow,fill]"+middleGap+"["+minLeft+"px::][100::50%-"+left+"px,grow,fill]", "[]1[]"));
+		panel.setLayout(new MigLayout(
+				"insets "+insets+", wrap 4",
+				"["+minLeft+"px::][100::50%-"+left+"px,grow,fill]"+middleGap+"["+minLeft+"px::][100::50%-"+left+"px,grow,fill]", "[]1[]"
+		));
 	}
 
 	public JPanel getPanel() {
 		return placementPanel==null ? pageContent : placementPanel;
 	}
 
-	protected JPanel createPlacementPanel(int insets, int middleGap){
+	protected JPanel createPlacementPanel(){
+		return createPlacementPanel(20);
+	}
+
+	protected JPanel createPlacementPanel(int insets){
 		placementPanel = new JPanel();
-		preparePageLayout(insets, middleGap);
+		preparePageLayout(insets, 20);
 		return placementPanel;
 	}
+
 	protected void setPlacementPanel(JPanel panel){
 		placementPanel = panel;
-	}
-	public JPanel getPlacementPanel(){
-		return placementPanel;
 	}
 
 	public void setDatabase(DB instance) {
@@ -128,13 +137,13 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 
 	protected void drawWindow(String fullName, JComponent tree, boolean maximize, boolean thinButtonPane){
 		frame = new GCFrameWithObservers(fullName);
-		frame.setDefaultCloseOperation(GCFrameWithObservers.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		frame.setIconImages(Theme.getAllSizes(Theme.ICO_LOGO));
 		frame.setDefaultSize();
 		frame.setLocationRelativeTo(DesignGUI.get().frame);
 		frame.setVisible(true);
 		if(maximize){
-			frame.setExtendedState(GCFrameWithObservers.MAXIMIZED_BOTH);
+			frame.setExtendedState(MAXIMIZED_BOTH);
 		}
 
 		frame.setContentPane(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT));
@@ -143,8 +152,9 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		drawButtonPane(thinButtonPane);
 		drawPageContent();
 
-		((JComponent)frame.getContentPane()).getActionMap().put("closeWin", new AbstractAction("closeWin") { @Override public void actionPerformed(ActionEvent evt) { executeAction(CLOSE_WINDOW); } });
-		((JComponent)frame.getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "closeWin");
+		JComponent pane = (JComponent) frame.getContentPane();
+		pane.getActionMap().put("closeWin", new AbstractAction("closeWin") { @Override public void actionPerformed(ActionEvent evt) { executeAction(CLOSE_WINDOW); } });
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "closeWin");
 	}
 
 	protected void drawTree(JComponent tree){
@@ -170,7 +180,17 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		}else{
 			rComponent = pageContent;
 		}
-		((JSplitPane)frame.getContentPane()).setRightComponent(new VerticalContainer(null, rComponent, buttonPane));
+		((JSplitPane)frame.getContentPane()).setRightComponent(new VerticalContainer(null, rComponent, consumeTextPane()));
+	}
+
+	private Component consumeTextPane() {
+		if (notificationText == null) {
+			return buttonPane;
+		}
+		JLabel label = new JLabel(notificationText);
+		label.setBorder(new EmptyBorder(10, 5, 10, 20));
+		notificationText = null;
+		return new VerticalContainer(label, null, buttonPane);
 	}
 
 	private void drawButtonPane(boolean thinButtonPane){
@@ -190,9 +210,6 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		buttonPane.add(btnSave);
 		buttonPane.add(btnCancel);
 	}
-
-	@Override
-	public abstract void valueChanged(TreeSelectionEvent tse);
 
 	public abstract void notifyChange(String elementName, String value);
 	public abstract void notifyChange(String elementName, boolean value);

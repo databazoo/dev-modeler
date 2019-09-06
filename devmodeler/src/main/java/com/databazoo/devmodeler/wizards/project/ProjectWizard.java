@@ -1053,7 +1053,7 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 	}
 
 	private void drawManualConfigPanel(){
-		inputPanelManual = createPlacementPanel(20, 20);
+		inputPanelManual = createPlacementPanel();
 		addPathInput(L_REVISIONS_FOLDER, listedProject.getRevPath(), SPAN);
 		addText(""); addComment("&nbsp;All your changes will be stored here. This folder should be under revision control.", SPAN);
 		addEmptyLine();
@@ -1062,7 +1062,7 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 	}
 
 	private void drawGITConfigPanel(){
-		inputPanelGIT = createPlacementPanel(20, 20);
+		inputPanelGIT = createPlacementPanel();
 
 		revisionURLGIT = addTextInput(L_CHECKOUT_URL, listedProject.getVerURL(), SPAN);
 		//addEmptyLine();
@@ -1091,7 +1091,7 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 	}
 
 	private void drawSVNConfigPanel(){
-		inputPanelSVN = createPlacementPanel(20, 20);
+		inputPanelSVN = createPlacementPanel();
 
 		revisionURLSVN = addTextInput(L_CHECKOUT_URL, listedProject.getVerURL(), SPAN);
 		//addEmptyLine();
