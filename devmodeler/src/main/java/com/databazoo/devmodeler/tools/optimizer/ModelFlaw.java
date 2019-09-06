@@ -2,6 +2,7 @@
 package com.databazoo.devmodeler.tools.optimizer;
 
 import com.databazoo.devmodeler.model.IModelElement;
+import com.databazoo.devmodeler.wizards.relation.RelationWizard;
 
 /**
  *
@@ -65,7 +66,6 @@ public class ModelFlaw {
 	public final String forwardSQL;
 	public final String backwardSQL;
 
-
 	private ModelFlaw (IModelElement element, String severity, String title, String description, Runnable onClick) {
 		this(element, severity, title, description, null, null, onClick);
 	}
@@ -79,11 +79,13 @@ public class ModelFlaw {
 		this.severity = severity;
 		this.title = title;
 		this.description = "<html>" + description + "</html>";
-		this.onClick = onClick;
+		this.onClick = () -> {
+			RelationWizard.setNotificationText(ModelFlaw.this.description.replaceAll("\\. ", ".<br>"));
+			onClick.run();
+		};
 		this.descriptionWoColors = this.description.replaceAll("font[^>]*", "u");
 		this.forwardSQL = forwardSQL;
 		this.backwardSQL = backwardSQL;
 	}
-
 
 }

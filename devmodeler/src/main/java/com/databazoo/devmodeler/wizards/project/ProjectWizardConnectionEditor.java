@@ -88,7 +88,7 @@ class ProjectWizardConnectionEditor extends MigWizard {
     }
 
     JPanel preparePanel() {
-        final JPanel panel = createPlacementPanel(10, 20);
+        final JPanel panel = createPlacementPanel(10);
         panel.setPreferredSize(new Dimension(400, 380));
         panel.setBorder(new EmptyBorder(0, 0, 0, 5));
 

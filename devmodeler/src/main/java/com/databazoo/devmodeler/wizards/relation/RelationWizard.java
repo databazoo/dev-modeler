@@ -71,6 +71,10 @@ public class RelationWizard extends RelationWizardPagesSequence {
 		return wiz;
 	}
 
+    public static void setNotificationText(String text) {
+        notificationText = text;
+    }
+
 	private String workspaceName;
 	FormattedClickableTextField queryInput;
 	private JButton btnSave2 = new JButton("");
@@ -591,9 +595,7 @@ public class RelationWizard extends RelationWizardPagesSequence {
 
 	@Override
 	public boolean checkSQLChanges(){
-		//Dbg.toFile("Element: "+editableElement.getFullName()+" Object: "+editableElement.hashCode()+" Old behavior: "+editableElement.getBehavior().hashCode()+" New behavior: "+editableElement.getBehavior().getUpdated().hashCode());
 		if(editableElement != null && queryInput != null){
-			//RelationWizard.changeIsDirectlyReversible = false;
 			String changed = editableElement.getQueryChanged(connection);
 			if(!changed.isEmpty()){
 				updateQueryInput(changed);
@@ -604,8 +606,6 @@ public class RelationWizard extends RelationWizardPagesSequence {
 				}else{
 					revertSQL = null;
 				}
-				//Dbg.info("Forward SQL: "+changed);
-				//Dbg.info("Revert SQL: "+revertSQL);
 				Dbg.toFile("Forward SQL: "+changed);
 				return true;
 			}else{
@@ -732,16 +732,14 @@ public class RelationWizard extends RelationWizardPagesSequence {
                                         (con.getRel2() instanceof Relation && w.find((Relation) con.getRel2()) != null) ||
                                         (con.getRel2() instanceof Function && w.find((Function) con.getRel2()) != null))
                         .forEach(w -> {
-                            if(w != null){
-                                w.addConstraints((Relation) con.getRel1());
-                                if (con.getRel2() instanceof Relation) {
-                                    w.add((Relation) con.getRel2());
-                                    w.addConstraints((Relation) con.getRel2());
+                            w.addConstraints((Relation) con.getRel1());
+                            if (con.getRel2() instanceof Relation) {
+                                w.add((Relation) con.getRel2());
+                                w.addConstraints((Relation) con.getRel2());
 
-                                } else if (con.getRel2() instanceof Function) {
-                                    w.add((Function) con.getRel2());
-                                    w.addTriggers((Function) con.getRel2());
-                                }
+                            } else if (con.getRel2() instanceof Function) {
+                                w.add((Function) con.getRel2());
+                                w.addTriggers((Function) con.getRel2());
                             }
                         });
 
