@@ -74,7 +74,7 @@ public class VerticalTextIcon implements Icon, SwingConstants {
         this.rotate = rotate;
         this.clockwise = clockwise;
         width = fm.stringWidth(text)+4;
-        height = fm.getHeight()-8;
+        height = fm.getHeight();
     }
 
 	/**
@@ -100,10 +100,10 @@ public class VerticalTextIcon implements Icon, SwingConstants {
                 g2.translate(x, y + getIconHeight());
                 g2.rotate(-Math.PI / 2);
             }
-            g.drawString(text, 2, fm.getLeading() + fm.getAscent() - 4);
+            g.drawString(text, 2, fm.getLeading() + fm.getAscent());
             g2.setTransform(oldTransform);
         } else {
-            g.drawString(text, 2, fm.getLeading() + fm.getAscent() - 4);
+            g.drawString(text, 2, fm.getLeading() + fm.getAscent());
         }
     }
 
