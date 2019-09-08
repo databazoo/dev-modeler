@@ -335,7 +335,7 @@ public class Index extends EnvironmentComponent implements IModelElement {
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		if(isSelected){
-			graphics.setPaint(Canvas.SELECTION_COLOR_A2);
+			graphics.setPaint(UIConstants.Colors.getSelectionBackground());
 			graphics.setStroke(Canvas.getLineStrokeFull(NAME_FONT_SIZE));
 			graphics.drawLine(NAME_FONT_SIZE/2, getHeight()/2 - NAME_FONT_SIZE/3, getWidth() - DISTANCE_FROM_TABLE/2, getHeight()/2 - NAME_FONT_SIZE/3);
 			graphics.setColor(Color.BLACK);

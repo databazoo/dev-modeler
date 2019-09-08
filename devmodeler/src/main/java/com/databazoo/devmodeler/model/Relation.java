@@ -1394,7 +1394,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 
 					// Draw selection background
 					if (ind.isSelected()) {
-						graphics.setColor(Canvas.SELECTION_COLOR_A1);
+						graphics.setColor(UIConstants.Colors.getSelectionBackground());
 						graphics.setStroke(Index.STROKE_SELECT);
 						graphics.drawLine(1, top, getWidth(), top);
 
@@ -1413,7 +1413,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 				if(least != most){
 					// Draw selection between multiple attributes
 					if (ind.isSelected()) {
-						graphics.setColor(Canvas.SELECTION_COLOR_A1);
+						graphics.setColor(UIConstants.Colors.getSelectionBackground());
 						graphics.setStroke(Index.STROKE_SELECT);
 						graphics.drawLine(1, offset + least * attrVSize, 1, offset + most * attrVSize);
 

@@ -14,7 +14,6 @@ import org.pushingpixels.substance.api.skin.MarinerSkin;
 import org.pushingpixels.substance.api.skin.MistAquaSkin;
 import org.pushingpixels.substance.api.skin.MistSilverSkin;
 import org.pushingpixels.substance.api.skin.ModerateSkin;
-import org.pushingpixels.substance.api.skin.NebulaBrickWallSkin;
 import org.pushingpixels.substance.api.skin.NebulaSkin;
 import org.pushingpixels.substance.api.skin.RavenSkin;
 import org.pushingpixels.substance.api.skin.TwilightSkin;
@@ -42,7 +41,6 @@ public class SkinnedSubstanceLAF extends SubstanceLookAndFeel {
         SKINS.put("Mist Silver", new SkinDescriptor("Mist Silver", new MistSilverSkin(), true, false));
 
         SKINS.put("Moderate", new SkinDescriptor("Moderate", new ModerateSkin(), true, false));                                     // Good one
-        SKINS.put("Nebula Brick Wall", new SkinDescriptor("Nebula Brick Wall", new NebulaBrickWallSkin(), true, false));            // Generic - may be a good choice
         SKINS.put("Nebula", new SkinDescriptor("Nebula", new NebulaSkin(), true, false));                                           // Good one - no setup required
 
         SKINS.put("Graphite", new SkinDescriptor("Graphite", new GraphiteSkin(), true, true));
