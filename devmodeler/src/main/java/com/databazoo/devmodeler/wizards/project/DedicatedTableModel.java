@@ -45,8 +45,12 @@ class DedicatedTableModel extends ProjectTableModel {
 
 	@Override
 	public int getRowCount(){
-		int dbsCount = getWizard().tablesUI.dbsTableModel.getRowCount()-1;
-		int connsCount = getWizard().tablesUI.connectionsTableModel.getRowCount()-1;
+		ProjectWizard wizard = getWizard();
+		if (wizard == null) {
+			return 1;
+		}
+		int dbsCount = wizard.tablesUI.dbsTableModel.getRowCount()-1;
+		int connsCount = wizard.tablesUI.connectionsTableModel.getRowCount()-1;
 		return dbsCount * connsCount;
 	}
 

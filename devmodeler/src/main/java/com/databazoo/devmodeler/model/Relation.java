@@ -232,13 +232,14 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 
 	private void draw(){
 		displayName = behavior.name;
-		if(attributes.size() > 0){
+		if(!attributes.isEmpty()){
 			countAttributes = attributes.size();
 		}
 		setLayout(null);
 		checkSize();
 
-		setBackground(LOW_COLOR);
+		setBackground(UIConstants.Colors.getPanelBackground());
+		setForeground(UIConstants.Colors.getLabelForeground());
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
@@ -819,7 +820,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 
 		// Columns
 		a = list.get(0);
-		a.setTypeColor(Color.BLACK);
+		a.setTypeColor(UIConstants.Colors.getLabelForeground());
 		a.getBehavior().setAttType(String.valueOf(attributes.size()));
 		if(attributes.size() >= ATTRIBUTE_COUNT_LIMIT){
 			a.setTypeColor(Color.red);
@@ -828,13 +829,13 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 
 		// Rows
 		a = list.get(1);
-		a.setTypeColor(Color.BLACK);
+		a.setTypeColor(UIConstants.Colors.getLabelForeground());
 		a.getBehavior().setAttType(Geometry.getReadableCountColorized(countRows, a));
 		a.checkSize();
 
 		// Size (data / indexes)
 		a = list.get(2);
-		a.setTypeColor(Color.BLACK);
+		a.setTypeColor(UIConstants.Colors.getLabelForeground());
 		a.getBehavior().setAttType(Geometry.getReadableSizeColorized(sizeTotal, a)+" ("+
 					Geometry.getReadableSizeColorized(sizeTotal-sizeIndexes, a)+" / "+
 					Geometry.getReadableSizeColorized(sizeIndexes, a)+")");
@@ -847,7 +848,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 			a.setTypeColor(Color.RED);
 		}else{
 			a.getBehavior().setAttType("yes");
-			a.setTypeColor(UIConstants.COLOR_GREEN);
+			a.setTypeColor(UIConstants.Colors.GREEN);
 		}
 		a.checkSize();
 
@@ -857,7 +858,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 		if(triggers.size() >= TRIGGER_COUNT_LIMIT){
 			a.setTypeColor(Color.RED);
 		}else{
-			a.setTypeColor(Color.BLACK);
+			a.setTypeColor(UIConstants.Colors.getLabelForeground());
 		}
 		a.checkSize();
 
@@ -867,7 +868,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 		if(indexes.size() >= INDEX_COUNT_LIMIT){
 			a.setTypeColor(Color.RED);
 		}else{
-			a.setTypeColor(Color.BLACK);
+			a.setTypeColor(UIConstants.Colors.getLabelForeground());
 		}
 		a.checkSize();
 	}

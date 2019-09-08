@@ -226,7 +226,7 @@ class TextFieldFinder extends JFrame {
 	 */
 	private void checkReplaceButtons() {
 		String searchText = inputSearch.getText();
-		if (!searchText.isEmpty() && !inputSearch.getForeground().equals(UIConstants.COLOR_RED)) {
+		if (!searchText.isEmpty() && !inputSearch.getForeground().equals(UIConstants.Colors.RED)) {
 			buttonReplace.setEnabled(true);
 			buttonReplaceAll.setEnabled(true);
 		} else {
@@ -268,7 +268,7 @@ class TextFieldFinder extends JFrame {
 					inputComponent.setSelectionStart(loc);
 					inputComponent.setSelectionEnd(loc + searchText.length());
 				} else {
-					inputSearch.setForeground(UIConstants.COLOR_RED);
+					inputSearch.setForeground(UIConstants.Colors.RED);
 				}
 			}
 		} else {
@@ -282,7 +282,7 @@ class TextFieldFinder extends JFrame {
 					inputComponent.setSelectionStart(loc);
 					inputComponent.setSelectionEnd(loc + searchText.length());
 				} else {
-					inputSearch.setForeground(UIConstants.COLOR_RED);
+					inputSearch.setForeground(UIConstants.Colors.RED);
 				}
 			}
 		}

@@ -128,7 +128,7 @@ public interface Geometry {
 	static String getReadableSizeColorized(long size, Attribute a){
 		String ret = getReadableSize(size);
 		if(ret.matches(".*[GT]+")){
-			a.setTypeColor(UIConstants.COLOR_RED);
+			a.setTypeColor(UIConstants.Colors.RED);
 		}
 		return ret;
 	}
@@ -149,7 +149,7 @@ public interface Geometry {
 	static String getReadableCountColorized(long size, Attribute a){
 		String ret = getReadableCount(size);
 		if(ret.matches(".*[mgt]+")){
-			a.setTypeColor(UIConstants.COLOR_RED);
+			a.setTypeColor(UIConstants.Colors.RED);
 		}
 		return ret;
 	}

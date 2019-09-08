@@ -134,40 +134,40 @@ public abstract class FormatterBase implements Serializable {
 		StyleConstants.setForeground(def, Color.LIGHT_GRAY);
 
 		styleKeyword = doc.addStyle("kw", styleRegular);
-		StyleConstants.setForeground(styleKeyword, UIConstants.COLOR_BLUE_GRAY);
+		StyleConstants.setForeground(styleKeyword, UIConstants.Colors.BLUE_GRAY);
 
 		styleNumber = doc.addStyle("nums", styleRegular);
-		StyleConstants.setForeground(styleNumber, UIConstants.COLOR_PINK);
+		StyleConstants.setForeground(styleNumber, UIConstants.Colors.PINK);
 
 		styleString = doc.addStyle("strings", styleRegular);
-		StyleConstants.setForeground(styleString, UIConstants.COLOR_BROWN);
+		StyleConstants.setForeground(styleString, UIConstants.Colors.BROWN);
 
 		styleTableCol = doc.addStyle("table_col", styleRegular);
-		StyleConstants.setForeground(styleTableCol, UIConstants.COLOR_GREEN_BRIGHT);
+		StyleConstants.setForeground(styleTableCol, UIConstants.Colors.GREEN_BRIGHT);
 		StyleConstants.setItalic(styleTableCol, true);
 
 		styleLocalVar = doc.addStyle("local_var", styleRegular);
-		StyleConstants.setForeground(styleLocalVar, UIConstants.COLOR_BLUE_GRAY);
+		StyleConstants.setForeground(styleLocalVar, UIConstants.Colors.BLUE_GRAY);
 		StyleConstants.setItalic(styleLocalVar, true);
 
 		styleTableColUl = doc.addStyle("table_col_ul", styleRegular);
-		StyleConstants.setForeground(styleTableColUl, UIConstants.COLOR_GREEN_BRIGHT);
+		StyleConstants.setForeground(styleTableColUl, UIConstants.Colors.GREEN_BRIGHT);
 		StyleConstants.setItalic(styleTableColUl, true);
 		StyleConstants.setUnderline(styleTableColUl, true);
 
 		styleDatatype = doc.addStyle("datatype", styleRegular);
-		StyleConstants.setForeground(styleDatatype, UIConstants.COLOR_PINK);
+		StyleConstants.setForeground(styleDatatype, UIConstants.Colors.PINK);
 		StyleConstants.setItalic(styleDatatype, true);
 
 		styleComment = doc.addStyle("comment", styleRegular);
-		StyleConstants.setForeground(styleComment, UIConstants.COLOR_GRAY);
+		StyleConstants.setForeground(styleComment, UIConstants.Colors.GRAY);
 
 		styleParen = doc.addStyle("paren", styleRegular);
-		StyleConstants.setBackground(styleParen, UIConstants.COLOR_HILIGHT_CHANGE_DARK);
+		StyleConstants.setBackground(styleParen, UIConstants.Colors.HILIGHT_CHANGE_DARK);
 		StyleConstants.setBold(styleParen, true);
 
 		Style styleError = doc.addStyle(STR_STYLE_ERROR, styleRegular);
-		StyleConstants.setForeground(styleError, UIConstants.COLOR_RED);
+		StyleConstants.setForeground(styleError, UIConstants.Colors.RED);
 		StyleConstants.setUnderline(styleError, true);
 	}
 
@@ -180,40 +180,40 @@ public abstract class FormatterBase implements Serializable {
 		StyleConstants.setForeground(def, Color.BLACK);
 
 		styleKeyword = doc.addStyle("kw", styleRegular);
-		StyleConstants.setForeground(styleKeyword, UIConstants.COLOR_BLUE);
+		StyleConstants.setForeground(styleKeyword, UIConstants.Colors.BLUE);
 
 		styleNumber = doc.addStyle("nums", styleRegular);
-		StyleConstants.setForeground(styleNumber, UIConstants.COLOR_AMBER);
+		StyleConstants.setForeground(styleNumber, UIConstants.Colors.AMBER);
 
 		styleString = doc.addStyle("strings", styleRegular);
-		StyleConstants.setForeground(styleString, UIConstants.COLOR_BROWN);
+		StyleConstants.setForeground(styleString, UIConstants.Colors.BROWN);
 
 		styleTableCol = doc.addStyle("table_col", styleRegular);
-		StyleConstants.setForeground(styleTableCol, UIConstants.COLOR_GREEN);
+		StyleConstants.setForeground(styleTableCol, UIConstants.Colors.GREEN);
 		StyleConstants.setItalic(styleTableCol, true);
 
 		styleLocalVar = doc.addStyle("local_var", styleRegular);
-		StyleConstants.setForeground(styleLocalVar, UIConstants.COLOR_BLUE_DARK);
+		StyleConstants.setForeground(styleLocalVar, UIConstants.Colors.BLUE_DARK);
 		StyleConstants.setItalic(styleLocalVar, true);
 
 		styleTableColUl = doc.addStyle("table_col_ul", styleRegular);
-		StyleConstants.setForeground(styleTableColUl, UIConstants.COLOR_GREEN);
+		StyleConstants.setForeground(styleTableColUl, UIConstants.Colors.GREEN);
 		StyleConstants.setItalic(styleTableColUl, true);
 		StyleConstants.setUnderline(styleTableColUl, true);
 
 		styleDatatype = doc.addStyle("datatype", styleRegular);
-		StyleConstants.setForeground(styleDatatype, UIConstants.COLOR_AMBER);
+		StyleConstants.setForeground(styleDatatype, UIConstants.Colors.AMBER);
 		StyleConstants.setItalic(styleDatatype, true);
 
 		styleComment = doc.addStyle("comment", styleRegular);
-		StyleConstants.setForeground(styleComment, UIConstants.COLOR_GRAY);
+		StyleConstants.setForeground(styleComment, UIConstants.Colors.GRAY);
 
 		styleParen = doc.addStyle("paren", styleRegular);
-		StyleConstants.setBackground(styleParen, UIConstants.COLOR_HILIGHT_CHANGE);
+		StyleConstants.setBackground(styleParen, UIConstants.Colors.HILIGHT_CHANGE);
 		StyleConstants.setBold(styleParen, true);
 
 		Style styleError = doc.addStyle(STR_STYLE_ERROR, styleRegular);
-		StyleConstants.setForeground(styleError, UIConstants.COLOR_RED);
+		StyleConstants.setForeground(styleError, UIConstants.Colors.RED);
 		StyleConstants.setUnderline(styleError, true);
 	}
 

@@ -402,15 +402,15 @@ class StaticRules {
     }
 
     private String elementName(String name) {
-        return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_GREEN.getRGB()).substring(2) + "\">" + name + "</font>";
+        return "<font color=\"#" + Integer.toHexString(UIConstants.Colors.GREEN.getRGB()).substring(2) + "\">" + name + "</font>";
     }
 
     private String value(String val) {
-        return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
+        return "<font color=\"#" + Integer.toHexString(UIConstants.Colors.AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
     }
 
     private String value(int val) {
-        return "<font color=\"#" + Integer.toHexString(UIConstants.COLOR_AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
+        return "<font color=\"#" + Integer.toHexString(UIConstants.Colors.AMBER.getRGB()).substring(2) + "\">" + val + "</font>";
     }
 
     /**

@@ -1,6 +1,7 @@
 
 package com.databazoo.components.elements;
 
+import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.tools.Geometry;
@@ -23,7 +24,7 @@ public abstract class LineComponent extends EnvironmentComponent {
 	public static final int TWO_PLUS_HALF_TOLERANCE = 2 + CLICK_TOLERANCE / 2;
     public static final int ONE_PLUS_HALF_TOLERANCE = 1 + CLICK_TOLERANCE / 2;
 
-	protected Color lineColor = Color.BLACK;
+	protected Color lineColor = UIConstants.Colors.getLabelForeground();
 	protected DraggableComponent rel1, rel2;
 	protected int direction = LEFT_TOP_RIGHT_BOTTOM;
 	protected boolean isFlipped = false;

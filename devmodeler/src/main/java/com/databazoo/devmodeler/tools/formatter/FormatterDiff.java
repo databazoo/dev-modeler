@@ -22,13 +22,13 @@ import difflib.InsertDelta;
  */
 public class FormatterDiff extends FormatterSQL {
 
-	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_INSERT = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_INSERT);
-	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_DELETE);
-	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_CHANGE);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_INSERT = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_INSERT);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_DELETE);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_CHANGE);
 
-	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_INSERT_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_INSERT_DARK);
-	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_DELETE_DARK);
-	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.COLOR_HILIGHT_CHANGE_DARK);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_INSERT_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_INSERT_DARK);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_DELETE_DARK);
+	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_CHANGE_DARK);
 
 	public FormatterDiff(List<Delta> deltas, boolean isSource) {
 		super();

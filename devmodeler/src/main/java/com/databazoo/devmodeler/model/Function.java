@@ -87,6 +87,7 @@ public class Function extends DraggableComponent implements IModelElement {
 		setSize(new Dimension(/*Canvas.getZoomed*/(Canvas.DEFAULT_ENTITY_WIDTH), /*Canvas.getZoomed*/ (20)));
 		//setToolTipText(getRetType() + " " + behavior.name + "(" + getArgs() + ")");
 		setBackground(BG_COLOR);
+		setForeground(Color.BLACK);
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		checkSize();
 	}

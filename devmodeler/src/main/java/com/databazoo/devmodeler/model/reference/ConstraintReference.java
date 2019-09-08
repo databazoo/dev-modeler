@@ -92,10 +92,10 @@ public class ConstraintReference extends LineComponentReference {
 		isSelected = false;
 		repaint();
 		if (con.getBehavior().getAttr1() != null) {
-			setColorForAttribute(con.getBehavior().getAttr1().getName(), rel1, UIConstants.COLOR_FG_ATTRIBUTE);
+			setColorForAttribute(con.getBehavior().getAttr1().getName(), rel1, UIConstants.Colors.getLabelForeground());
 		}
 		if (con.getBehavior().getAttr2() != null) {
-			setColorForAttribute(con.getBehavior().getAttr2().getName(), rel2, UIConstants.COLOR_FG_ATTRIBUTE);
+			setColorForAttribute(con.getBehavior().getAttr2().getName(), rel2, UIConstants.Colors.getLabelForeground());
 		}
 	}
 

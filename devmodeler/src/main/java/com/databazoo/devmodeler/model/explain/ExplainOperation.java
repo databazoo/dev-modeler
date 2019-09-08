@@ -114,7 +114,7 @@ public class ExplainOperation extends DraggableComponent {
 			lab.setToolTipText(indName);
 			lab.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lab.setFont(FontFactory.getMonospaced(Font.ITALIC, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
-			lab.setForeground(UIConstants.COLOR_GREEN);
+			lab.setForeground(UIConstants.Colors.GREEN);
 			add(lab);
 		}
 		if(relName != null){
@@ -122,7 +122,7 @@ public class ExplainOperation extends DraggableComponent {
 			lab.setToolTipText(relName);
 			lab.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lab.setFont(FontFactory.getMonospaced(Font.ITALIC, Settings.getInt(Settings.L_FONT_MONO_SIZE)));
-			lab.setForeground(UIConstants.COLOR_GREEN);
+			lab.setForeground(UIConstants.Colors.GREEN);
 			add(lab);
 		}
 		addFocusListener(new FocusAdapter(){

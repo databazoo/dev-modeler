@@ -86,6 +86,7 @@ public class View extends DraggableComponent implements IModelElement {
 		setLayout(null);
 		setSize(new Dimension(Canvas.DEFAULT_ENTITY_WIDTH, 20));
 		setBackground(BG_COLOR);
+		setForeground(Color.BLACK);
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		checkSize();
 	}

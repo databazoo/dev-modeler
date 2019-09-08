@@ -1,7 +1,9 @@
 package com.databazoo.devmodeler.model;
 
+import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.LineComponent;
 import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.gui.Canvas;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -225,6 +227,7 @@ public interface ConstraintUtil {
      * @return 64x64 buffered image
      */
     static BufferedImage rotateCrowsFoot(double rads, boolean fromZero, boolean toMany) {
+        Color color = UIConstants.Colors.getLabelForeground();
         BufferedImage dimg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = dimg.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -234,26 +237,26 @@ public interface ConstraintUtil {
         }
 
         if (toMany) {
-            graphics.setColor(Color.WHITE);
+            graphics.setColor(Canvas.instance.getBackground());
             graphics.fillRect(0, 30, 45, 4);
 
-            graphics.setColor(Color.BLACK);
+            graphics.setColor(color);
             graphics.drawLine(0, 22, 48, 32);
             graphics.drawLine(0, 32, 48, 32);
             graphics.drawLine(0, 42, 48, 32);
         } else {
-            graphics.setColor(Color.BLACK);
+            graphics.setColor(color);
             graphics.drawLine(39, 28, 39, 37);
         }
 
         if (fromZero) {
-            graphics.setColor(Color.WHITE);
+            graphics.setColor(Canvas.instance.getBackground());
             graphics.fillOval(43, 28, 9, 9);
 
-            graphics.setColor(Color.BLACK);
+            graphics.setColor(color);
             graphics.drawOval(43, 28, 9, 9);
         } else {
-            graphics.setColor(Color.BLACK);
+            graphics.setColor(color);
             graphics.drawLine(44, 28, 44, 37);
         }
 

@@ -56,20 +56,20 @@ abstract class AbstractView extends JComponent {
 				Graphics2D graphics = (Graphics2D) g;
 				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-				graphics.setPaint(UIConstants.COLOR_BG_LIGHT);
+				graphics.setPaint(UIConstants.Colors.getPanelBackground());
 				graphics.fillRect(0, 2, getWidth() - 3, getHeight() - 2);
-				graphics.setPaint(UIConstants.COLOR_BG_DARK);
+				graphics.setPaint(UIConstants.Colors.getTableBorders());
 				graphics.drawRect(0, 2, getWidth() - 3, getHeight() - 2);
 
 				if (filterIncludesServers) {
 					graphics.fillRect(getWidth() - 389 - 1, 0, 389 - 3 + 2, 2);
-					graphics.setPaint(UIConstants.COLOR_BG_LIGHT);
+					graphics.setPaint(UIConstants.Colors.getPanelBackground());
 					//graphics.drawLine(getWidth()-389, 0, getWidth()-4, 0);
 					graphics.fillRect(getWidth() - 389, 0, 389 - 3, 3);
 				}
 
 				graphics.setFont(FILTER_FONT);
-				graphics.setPaint(Color.GRAY);
+				graphics.setPaint(UIConstants.Colors.getLabelForeground());
 				graphics.drawString(title, 10, 22);
 			}
 		};
@@ -79,7 +79,7 @@ abstract class AbstractView extends JComponent {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			JLabel comp = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			if (value != null && value instanceof Icon) {
+			if (value instanceof Icon) {
 				comp.setIcon((Icon) value);
 				comp.setText(null);
 			} else {

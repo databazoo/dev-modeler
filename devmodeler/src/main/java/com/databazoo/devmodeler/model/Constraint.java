@@ -617,10 +617,10 @@ public class Constraint extends LineComponent implements IModelElement {
 			}
 		} else {
 			if (behavior.attr1 != null) {
-				behavior.attr1.setForeground(UIConstants.COLOR_FG_ATTRIBUTE);
+				behavior.attr1.setForeground(UIConstants.Colors.getLabelForeground());
 			}
 			if (behavior.attr2 != null) {
-				behavior.attr2.setForeground(UIConstants.COLOR_FG_ATTRIBUTE);
+				behavior.attr2.setForeground(UIConstants.Colors.getLabelForeground());
 			}
 		}
 	}
