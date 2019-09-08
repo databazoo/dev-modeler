@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -159,7 +158,7 @@ public class DifferenceView extends AbstractView {
         revisionTable.getActionMap().put("removeSelectedRevision", new DeleteRevisionAction());
 
         JScrollPane revScroll = new JScrollPane(revisionTable);
-        revScroll.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 1, 2), BorderFactory.createLineBorder(UIConstants.COLOR_BG_DARK)));
+        revScroll.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 1, 2), BorderFactory.createLineBorder(UIConstants.Colors.getTableBorders())));
         return revScroll;
     }
 
@@ -205,7 +204,7 @@ public class DifferenceView extends AbstractView {
         differenceTable.addMouseListener(new DifferenceTableMouseHandler());
         differenceTable.getSelectionModel().addListSelectionListener(new DifferenceTableSelectionHandler());
         JScrollPane diffScroll = new JScrollPane(differenceTable);
-        diffScroll.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 1, 2), BorderFactory.createLineBorder(UIConstants.COLOR_BG_DARK)));
+        diffScroll.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 1, 2), BorderFactory.createLineBorder(UIConstants.Colors.getTableBorders())));
         return diffScroll;
     }
 
@@ -370,21 +369,7 @@ public class DifferenceView extends AbstractView {
         colModel.getColumn(4).setMinWidth(90);
         colModel.getColumn(5).setMinWidth(70);
         revisionTable.getColumn("").setCellRenderer(new IconCellRenderer());
-        revisionTable.getColumn("Author").setCellRenderer(new AuthorCellRenderer());
         author = Settings.getStr(Settings.L_REVISION_AUTHOR);
-    }
-
-    private static class AuthorCellRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            JLabel comp = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (value != null && value.equals(DifferenceView.instance.author)) {
-                comp.setForeground(Color.BLACK);
-            } else {
-                comp.setForeground(UIConstants.COLOR_GRAY);
-            }
-            return comp;
-        }
     }
 
     private static class RevisionTableModel extends AbstractTableModel {
@@ -416,21 +401,37 @@ public class DifferenceView extends AbstractView {
         public Object getValueAt(int row, int col) {
             checkRevisionChanges(DifferenceView.instance.searchRevisionInput.getText(), false);
             row = revs.size() - row - 1;
+            Revision val = revs.get(row);
             if (col == 0) {
-                return revs.get(row).isArchived ? Revision.ICO_ARCHIVED
-                        : (revs.get(row).isApproved ? Revision.ICO_APPROVED : (revs.get(row).isClosed ? Revision.ICO_LOCKED : ""));
+                return getIcon(val);
             } else if (col == 1) {
-                return revs.get(row).toString();
+                return val.toString();
             } else if (col == 2) {
-                return revs.get(row).getAuthor();
+                String author = val.getAuthor();
+                if (!author.equals(DifferenceView.instance.author)) {
+                    return "<html><font color=" + UIConstants.Colors.GRAY + ">" + author + "</font></html>";
+                }
+                return author;
             } else if (col == 3) {
-                return revs.get(row).getDate();
+                return val.getDate();
             } else if (col == 4) {
-                return revs.get(row).getChangeDate();
+                return val.getChangeDate();
             } else if (col == 5) {
-                return revs.get(row).getCntChanges();
+                return val.getCntChanges();
             } else if (col == 6) {
-                return revs.get(row).getAppliedIn();
+                return val.getAppliedIn();
+            } else {
+                return "";
+            }
+        }
+
+        private Object getIcon(Revision val) {
+            if (val.isArchived) {
+                return Revision.ICO_ARCHIVED;
+            } else if (val.isApproved) {
+                return Revision.ICO_APPROVED;
+            } else if (val.isClosed) {
+                return Revision.ICO_LOCKED;
             } else {
                 return "";
             }

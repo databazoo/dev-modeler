@@ -151,7 +151,7 @@ public class Neighborhood extends JPanel {
 
 		@Override
 		protected void paintComponent(Graphics g) {
-			g.setColor(Color.WHITE);
+			g.setColor(Canvas.instance.getBackground());
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 
@@ -260,6 +260,10 @@ public class Neighborhood extends JPanel {
 			attributes.clear();
 			rel.getDataInfo(attributes);
 			setSize(new Dimension(Canvas.DEFAULT_ENTITY_WIDTH, 24+attributes.size()*Attribute.V_SIZE));
+
+			setBackground(UIConstants.Colors.getPanelBackground());
+			setForeground(UIConstants.Colors.getLabelForeground());
+
 			attributes.forEach(Attribute::checkSizeNoZoom);
 			displayNameWidth = UIConstants.GRAPHICS.getFontMetrics(HEADER_FONT).stringWidth(displayName);
 		}
@@ -277,12 +281,11 @@ public class Neighborhood extends JPanel {
 				if(attr.getBackground() != null){
 					graphics.setColor(attr.getBackground());
 					//graphics.setColor(Color.ORANGE);
-					graphics.fillRect(1, 1 + top, attr.getWidth(), attr.getHeight()-2);
-					graphics.fillRect(2, top, attr.getWidth()-2, attr.getHeight());
+					graphics.fillRect(1, top, attr.getWidth(), attr.getHeight());
 				}
 
 				graphics.setFont(attr.getFont());
-				graphics.setColor(Color.BLACK);
+				graphics.setColor(UIConstants.Colors.getLabelForeground());
 				graphics.drawString(attr.getBehavior().getName(), 1, Attribute.V_SIZE-4 + top);
 				if(attr.getTypeColor() != null) {
 					graphics.setColor(attr.getTypeColor());
@@ -317,6 +320,9 @@ public class Neighborhood extends JPanel {
 		NeighborhoodRelationMini(Relation rel) {
 			super(null, rel);
 			setSize(new Dimension(3*Canvas.GRID_SIZE+6, 32));
+
+			setBackground(UIConstants.Colors.getPanelBackground());
+			setForeground(UIConstants.Colors.getLabelForeground());
 
 			FontMetrics fm = UIConstants.GRAPHICS.getFontMetrics(HEADER_FONT);
 			displayNameWidth = fm.stringWidth(displayName);

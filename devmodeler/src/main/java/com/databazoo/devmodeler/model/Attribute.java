@@ -38,10 +38,11 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 	public static final Icon ico16 = Theme.getSmallIcon(Theme.ICO_COLUMN);
 	public static final int V_SIZE = 14;
 
-	private static Color NULL_COLOR = UIConstants.COLOR_BLUE;
-	private static Color DEF_COLOR = UIConstants.COLOR_GREEN;
-	private static Color HIGH_COLOR = UIConstants.COLOR_LIGHT_GRAY;
-	private static Color LOW_COLOR = UIConstants.COLOR_BG_ATTRIBUTE;
+	private static Color NULL_COLOR = UIConstants.Colors.BLUE;
+	private static Color DEF_COLOR = UIConstants.Colors.GREEN;
+	private static Color DRAG_COLOR = UIConstants.Colors.YELLOW;
+	private static Color HIGH_COLOR = UIConstants.Colors.getSelectionBackground();
+	private static Color LOW_COLOR = UIConstants.Colors.getLabelBackground();
 
 	private Behavior behavior = new Behavior();
 	private int attNum;
@@ -77,6 +78,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 		}
 
 		setBackground(LOW_COLOR);
+		setForeground(UIConstants.Colors.getLabelForeground());
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		addMouseListeners();
 		parent.getDB().getProject().usedDataTypes.put(behavior.attType, 1);
@@ -93,6 +95,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 		behavior.attNull = false;
 		this.rel = parent;
 		setBackground(LOW_COLOR);
+		setForeground(UIConstants.Colors.getLabelForeground());
 	}
 
 	public void setAttNum(int attNum) {
@@ -125,7 +128,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 			public void mousePressed(MouseEvent me) {
 				if (DesignGUI.getView() == ViewMode.DESIGNER && isDNDEnabled) {
 					isDragged = true;
-					HIGH_COLOR = UIConstants.COLOR_YELLOW;
+					HIGH_COLOR = DRAG_COLOR;
 				}
 			}
 
@@ -159,7 +162,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 						}
 					}
 
-					HIGH_COLOR = UIConstants.COLOR_LIGHT_GRAY;
+					HIGH_COLOR = UIConstants.Colors.getSelectionBackground();
 					localAttr.repaint();
 					isDragged = false;
 
@@ -177,12 +180,18 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 			@Override
 			public void mouseEntered(MouseEvent me) {
 				setBackground(HIGH_COLOR);
+				if (getForeground().equals(UIConstants.Colors.getLabelForeground())) {
+					setForeground(UIConstants.Colors.getSelectionForeground());
+				}
 				repaint();
 			}
 
 			@Override
 			public void mouseExited(MouseEvent me) {
 				setBackground(LOW_COLOR);
+				if (getForeground().equals(UIConstants.Colors.getSelectionForeground())) {
+					setForeground(UIConstants.Colors.getLabelForeground());
+				}
 				repaint();
 			}
 		});
@@ -215,7 +224,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		if (isDragged) {
-			graphics.setColor(UIConstants.COLOR_YELLOW);
+			graphics.setColor(DRAG_COLOR);
 			graphics.fillRect(0, 0, getWidth(), getHeight());
 		} else if (getBackground() != null) {
 			graphics.setColor(getBackground());

@@ -384,7 +384,7 @@ public class Menu extends JPanel {
 
     private class LeftMenu extends JPanel {
 
-        private static final int MENU_WIDTH = 208;
+        private static final int MENU_WIDTH = 244;
 
         private LeftMenu() {
             setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -395,13 +395,14 @@ public class Menu extends JPanel {
         private void draw() {
             JMenuBar menuBar = new JMenuBar();
 
-            menuBar.setBorder(new EmptyBorder(4, 8, 0, 8));
+            menuBar.setBorder(new EmptyBorder(4, 8, 0, 0));
             menuBar.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
             menuBar.setLayout(new GridLayout(1, 0, 0, 0));
 
             menuBar.add(drawFileMenu());
             menuBar.add(drawViewMenu());
             menuBar.add(drawModelMenu());
+            //menuBar.add(drawToolMenu());
 
             add(menuBar);
 
@@ -446,6 +447,14 @@ public class Menu extends JPanel {
             modelMenuElem.add(drawExportMenu());
             modelMenuElem.addSeparator();
             modelMenuElem.add(new MyMenuItem(L_IMPORT, Theme.getSmallIcon(Theme.ICO_IMPORT)));
+            return modelMenuElem;
+        }
+
+        private JMenu drawToolMenu() {
+            JMenu modelMenuElem = new JMenu(" Tools ");
+            modelMenuElem.add(new MyMenuItem("Compare databases"));
+            modelMenuElem.add(new MyMenuItem("Server status"));
+            modelMenuElem.add(new MyMenuItem("SQL query window"));
             return modelMenuElem;
         }
 
@@ -586,9 +595,9 @@ public class Menu extends JPanel {
             if (DesignGUI.getView() == ViewMode.DIFF && Project.getCurrent().getType() != Project.TYPE_ABSTRACT && DifferenceView.instance
                     .isCompareSelected()) {
                 int w = SIDE_MENU_WIDTH;
-                graphics.setPaint(UIConstants.COLOR_BG_LIGHT);
+                graphics.setPaint(UIConstants.Colors.getPanelBackground());
                 graphics.fillRect(getWidth() - w, 0, w - 3, getHeight());
-                graphics.setPaint(UIConstants.COLOR_BG_DARK);
+                graphics.setPaint(UIConstants.Colors.getTableBorders());
                 graphics.drawRect(getWidth() - w, 0, w - 3, getHeight());
             }
         }

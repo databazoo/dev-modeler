@@ -5,6 +5,7 @@ import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.GC;
 import com.databazoo.tools.Schedule;
@@ -14,6 +15,7 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Simple information panel with colorful output. Hides on click.
@@ -22,6 +24,7 @@ import java.util.List;
  */
 class InfoPanel extends ClickableComponent implements IInfoPanel {
 
+	private static final Random RANDOM = new Random();
 	private final List<InfoPanelLabel> labels = new ArrayList<>();
 	private final Font nameFont = FontFactory.getSans(Font.ITALIC, Settings.getInt(Settings.L_FONT_TREE_SIZE));
 	private int maxLabelCount = Config.INFO_PANEL_MAX_LABELS;
@@ -33,16 +36,16 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 	}
 
 	@Override
-	public synchronized int write(String message) {
-		return createLabel(message, Color.BLACK);
+	public int write(String message) {
+		return createLabel(message, UIConstants.Colors.getLabelForeground());
 	}
 
 	@Override
-	public synchronized int writeGray(String message) {
-		return createLabel(message, UIConstants.COLOR_GRAY);
+	public int writeGray(String message) {
+		return createLabel(message, UIConstants.Colors.GRAY);
 	}
 
-	private int createLabel(String message, Color colorGray) {
+	private synchronized int createLabel(String message, Color colorGray) {
 		final InfoPanelLabel[] label = new InfoPanelLabel[1];
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
@@ -60,18 +63,18 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 	}
 
 	@Override
-	public synchronized int writeGreen(String message) {
-		return createLabel(message, UIConstants.COLOR_GREEN);
+	public int writeGreen(String message) {
+		return createLabel(message, UIConstants.Colors.GREEN);
 	}
 
 	@Override
-	public synchronized int writeRed(String message) {
-		return createLabel(message, UIConstants.COLOR_RED);
+	public int writeRed(String message) {
+		return createLabel(message, UIConstants.Colors.RED);
 	}
 
 	@Override
-	public synchronized int writeBlue(String message) {
-		return createLabel(message, UIConstants.COLOR_BLUE);
+	public int writeBlue(String message) {
+		return createLabel(message, UIConstants.Colors.BLUE);
 	}
 
 	@Override
@@ -79,7 +82,7 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 		InfoPanelLabel m = getLabel(uid);
 		if(m != null){
 			m.setText(m.getText() + " OK");
-			m.setForeground(UIConstants.COLOR_GREEN);
+			m.setForeground(UIConstants.Colors.GREEN);
 			m.updateSize();
 			m.setHideTimer(Config.INFO_PANEL_TIMEOUT_OK);
 			drawLabels();
@@ -102,7 +105,7 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 			for (int j = i + 1; j < labels.size(); j++) {
 				labels.remove(j);
 			}
-			m = new InfoPanelLabel(failedReason, UIConstants.COLOR_RED);
+			m = new InfoPanelLabel(failedReason, UIConstants.Colors.RED);
 			m.setHideTimer(Config.INFO_PANEL_TIMEOUT_FAIL);
 			labels.add(m);
 			labels.addAll(tmp);
@@ -110,7 +113,7 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 		}
 	}
 
-	private synchronized void drawLabels(){
+	private void drawLabels(){
 		if (Settings.getBool(Settings.L_LAYOUT_INFOPANEL)) {
 			if(hideTimer == null){
 				hideTimer = new Timer(1000, e -> {
@@ -149,7 +152,7 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 		}
 	}
 
-	private synchronized void hideLabels(){
+	private void hideLabels(){
 		boolean toRepaint = false;
 		for(int i=0; i < labels.size(); i++){
 			InfoPanelLabel label = labels.get(i);
@@ -167,8 +170,10 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 	}
 
 	@Override
-	public synchronized void clicked(){
-		labels.clear();
+	public void clicked(){
+		synchronized (InfoPanel.this) {
+			labels.clear();
+		}
 		drawLabels();
 	}
 
@@ -211,14 +216,14 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 
 	public class InfoPanelLabel extends JLabel
 	{
-		final static int LINE_HEIGHT = 14;
-		final int UID = (int)(Math.random()*10000);
+		static final int LINE_HEIGHT = 14;
+		final int UID = RANDOM.nextInt();
 		private int ttl = Config.INFO_PANEL_TIMEOUT_WAIT;
 
 		InfoPanelLabel(String message, Color color){
 			super(message);
 			setForeground(color);
-			setBackground(Color.WHITE);
+			setBackground(Canvas.instance.getBackground());
 			setFont(nameFont);
 			if(labels.size() > 20){
 				labels.remove(0);
@@ -243,11 +248,6 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 		protected void paintComponent(Graphics g) {
 			Graphics2D graphics = (Graphics2D) g;
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			/*int width = getWidth();
-			int height = getHeight();
-			graphics.setColor(new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), 180));
-			graphics.fillRect(0, 0, width, height);*/
 
 			graphics.setColor(getBackground());
 			graphics.drawString(getText(), -1, 12);

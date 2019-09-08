@@ -23,6 +23,16 @@ public class VerticalTextIcon implements Icon, SwingConstants {
     private final boolean rotate;
 
     /**
+     * Get a normal text in icon form.
+     *
+     * @param text given text
+     * @return icon with text on it
+     */
+    public static Icon noRotation(String text){
+        return new VerticalTextIcon(text, true, false);
+    }
+
+    /**
      * Get a vertical text. Rotate clockwise.
      *
      * @param text given text
@@ -90,7 +100,7 @@ public class VerticalTextIcon implements Icon, SwingConstants {
         Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g.setColor(Color.BLACK);
+        g.setColor(UIConstants.Colors.getLabelForeground());
         if(rotate) {
             AffineTransform oldTransform = g2.getTransform();
             if (clockwise) {

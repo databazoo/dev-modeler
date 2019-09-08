@@ -452,7 +452,7 @@ public class ServerActivityWindow {
 		private ServerStatusRenderer(ServerActivityWindow window){
 			this.window = window;
 			setOpaque(true);
-			setBorder(BorderFactory.createMatteBorder(0,0,1,1, UIConstants.COLOR_TABLE_BORDERS));
+			setBorder(BorderFactory.createMatteBorder(0,0,1,1, UIConstants.Colors.getTableBorders()));
 		}
 
 		@Override
@@ -462,16 +462,16 @@ public class ServerActivityWindow {
 			ServerStatusTableModel model = (ServerStatusTableModel)table.getModel();
 			if(isSelected){
 				fgLive = Color.WHITE;
-				fgOld = UIConstants.COLOR_LIGHT_GRAY;
-				fgVeryOld = UIConstants.COLOR_GRAY;
-				fgSlow = UIConstants.COLOR_RED_SELECTED;
+				fgOld = UIConstants.Colors.LIGHT_GRAY;
+				fgVeryOld = UIConstants.Colors.GRAY;
+				fgSlow = UIConstants.Colors.RED_SELECTED;
 				setBackground(table.getSelectionBackground());
 				window.selectedRowFound = true;
 			}else{
 				fgLive = Color.BLACK;
-				fgOld = UIConstants.COLOR_GRAY;
-				fgVeryOld = UIConstants.COLOR_LIGHT_GRAY;
-				fgSlow = UIConstants.COLOR_RED;
+				fgOld = UIConstants.Colors.GRAY;
+				fgVeryOld = UIConstants.Colors.LIGHT_GRAY;
+				fgSlow = UIConstants.Colors.RED;
 				setBackground(Color.WHITE);
 			}
 			setText((String)value);

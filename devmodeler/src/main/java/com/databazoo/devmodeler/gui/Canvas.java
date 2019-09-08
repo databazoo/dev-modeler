@@ -67,7 +67,7 @@ public class Canvas extends ClickableComponent {
 	public static final int DEFAULT_ENTITY_WIDTH = 7 * GRID_SIZE + 6;
 	public static int ZOOMED_ENTITY_WIDTH = DEFAULT_ENTITY_WIDTH;
 	public static final int WHITESPACE = 10 * GRID_SIZE;
-	public static final Color SELECTION_COLOR = UIConstants.COLOR_RED;
+	public static final Color SELECTION_COLOR = UIConstants.Colors.RED;
 	public static final Color SELECTION_COLOR_A1 = new Color(SELECTION_COLOR.getRed(), SELECTION_COLOR.getGreen(), SELECTION_COLOR.getBlue(), 255-40);
 	public static final Color SELECTION_COLOR_A2 = new Color(SELECTION_COLOR.getRed(), SELECTION_COLOR.getGreen(), SELECTION_COLOR.getBlue(), 255-130);
 	public static final Color SELECTION_COLOR_A3 = new Color(SELECTION_COLOR.getRed(), SELECTION_COLOR.getGreen(), SELECTION_COLOR.getBlue(), 255-220);
@@ -154,7 +154,7 @@ public class Canvas extends ClickableComponent {
 	private Canvas() {
 		setPreferredSize(size);
 		setAutoscrolls(true);
-		setBackground(Color.white);
+		setBackground(UIConstants.isLafWithDarkSkin() ? UIConstants.Colors.getLabelBackground() : Color.white);
 		addListeners();
 		getActionMap().put(ACTION_MAIN_SEARCH, new AbstractAction(ACTION_MAIN_SEARCH) {
 			@Override
@@ -1051,7 +1051,7 @@ public class Canvas extends ClickableComponent {
 			g.fillRect(0, 0, getWidth(), getHeight());
 
 			if (gridEnabled && isDefaultZoom()) {
-				g.setColor(Color.BLACK);
+				g.setColor(UIConstants.Colors.getLabelForeground());
 				drawDots(g, bounds);
 			}
 		}
@@ -1137,7 +1137,7 @@ public class Canvas extends ClickableComponent {
 			super();
 			setPreferredSize(new Dimension(16, 16));
 			setSize(new Dimension(16, 16));
-			setBackground(UIConstants.COLOR_YELLOW);
+			setBackground(UIConstants.Colors.YELLOW);
 
 			createLine(attr);
 		}

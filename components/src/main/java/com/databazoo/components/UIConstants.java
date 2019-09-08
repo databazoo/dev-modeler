@@ -8,6 +8,8 @@ import java.util.Properties;
 
 import com.databazoo.tools.Dbg;
 
+import javax.swing.*;
+
 /**
  * UI Constants
  */
@@ -17,33 +19,6 @@ public class UIConstants {
     public static final String OS = System.getProperty("os.name").toLowerCase();
 
     public static final int TYPE_TIMEOUT = 500;
-
-    public static final Color COLOR_RED = Color.decode("#D20000");
-    public static final Color COLOR_RED_SELECTED = Color.decode("#FF7777");
-    public static final Color COLOR_GREEN = Color.decode("#009900");
-    public static final Color COLOR_GREEN_DARK = Color.decode("#003300");
-    public static final Color COLOR_GREEN_BRIGHT = Color.decode("#77FF77");
-    public static final Color COLOR_BLUE = Color.BLUE;
-    public static final Color COLOR_BLUE_DARK = Color.decode("#000055");
-    public static final Color COLOR_BLUE_GRAY = Color.decode("#7777FF");
-    public static final Color COLOR_YELLOW = Color.YELLOW;
-    public static final Color COLOR_GRAY = Color.decode("#999999");
-    public static final Color COLOR_LIGHT_GRAY = Color.decode("#CCCCCC");
-    public static final Color COLOR_BROWN = Color.decode("#CE7B00");
-    public static final Color COLOR_AMBER = Color.decode("#770000");
-    public static final Color COLOR_PINK = Color.decode("#FF7777");
-    // TODO: select from environment
-    public static final Color COLOR_BG_DARK = Color.decode("#9297A1");
-    public static final Color COLOR_BG_LIGHT = Color.decode("#F2F2F2");
-    public static final Color COLOR_FG_ATTRIBUTE = Color.decode("#000000");
-    public static final Color COLOR_BG_ATTRIBUTE = Color.decode("#F5F9FF");
-    public static final Color COLOR_TABLE_BORDERS = Color.decode("#F0F0F0");
-    public static final Color COLOR_HILIGHT_INSERT = Color.decode("#AAFFAA");
-    public static final Color COLOR_HILIGHT_DELETE = Color.decode("#FFCCCC");
-    public static final Color COLOR_HILIGHT_CHANGE = Color.decode("#CCCCFF");
-    public static final Color COLOR_HILIGHT_INSERT_DARK = Color.decode("#225522");
-    public static final Color COLOR_HILIGHT_DELETE_DARK = Color.decode("#552222");
-    public static final Color COLOR_HILIGHT_CHANGE_DARK = Color.decode("#222255");
 
     public static final boolean DEBUG = getProperty("app.debug") != null && getProperty("app.debug").equalsIgnoreCase("true");
     public static final String APP_VERSION = "app.version";
@@ -173,5 +148,58 @@ public class UIConstants {
 
     public static void setLafWithDarkSkin(boolean lafWithDarkSkin) {
         UIConstants.lafWithDarkSkin = lafWithDarkSkin;
+    }
+
+    public static class Colors {
+
+        public static final Color RED = Color.decode("#D20000");
+        public static final Color RED_SELECTED = Color.decode("#FF7777");
+        public static final Color GREEN = Color.decode("#009900");
+        public static final Color GREEN_DARK = Color.decode("#003300");
+        public static final Color GREEN_BRIGHT = Color.decode("#77FF77");
+        public static final Color BLUE = Color.BLUE;
+        public static final Color BLUE_DARK = Color.decode("#000055");
+        public static final Color BLUE_GRAY = Color.decode("#7777FF");
+        public static final Color YELLOW = Color.YELLOW;
+        public static final Color GRAY = Color.decode("#999999");
+        public static final Color LIGHT_GRAY = Color.decode("#CCCCCC");
+        public static final Color BROWN = Color.decode("#CE7B00");
+        public static final Color AMBER = Color.decode("#770000");
+        public static final Color PINK = Color.decode("#FF7777");
+        public static final Color HILIGHT_INSERT = Color.decode("#AAFFAA");
+        public static final Color HILIGHT_DELETE = Color.decode("#FFCCCC");
+        public static final Color HILIGHT_CHANGE = Color.decode("#CCCCFF");
+        public static final Color HILIGHT_INSERT_DARK = Color.decode("#225522");
+        public static final Color HILIGHT_DELETE_DARK = Color.decode("#552222");
+        public static final Color HILIGHT_CHANGE_DARK = Color.decode("#222255");
+
+        private static JLabel jLabel = new JLabel();
+        private static JPanel jPanel = new JPanel();
+        private static JTable jTable = new JTable();
+
+        public static Color getLabelForeground() {
+            return jLabel.getForeground();
+        }
+        public static Color getLabelBackground() {
+            return jLabel.getBackground();
+        }
+        public static Color getPanelBackground() {
+            return jPanel.getBackground();
+        }
+        public static Color getSelectionForeground() {
+            return jTable.getSelectionForeground();
+        }
+        public static Color getSelectionBackground() {
+            return jTable.getSelectionBackground();
+        }
+        public static Color getTableBorders() {
+            return jTable.getGridColor();
+        }
+
+        public static void update() {
+            jLabel = new JLabel();
+            jPanel = new JPanel();
+            jTable = new JTable();
+        }
     }
 }

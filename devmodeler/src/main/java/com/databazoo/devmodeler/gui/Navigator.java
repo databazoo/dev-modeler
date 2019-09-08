@@ -1,5 +1,6 @@
 package com.databazoo.devmodeler.gui;
 
+import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.config.Settings;
@@ -202,7 +203,7 @@ public final class Navigator extends JComponent {
             graphics.setColor(getForeground());
             graphics.fillRect(x, y, w, h);
             if (schemata != null) {
-                graphics.setColor(Color.GRAY);
+                graphics.setColor(UIConstants.isLafWithDarkSkin() ? Color.BLACK : Color.GRAY);
                 for (Rectangle schema : schemata) {
                     graphics.drawRect(schema.x, schema.y, schema.width, schema.height);
                 }

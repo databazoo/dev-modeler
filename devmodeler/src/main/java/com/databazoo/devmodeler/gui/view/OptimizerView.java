@@ -191,7 +191,7 @@ public class OptimizerView extends AbstractView {
         staticFlawTable.addMouseListener(new StaticFlawMouseHandler());
         staticFlawTable.getSelectionModel().addListSelectionListener(new StaticFlawSelectionListener());
         JScrollPane scroll = new JScrollPane(staticFlawTable);
-        scroll.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 1, 2), BorderFactory.createLineBorder(UIConstants.COLOR_BG_DARK)));
+        scroll.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 0, 1, 2), BorderFactory.createLineBorder(UIConstants.Colors.getTableBorders())));
         return scroll;
     }
 

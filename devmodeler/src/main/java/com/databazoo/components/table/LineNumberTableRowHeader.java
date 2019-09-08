@@ -90,7 +90,7 @@ public class LineNumberTableRowHeader extends JComponent {
 				g.fillRect(0, cellRect.y, getWidth(), cellRect.height);
 			}*/
 			//if(!result.isNewLine(r)){
-				g.setColor(UIConstants.COLOR_TABLE_BORDERS);
+				g.setColor(UIConstants.Colors.getTableBorders());
 				g.drawLine(0, cellRect.y-1, getWidth(), cellRect.y-1);
 			//}
 
@@ -106,7 +106,7 @@ public class LineNumberTableRowHeader extends JComponent {
 			}
 		}
 		cellRect = table.getCellRect(table.getRowCount()-1, 0, false);
-		g.setColor(UIConstants.COLOR_TABLE_BORDERS);
+		g.setColor(UIConstants.Colors.getTableBorders());
 		g.drawLine(0, cellRect.y+cellRect.height-1, getWidth(), cellRect.y+cellRect.height-1);
 	}
 

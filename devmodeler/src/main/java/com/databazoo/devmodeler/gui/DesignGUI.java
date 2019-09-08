@@ -81,7 +81,7 @@ public class DesignGUI {
 
 		UIConstants.setLafWithRotatedTabs(false);
 		UIConstants.setLafWithDarkSkin(false);
-		if (!Settings.getStr(Settings.L_THEME_COLORS).equals(SKIN_NIMBUS)) {
+		if (!SKIN_NIMBUS.equals(Settings.getStr(Settings.L_THEME_COLORS))) {
 			try {
 				UIManager.setLookAndFeel(new SkinnedSubstanceLAF());
 				UIConstants.setLafWithRotatedTabs(true);
@@ -107,6 +107,7 @@ public class DesignGUI {
 				Dbg.fixme("If this fails there's something very wrong with the installation. Not much we can do about it.", e);
 			}
 		}
+		UIConstants.Colors.update();
 	}
 
 	public void drawMainWindow(){
