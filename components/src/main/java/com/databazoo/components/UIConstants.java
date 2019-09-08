@@ -1,14 +1,13 @@
 package com.databazoo.components;
 
+import com.databazoo.tools.Dbg;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Properties;
-
-import com.databazoo.tools.Dbg;
-
-import javax.swing.*;
 
 /**
  * UI Constants
@@ -180,18 +179,23 @@ public class UIConstants {
         public static Color getLabelForeground() {
             return jLabel.getForeground();
         }
+
         public static Color getLabelBackground() {
             return jLabel.getBackground();
         }
+
         public static Color getPanelBackground() {
             return jPanel.getBackground();
         }
+
         public static Color getSelectionForeground() {
             return jTable.getSelectionForeground();
         }
+
         public static Color getSelectionBackground() {
             return jTable.getSelectionBackground();
         }
+
         public static Color getTableBorders() {
             return jTable.getGridColor();
         }

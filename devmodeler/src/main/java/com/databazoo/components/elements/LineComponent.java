@@ -174,7 +174,7 @@ public abstract class LineComponent extends EnvironmentComponent {
 			}
 
 			if (isSelected) {
-				graphics.setPaint(Canvas.SELECTION_COLOR_A2);
+				graphics.setPaint(UIConstants.Colors.getSelectionBackground());
 				graphics.setStroke(Canvas.getLineStrokeFull(4));
 				drawLine(graphics);
 				graphics.setStroke(Canvas.getLineStrokeFull(2));

@@ -1,6 +1,7 @@
 package com.databazoo.devmodeler.model;
 
 import com.databazoo.components.FontFactory;
+import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.IConnection;
@@ -8,8 +9,13 @@ import com.databazoo.devmodeler.conn.SQLOutputConfig;
 import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.gui.*;
+import com.databazoo.devmodeler.gui.DBTree;
+import com.databazoo.devmodeler.gui.DesignGUI;
+import com.databazoo.devmodeler.gui.HotMenu;
 import com.databazoo.devmodeler.gui.Menu;
+import com.databazoo.devmodeler.gui.Navigator;
+import com.databazoo.devmodeler.gui.RightClickMenu;
+import com.databazoo.devmodeler.gui.SearchPanel;
 import com.databazoo.devmodeler.gui.window.datawindow.DataWindow;
 import com.databazoo.devmodeler.model.reference.SchemaReference;
 import com.databazoo.devmodeler.project.Project;
@@ -23,11 +29,23 @@ import com.databazoo.tools.Usage;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.databazoo.devmodeler.gui.UsageElement.*;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_COPY;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_DROP;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_EDIT;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_MAINTAIN;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_REARRANGE;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_SOURCE;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_CONTEXT_WORKSPACE;
+import static com.databazoo.devmodeler.gui.UsageElement.SCHEMA_DOUBLE_CLICKED;
+import static com.databazoo.devmodeler.gui.UsageElement.WS_REMOVE;
 
 /**
  * Model representation of schemata.
@@ -799,11 +817,11 @@ public class Schema extends DraggableComponent implements IModelElement {
 
 			graphics.setStroke(Canvas.getBasicStroke());
 			if (isSelected) {
-				graphics.setColor(Canvas.SELECTION_COLOR_A1);
+				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(1, 1, widthNoGap - 2, heightNoGap - 2, arcs.width - 1, arcs.height - 1);
-				graphics.setColor(Canvas.SELECTION_COLOR_A2);
+				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(2, 2, widthNoGap - 4, heightNoGap - 4, arcs.width - 2, arcs.height - 2);
-				graphics.setColor(Canvas.SELECTION_COLOR_A3);
+				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(3, 3, widthNoGap - 6, heightNoGap - 6, arcs.width - 3, arcs.height - 3);
 			}
 			graphics.setColor(Color.GRAY);

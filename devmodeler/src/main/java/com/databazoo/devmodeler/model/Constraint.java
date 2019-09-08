@@ -137,10 +137,10 @@ public class Constraint extends LineComponent implements IModelElement {
 		if (!isSelected) {
 			Schedule.inEDT(Schedule.CLICK_DELAY, () -> {
 				if (behavior.attr1 != null) {
-					behavior.attr1.setForeground(Canvas.SELECTION_COLOR);
+					behavior.attr1.setForeground(UIConstants.Colors.getSelectionBackground());
 				}
 				if (behavior.attr2 != null) {
-					behavior.attr2.setForeground(Canvas.SELECTION_COLOR);
+					behavior.attr2.setForeground(UIConstants.Colors.getSelectionBackground());
 				}
 			});
 			Canvas.instance.setSelectedElement(this);
@@ -719,7 +719,7 @@ public class Constraint extends LineComponent implements IModelElement {
 	 */
 	private void paintSelfRelation(Graphics2D graphics) {
 		if(isSelected){
-			graphics.setPaint(Canvas.SELECTION_COLOR_A2);
+			graphics.setPaint(UIConstants.Colors.getSelectionBackground());
 
 			graphics.setStroke(Canvas.getLineStrokeFull(4));
 			graphics.drawLine(1, 1, getWidth() - 2, 1);
@@ -749,7 +749,7 @@ public class Constraint extends LineComponent implements IModelElement {
 	 */
 	private void paintZ(Graphics2D graphics) {
 		if(isSelected){
-			graphics.setPaint(Canvas.SELECTION_COLOR_A2);
+			graphics.setPaint(UIConstants.Colors.getSelectionBackground());
 			graphics.setStroke(Canvas.getLineStrokeFull(4));
 			drawZ(graphics, 2);
 			graphics.setStroke(Canvas.getLineStrokeFull(2));

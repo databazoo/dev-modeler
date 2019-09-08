@@ -1,6 +1,7 @@
 
 package com.databazoo.components.elements;
 
+import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.Canvas;
@@ -224,11 +225,11 @@ public abstract class DraggableComponent extends EnvironmentComponent {
 			graphics.setColor(getBackground());
 			graphics.fillRoundRect(0, 0, width - gap, height - gap, arcs.width, arcs.height);
 			if (isSelected) {
-				graphics.setColor(Canvas.SELECTION_COLOR_A1);
+				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(1, 1, width - gap - 2, height - gap - 2, arcs.width - 1, arcs.height - 1);
-				graphics.setColor(Canvas.SELECTION_COLOR_A2);
+				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(2, 2, width - gap - 4, height - gap - 4, arcs.width - 2, arcs.height - 2);
-				graphics.setColor(Canvas.SELECTION_COLOR_A3);
+				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(3, 3, width - gap - 6, height - gap - 6, arcs.width - 3, arcs.height - 3);
 			}
 			graphics.setColor(getForeground());

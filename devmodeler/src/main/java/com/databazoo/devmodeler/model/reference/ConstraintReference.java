@@ -1,9 +1,6 @@
 
 package com.databazoo.devmodeler.model.reference;
 
-import javax.swing.*;
-import java.awt.*;
-
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
@@ -12,6 +9,9 @@ import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.model.ConstraintUtil;
 import com.databazoo.devmodeler.model.Workspace;
 import com.databazoo.devmodeler.tools.Geometry;
+
+import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -48,10 +48,10 @@ public class ConstraintReference extends LineComponentReference {
 		if(con != null){
 			if(!isSelected){
 				if (con.getBehavior().getAttr1() != null) {
-					setColorForAttribute(con.getBehavior().getAttr1().getName(), rel1, Canvas.SELECTION_COLOR);
+					setColorForAttribute(con.getBehavior().getAttr1().getName(), rel1, UIConstants.Colors.getSelectionBackground());
 				}
 				if (con.getBehavior().getAttr2() != null) {
-					setColorForAttribute(con.getBehavior().getAttr2().getName(), rel2, Canvas.SELECTION_COLOR);
+					setColorForAttribute(con.getBehavior().getAttr2().getName(), rel2, UIConstants.Colors.getSelectionBackground());
 				}
 				Canvas.instance.setSelectedElement(con);
 				isSelected = true;

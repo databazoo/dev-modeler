@@ -2,6 +2,7 @@ package com.databazoo.devmodeler.model;
 
 import com.databazoo.components.FontFactory;
 import com.databazoo.components.GCFrame;
+import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.components.text.SelectableText;
 import com.databazoo.devmodeler.config.Theme;
@@ -98,11 +99,11 @@ public class Package extends DraggableComponent implements IModelElement {
 		int gap = 1;
 
 		if(isSelected){
-			graphics.setColor(Canvas.SELECTION_COLOR_A1);
+			graphics.setColor(UIConstants.Colors.getSelectionBackground());
 			graphics.drawRoundRect(1, 1, width - gap - 2, height - gap - 2, arcs.width-1, arcs.height-1);
-			graphics.setColor(Canvas.SELECTION_COLOR_A2);
+			graphics.setColor(UIConstants.Colors.getSelectionBackground());
 			graphics.drawRoundRect(2, 2, width - gap - 4, height - gap - 4, arcs.width-2, arcs.height-2);
-			graphics.setColor(Canvas.SELECTION_COLOR_A3);
+			graphics.setColor(UIConstants.Colors.getSelectionBackground());
 			graphics.drawRoundRect(3, 3, width - gap - 6, height - gap - 6, arcs.width-3, arcs.height-3);
 		}
 		graphics.setColor(Function.BG_COLOR);
