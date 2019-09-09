@@ -1,21 +1,19 @@
 package com.databazoo.components.textInput;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.awt.*;
-
-import javax.swing.*;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.conn.ConnectionPg;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.ProjectManager;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import javax.swing.*;
+import java.awt.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class TextFieldFinderTest {
 
@@ -38,7 +36,7 @@ public class TextFieldFinderTest {
 		//textField.setPreferredSize(new Dimension(800, 600));
 		textField.setSize(new Dimension(800, 600));
 
-		JScrollPane scrollPane = new JScrollPane(textField);
+		JScrollPane scrollPane = new TextScrollPane(textField);
 		//scrollPane.setPreferredSize(new Dimension(600, 400));
 		scrollPane.setSize(new Dimension(600, 400));
 
@@ -87,7 +85,7 @@ public class TextFieldFinderTest {
 		textField.setSize(new Dimension(800, 600));
 
 		GCFrame frame = new GCFrame("search standalone test");
-		frame.getContentPane().add(new JScrollPane(textField));
+		frame.getContentPane().add(new TextScrollPane(textField));
 		frame.setSize(new Dimension(100, 80));
 		frame.setLocation(0, 0);
 		frame.setVisible(GCFrame.SHOW_GUI);

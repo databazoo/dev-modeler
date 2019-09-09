@@ -9,6 +9,7 @@ import com.databazoo.components.containers.HorizontalContainer;
 import com.databazoo.components.icons.DiffIconRenderer;
 import com.databazoo.components.text.SelectableText;
 import com.databazoo.components.textInput.FormattedClickableTextField;
+import com.databazoo.components.textInput.TextScrollPane;
 import com.databazoo.components.textInput.UndoableTextField;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
@@ -400,7 +401,7 @@ public class DiffWizard extends SQLEnabledWizard {
 		for (int i = 0; i < dbs.size(); i++) {
 			queryInputs[i] = new FormattedClickableTextField(database.getProject());
 			queryInputs[i].setAutocomplete(frame, connection);
-			inputTabs.addTab(dbs.get(i).getName(), new JScrollPane(queryInputs[i]));
+			inputTabs.addTab(dbs.get(i).getName(), new TextScrollPane(queryInputs[i]));
 		}
 
 		JPanel panel = new JPanel();
@@ -562,8 +563,8 @@ public class DiffWizard extends SQLEnabledWizard {
 
 		addText("Revert SQL (OLD)", SPAN2_CENTER);
 		addText("Forward SQL (NEW)", SPAN2_CENTER);
-		addPanel(scroll2 = new JScrollPane(queryRevert), SPAN2_H100_W5050);
-		addPanel(scroll1 = new JScrollPane(queryForward), SPAN2_H100_W5050);
+		addPanel(scroll2 = new TextScrollPane(queryRevert), SPAN2_H100_W5050);
+		addPanel(scroll1 = new TextScrollPane(queryForward), SPAN2_H100_W5050);
 		addPanel(" Move to revision", new HorizontalContainer(null, moveRevisionNameCombo, moveButton), "width 50%-120px!, align right");
 		addEmptyLine();
 
@@ -584,8 +585,8 @@ public class DiffWizard extends SQLEnabledWizard {
 
 		addText("Revert SQL (OLD):", SPAN2_CENTER);
 		addText("Forward SQL (NEW):", SPAN2_CENTER);
-		addPanel(new JScrollPane(queryRevert), SPAN2_H100_W5050);
-		addPanel(new JScrollPane(queryForward), SPAN2_H100_W5050);
+		addPanel(new TextScrollPane(queryRevert), SPAN2_H100_W5050);
+		addPanel(new TextScrollPane(queryForward), SPAN2_H100_W5050);
 
 		if (tree.getRowCount() == 1) {
 			JPanel appCheckBoxPanel = new JPanel(new GridLayout(0, 1, 0, 0));
@@ -644,8 +645,8 @@ public class DiffWizard extends SQLEnabledWizard {
 
 		addText(localName, SPAN2_CENTER);
 		addText(remoteName, SPAN2_CENTER);
-		addPanel(scroll2 = new JScrollPane(queryRevert), SPAN2_H100_W5050);
-		addPanel(scroll1 = new JScrollPane(queryForward), SPAN2_H100_W5050);
+		addPanel(scroll2 = new TextScrollPane(queryRevert), SPAN2_H100_W5050);
+		addPanel(scroll1 = new TextScrollPane(queryForward), SPAN2_H100_W5050);
 		addPanel(buttonAccept1, SPAN2_GROW);
 		addPanel(buttonAccept2, SPAN2_GROW);
 
@@ -680,8 +681,8 @@ public class DiffWizard extends SQLEnabledWizard {
 
 		addText(localName, SPAN2_CENTER);
 		addText(remoteName, SPAN2_CENTER);
-		addPanel(scroll2 = new JScrollPane(queryRevert), SPAN2_H100_W5050);
-		addPanel(scroll1 = new JScrollPane(queryForward), SPAN2_H100_W5050);
+		addPanel(scroll2 = new TextScrollPane(queryRevert), SPAN2_H100_W5050);
+		addPanel(scroll1 = new TextScrollPane(queryForward), SPAN2_H100_W5050);
 		addPanel(btnAcc1, SPAN2_GROW);
 		addPanel(btnAcc2, SPAN2_GROW);
 

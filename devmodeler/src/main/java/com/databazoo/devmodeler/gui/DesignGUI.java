@@ -21,7 +21,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,11 +85,13 @@ public class DesignGUI {
 
 		UIConstants.setLafWithRotatedTabs(false);
 		UIConstants.setLafWithDarkSkin(false);
+		UIConstants.setLafRequiresBorderedTextFields(false);
 		if (!SKIN_NIMBUS.equals(Settings.getStr(Settings.L_THEME_COLORS))) {
 			try {
 				UIManager.setLookAndFeel(new SkinnedSubstanceLAF());
 				UIConstants.setLafWithRotatedTabs(true);
 				UIConstants.setLafWithDarkSkin(SkinnedSubstanceLAF.isCurrentSkinDark());
+				UIConstants.setLafRequiresBorderedTextFields(SkinnedSubstanceLAF.isCurrentSkinBordered());
 				return;
 			} catch (UnsupportedLookAndFeelException e) {
 				Dbg.fixme("Switching to SkinnedSubstanceLAF failed, trying Nimbus.", e);

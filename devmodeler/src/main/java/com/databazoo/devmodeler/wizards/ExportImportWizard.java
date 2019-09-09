@@ -1,6 +1,31 @@
 
 package com.databazoo.devmodeler.wizards;
 
+import com.databazoo.components.FileChooser;
+import com.databazoo.components.combo.IconableComboBox;
+import com.databazoo.components.containers.HorizontalContainer;
+import com.databazoo.components.text.SelectableText;
+import com.databazoo.components.textInput.FormattedClickableTextField;
+import com.databazoo.components.textInput.FormattedTextField;
+import com.databazoo.components.textInput.TextScrollPane;
+import com.databazoo.components.textInput.UndoableTextField;
+import com.databazoo.devmodeler.config.Config;
+import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
+import com.databazoo.devmodeler.conn.SupportedElement;
+import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
+import com.databazoo.devmodeler.gui.Navigator;
+import com.databazoo.devmodeler.gui.SearchPanel;
+import com.databazoo.devmodeler.gui.window.ProgressWindow;
+import com.databazoo.devmodeler.model.DB;
+import com.databazoo.devmodeler.project.Project;
+import com.databazoo.devmodeler.tools.formatter.FormatterSQL;
+import com.databazoo.tools.Dbg;
+import com.databazoo.tools.FileFilterFactory;
+import com.databazoo.tools.Schedule;
+import net.miginfocom.swing.MigLayout;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -21,30 +46,6 @@ import java.nio.channels.FileChannel;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
-import com.databazoo.components.FileChooser;
-import com.databazoo.components.combo.IconableComboBox;
-import com.databazoo.components.containers.HorizontalContainer;
-import com.databazoo.components.text.SelectableText;
-import com.databazoo.components.textInput.FormattedClickableTextField;
-import com.databazoo.components.textInput.FormattedTextField;
-import com.databazoo.components.textInput.UndoableTextField;
-import com.databazoo.devmodeler.config.Config;
-import com.databazoo.devmodeler.config.Settings;
-import com.databazoo.devmodeler.conn.SQLOutputConfigExport;
-import com.databazoo.devmodeler.conn.SupportedElement;
-import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.gui.DesignGUI;
-import com.databazoo.devmodeler.gui.Navigator;
-import com.databazoo.devmodeler.gui.SearchPanel;
-import com.databazoo.devmodeler.gui.window.ProgressWindow;
-import com.databazoo.devmodeler.model.DB;
-import com.databazoo.devmodeler.project.Project;
-import com.databazoo.devmodeler.tools.formatter.FormatterSQL;
-import com.databazoo.tools.Dbg;
-import com.databazoo.tools.FileFilterFactory;
-import com.databazoo.tools.Schedule;
-import net.miginfocom.swing.MigLayout;
 
 import static com.databazoo.devmodeler.conn.SQLOutputConfigExport.LINE_LENGHT;
 import static com.databazoo.devmodeler.conn.SQLOutputConfigExport.padCenter;
@@ -139,7 +140,7 @@ public class ExportImportWizard extends MigWizard {
 		textPreview.setEditable(false);
 		textPreview.setBordered(true);
 
-		JScrollPane scrl = new JScrollPane(textPreview);
+		JScrollPane scrl = new TextScrollPane(textPreview);
 		scrl.setBorder(null);
 		//scrl.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "File preview"));
 
@@ -293,7 +294,7 @@ public class ExportImportWizard extends MigWizard {
 
 		runExportToSQLPreview();
 
-		JScrollPane scrl = new JScrollPane(textPreview);
+		JScrollPane scrl = new TextScrollPane(textPreview);
 		scrl.setBorder(null);
 		//scrl.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "File preview"));
 

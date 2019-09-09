@@ -8,12 +8,19 @@ import com.databazoo.components.containers.HorizontalContainer;
 import com.databazoo.components.containers.VerticalContainer;
 import com.databazoo.components.icons.PlainColorIcon;
 import com.databazoo.components.textInput.FormattedClickableTextField;
-import com.databazoo.components.textInput.LineNumberRowHeader;
 import com.databazoo.components.textInput.QueryErrorPositionObserver;
+import com.databazoo.components.textInput.TextScrollPane;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.devmodeler.conn.*;
+import com.databazoo.devmodeler.conn.ConnectionOracleForward;
+import com.databazoo.devmodeler.conn.ConnectionUtils;
+import com.databazoo.devmodeler.conn.DBCommException;
+import com.databazoo.devmodeler.conn.IColoredConnection;
+import com.databazoo.devmodeler.conn.IConnection;
+import com.databazoo.devmodeler.conn.IConnectionQuery;
+import com.databazoo.devmodeler.conn.Result;
+import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.model.DB;
@@ -34,8 +41,15 @@ import plugins.api.IModelTable;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -587,18 +601,7 @@ public class DataWindow extends DataWindowOutputMessages {
 				@Override public void keyTyped(KeyEvent ke) { DataWindowPluginManager.onQueryChange(instance); }
 			});
 		}
-		JScrollPane scroll = new JScrollPane(queryInput);
-		scroll.setRowHeaderView(new LineNumberRowHeader(queryInput, scroll));
-		return scroll;
-	}
-
-	private void updateConnectionToSelected(){
-		connection = database.getProject().getConnectionByName(connectionCombo.getSelectedItem().toString());
-		IConnection dConn = database.getProject().getDedicatedConnection(database.getName(), connection.getName());
-		if(dConn != null) {
-			connection = dConn;
-		}
-		updateWindowTitle();
+		return TextScrollPane.withLineNumbers(queryInput);
 	}
 
 	@Override
@@ -963,6 +966,15 @@ public class DataWindow extends DataWindowOutputMessages {
 			setLayout(new BorderLayout(0,0));
 			add(buttonPane, BorderLayout.NORTH);
 			add(new JLabel(), BorderLayout.CENTER);
+		}
+
+		private void updateConnectionToSelected(){
+			connection = database.getProject().getConnectionByName(connectionCombo.getSelectedItem().toString());
+			IConnection dConn = database.getProject().getDedicatedConnection(database.getName(), connection.getName());
+			if(dConn != null) {
+				connection = dConn;
+			}
+			updateWindowTitle();
 		}
 	}
 }

@@ -58,9 +58,16 @@ public class SkinnedSubstanceLAF extends SubstanceLookAndFeel {
         return selectedSkin.substanceSkin;
     }
 
-    public static boolean isCurrentSkinDark() {
+    static boolean isCurrentSkinDark() {
         if (selectedSkin != null) {
             return selectedSkin.isDark;
+        }
+        return false;
+    }
+
+    static boolean isCurrentSkinBordered() {
+        if (selectedSkin != null) {
+            return selectedSkin.requiresBorderedTextFields;
         }
         return false;
     }

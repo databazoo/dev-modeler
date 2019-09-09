@@ -35,6 +35,7 @@ public class UIConstants {
 
     private static boolean lafWithRotatedTabs;
     private static boolean lafWithDarkSkin;
+    private static boolean lafRequiresBorderedTextFields;
 
     /**
      * Check platform.
@@ -147,6 +148,14 @@ public class UIConstants {
 
     public static void setLafWithDarkSkin(boolean lafWithDarkSkin) {
         UIConstants.lafWithDarkSkin = lafWithDarkSkin;
+    }
+
+    public static boolean isLafRequiresBorderedTextFields() {
+        return lafRequiresBorderedTextFields;
+    }
+
+    public static void setLafRequiresBorderedTextFields(boolean lafRequiresBorderedTextFields) {
+        UIConstants.lafRequiresBorderedTextFields = lafRequiresBorderedTextFields;
     }
 
     public static class Colors {

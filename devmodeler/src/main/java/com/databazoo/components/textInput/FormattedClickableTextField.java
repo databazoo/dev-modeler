@@ -1,21 +1,6 @@
 
 package com.databazoo.components.textInput;
 
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import com.databazoo.components.AutocompletePopupMenu;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
@@ -27,6 +12,22 @@ import com.databazoo.devmodeler.model.IModelElement;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.tools.formatter.FormatterBase;
 import com.databazoo.tools.Dbg;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
@@ -44,9 +45,9 @@ public class FormattedClickableTextField extends FormattedTextField {
 	 */
 	private static boolean isControlPressed(InputEvent ke){
 		if(UIConstants.isMac()){
-			return (ke.getModifiers() & InputEvent.META_MASK) != 0;
+			return (ke.getModifiersEx() & InputEvent.META_DOWN_MASK) != 0;
 		}else{
-			return (ke.getModifiers() & InputEvent.CTRL_MASK) != 0;
+			return (ke.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0;
 		}
 	}
 
@@ -129,7 +130,7 @@ public class FormattedClickableTextField extends FormattedTextField {
 				if(isControlPressed(me))
 				{
 					String text = getText();
-					int caretPos = viewToModel(me.getPoint());
+					int caretPos = viewToModel2D(me.getPoint());
 					int start = caretPos;
 
 					if(text.isEmpty() || start >= text.length()){
@@ -184,8 +185,8 @@ public class FormattedClickableTextField extends FormattedTextField {
 		}
 		Point loc;
 		try {
-			Rectangle rectangle = modelToView(center);
-			loc = new Point(rectangle.x, rectangle.y);
+			Rectangle2D rectangle = modelToView2D(center);
+			loc = new Point((int) rectangle.getX(), (int) rectangle.getY());
 		} catch (BadLocationException | NullPointerException ex) {
 			Dbg.notImportantAtAll("modelToView failed", ex);
 			loc = mePoint;

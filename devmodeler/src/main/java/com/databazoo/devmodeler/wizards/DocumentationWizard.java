@@ -1,5 +1,16 @@
 package com.databazoo.devmodeler.wizards;
 
+import com.databazoo.components.WizardTree;
+import com.databazoo.components.icons.ModelIconRenderer;
+import com.databazoo.components.textInput.TextScrollPane;
+import com.databazoo.components.textInput.UndoableTextField;
+import com.databazoo.devmodeler.config.Config;
+import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.gui.DesignGUI;
+import com.databazoo.devmodeler.gui.Menu;
+import com.databazoo.tools.Dbg;
+import com.databazoo.tools.Schedule;
+
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -8,16 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
-
-import com.databazoo.components.WizardTree;
-import com.databazoo.components.icons.ModelIconRenderer;
-import com.databazoo.components.textInput.UndoableTextField;
-import com.databazoo.devmodeler.config.Config;
-import com.databazoo.devmodeler.config.Settings;
-import com.databazoo.devmodeler.gui.DesignGUI;
-import com.databazoo.devmodeler.gui.Menu;
-import com.databazoo.tools.Dbg;
-import com.databazoo.tools.Schedule;
 
 /**
  * Use-cases described in HTML
@@ -157,7 +158,7 @@ public class DocumentationWizard extends MigWizard {
                 UndoableTextField contentText = new UndoableTextField();
                 contentText.setEditable(false);
                 contentText.setPage(useCase.getContentURL());
-                addPanel(new JScrollPane(contentText), "height 100%, width 100%-6px!, span");
+                addPanel(new TextScrollPane(contentText), "height 100%, width 100%-6px!, span");
             } catch (IOException e) {
                 Dbg.fixme("Loading content of UC failed", e);
             }

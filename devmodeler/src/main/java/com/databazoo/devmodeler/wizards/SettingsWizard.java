@@ -1,17 +1,17 @@
 
 package com.databazoo.devmodeler.wizards;
 
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.TreePath;
-import java.util.Map;
-
 import com.databazoo.components.WizardTree;
 import com.databazoo.components.icons.ModelIconRenderer;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.tools.formatter.FormatterSettings;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.TreePath;
+import java.util.Map;
 
 /**
  * Wizard for manipulating Settings
@@ -26,7 +26,7 @@ public class SettingsWizard extends IntroWizard {
 		return new SettingsWizard();
 	}
 
-	SettingsWizard(){
+	private SettingsWizard(){
 		super();
 		eulaAccepted = true;
 		setContentScrollable(true);
