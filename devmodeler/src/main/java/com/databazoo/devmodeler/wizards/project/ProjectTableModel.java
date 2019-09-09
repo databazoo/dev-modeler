@@ -1,9 +1,9 @@
 
 package com.databazoo.devmodeler.wizards.project;
 
-import javax.swing.table.AbstractTableModel;
-
 import com.databazoo.devmodeler.project.ProjectManager;
+
+import javax.swing.table.AbstractTableModel;
 
 /**
  * A table model that automatically references currently open Project Wizard
@@ -20,7 +20,7 @@ public abstract class ProjectTableModel extends AbstractTableModel {
 		return wizard;
 	}
 
-	protected final void resetProjectGUI(){
+	final void resetProjectGUI(){
 		if(getWizard().listedProject != null && getWizard().listedProject.equals(ProjectManager.getInstance().getCurrentProject())){
 			ProjectManager.getInstance().resetProjectGUI();
 		}

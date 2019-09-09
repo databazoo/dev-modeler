@@ -1,6 +1,12 @@
 
 package com.databazoo.components.table;
 
+import com.databazoo.components.GCFrame;
+import com.databazoo.components.containers.VerticalContainer;
+import com.databazoo.components.textInput.TextScrollPane;
+import com.databazoo.components.textInput.UndoableTextField;
+import com.databazoo.tools.Schedule;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -8,11 +14,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serializable;
-
-import com.databazoo.components.GCFrame;
-import com.databazoo.components.containers.VerticalContainer;
-import com.databazoo.components.textInput.UndoableTextField;
-import com.databazoo.tools.Schedule;
 
 /**
  * Table cell text editor that opens in a dialog window instead of inline text field.
@@ -69,7 +70,7 @@ public class BigTextTableCellEditor implements Serializable {
 		buttonPane.add(btnSave);
 		buttonPane.add(btnCancel);
 
-		frame.setContentPane(new VerticalContainer(null, new JScrollPane(editor), buttonPane));
+		frame.setContentPane(new VerticalContainer(null, new TextScrollPane(editor), buttonPane));
 		frame.pack();
 		frame.setLocationRelativeTo(mainWindow);
 		frame.setVisible(GCFrame.SHOW_GUI);

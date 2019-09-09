@@ -1,17 +1,11 @@
 
 package com.databazoo.devmodeler.wizards;
 
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-
 import com.databazoo.components.WizardTree;
 import com.databazoo.components.combo.IconableComboBox;
 import com.databazoo.components.containers.HorizontalContainer;
 import com.databazoo.components.icons.ModelIconRenderer;
+import com.databazoo.components.textInput.TextScrollPane;
 import com.databazoo.components.textInput.UndoableTextField;
 import com.databazoo.devmodeler.DevModeler;
 import com.databazoo.devmodeler.config.Config;
@@ -20,6 +14,13 @@ import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.devmodeler.wizards.project.ProjectWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import static com.databazoo.tools.Dbg.THIS_SHOULD_NEVER_HAPPEN;
 
@@ -147,7 +148,7 @@ public class IntroWizard extends MigWizard {
 		setPage(langValues[0]);
 
 		addPanel(new HorizontalContainer(new JLabel("                    ", JLabel.CENTER), new JLabel("<html><h2>"+L_WELCOME+"</h2><html>", JLabel.CENTER), langCombo), "width 100%-6px!, span");
-		addPanel(new JScrollPane(eulaText), "height 100%, width 100%-6px!, span");
+		addPanel(new TextScrollPane(eulaText), "height 100%, width 100%-6px!, span");
 
 		setNextButton("I ACCEPT", true, ACCEPT_EULA);
 	}

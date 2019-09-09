@@ -15,9 +15,35 @@ import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.BoxView;
+import javax.swing.text.ComponentView;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Element;
+import javax.swing.text.IconView;
+import javax.swing.text.LabelView;
+import javax.swing.text.ParagraphView;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.StyledEditorKit;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -169,23 +195,23 @@ public class UndoableTextField extends JTextPane {
 					}
 				});
 
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "Undo");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "Redo");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "Find");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "Find");
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Undo");
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Redo");
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Find");
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Find");
 
 		if (UIConstants.isMac()) {
 			// ^A ^C ^V ^X fix for MacOS
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.selectAllAction);
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.copyAction);
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.pasteAction);
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.cutAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.selectAllAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.copyAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.pasteAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.cutAction);
 
 			// HOME END PGUP PGDOWN fix for MacOS
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.endLineAction);
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.beginLineAction);
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.pageUpAction);
-			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), DefaultEditorKit.pageDownAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.endLineAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.beginLineAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.pageUpAction);
+			getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), DefaultEditorKit.pageDownAction);
 		}
 
 		addFocusListener(new FocusAdapter() {
@@ -251,18 +277,23 @@ public class UndoableTextField extends JTextPane {
 						boolean nextMayBeAvailable = !(UndoableTextField.this instanceof FormattedTextField) || ((FormattedTextField)UndoableTextField.this).textLen > caretPos;
 
 						if(nextMayBeAvailable && (UndoableTextField.this instanceof FormattedTextField || getText().length() > caretPos)) {
-							Rectangle curr = modelToView(caretPos);
-							Rectangle next = modelToView(caretPos + 1);
-							if (curr.y == next.y && curr.x <= mouseX && mouseX <= next.x) {
-								int middle = curr.x + (next.x - curr.x) / 2;
+							Rectangle2D curr = modelToView2D(caretPos);
+							Rectangle2D next = modelToView2D(caretPos + 1);
+							int currY = (int) curr.getY();
+							int nextY = (int) next.getY();
+							int currX = (int) curr.getX();
+							int nextX = (int) next.getX();
+							if (currY == nextY && currX <= mouseX && mouseX <= nextX) {
+								int middle = currX + (nextX - currX) / 2;
 								if (e.getPoint().x > middle) {
 									setCaretPosition(caretPos + 1);
 								}
-							} else if (mouseX < curr.x && caretPos > 0) {
-								Rectangle prev = modelToView(caretPos - 1);
-								if (curr.y == prev.y) {
-									//Dbg.info("Prev: "+prev.x+" Mouse: "+e.getPoint().x+" Curr: "+curr.x);
-									int middle = prev.x + (curr.x - prev.x) / 2;
+							} else if (mouseX < currX && caretPos > 0) {
+								Rectangle2D prev = modelToView2D(caretPos - 1);
+								int prevX = (int) prev.getX();
+								int prevY = (int) prev.getY();
+								if (currY == prevY) {
+									int middle = prevX + (currX - prevX) / 2;
 									if (e.getPoint().x < middle) {
 										setCaretPosition(caretPos - 1);
 									}
@@ -345,8 +376,8 @@ public class UndoableTextField extends JTextPane {
 							ke.consume();
 						}
 					} else if (!moveKeysDisabled && ke.getKeyCode() == KeyEvent.VK_TAB) {
-						if (getSelectedText() != null || ke.getModifiers() == KeyEvent.SHIFT_MASK) {
-							moveTabs(ke.getModifiers() == KeyEvent.SHIFT_MASK);
+						if (getSelectedText() != null || ke.getModifiersEx() == KeyEvent.SHIFT_DOWN_MASK) {
+							moveTabs(ke.getModifiersEx() == KeyEvent.SHIFT_DOWN_MASK);
 							ke.consume();
 						}
 					} else if (AutocompletePopupMenu.isShown() && ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -592,15 +623,19 @@ public class UndoableTextField extends JTextPane {
 
 	public void setBordered(boolean bordered) {
 		if (bordered) {
-			//Transfer the Painter to a TextPane key
-			UIDefaults paneDefaults = new UIDefaults();
-			paneDefaults.put("TextPane.borderPainter", UIManager.get("TextArea[Enabled+NotInScrollPane].borderPainter"));
-			paneDefaults.put("TextPane.backgroundPainter", UIManager.get("TextArea[Enabled+NotInScrollPane].backgroundPainter"));
+			if (!UIConstants.isLafRequiresBorderedTextFields()) {
+				//Transfer the Painter to a TextPane key
+				UIDefaults paneDefaults = new UIDefaults();
+				paneDefaults.put("TextPane.borderPainter", UIManager.get("TextArea[Enabled+NotInScrollPane].borderPainter"));
+				paneDefaults.put("TextPane.backgroundPainter", UIManager.get("TextArea[Enabled+NotInScrollPane].backgroundPainter"));
 
-			putClientProperty("Nimbus.Overrides", paneDefaults);
-			putClientProperty("Nimbus.Overrides.InheritDefaults", false);
+				putClientProperty("Nimbus.Overrides", paneDefaults);
+				putClientProperty("Nimbus.Overrides.InheritDefaults", false);
 
-			setMargin(new Insets(6, 6, 6, 6));
+				setMargin(new Insets(6, 6, 6, 6));
+			} else {
+				setBorder(new CompoundBorder(new LineBorder(UIConstants.Colors.getTableBorders(), 1), new EmptyBorder(3, 3, 3, 3)));
+			}
 		} else {
 			setBorder(null);
 		}
@@ -766,8 +801,8 @@ public class UndoableTextField extends JTextPane {
 	}
 
 	public void disableFinder() {
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "None");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "None");
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "None");
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "None");
 	}
 
 	void clearUndo() {

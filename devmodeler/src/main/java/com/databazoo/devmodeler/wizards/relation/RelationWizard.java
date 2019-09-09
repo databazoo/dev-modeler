@@ -1,23 +1,6 @@
 
 package com.databazoo.devmodeler.wizards.relation;
 
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.text.Position;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.databazoo.components.GCFrameWithObservers;
 import com.databazoo.components.RotatedTabbedPane;
 import com.databazoo.components.WizardTree;
@@ -29,6 +12,7 @@ import com.databazoo.components.textInput.FormattedClickableTextField;
 import com.databazoo.components.textInput.LineNumberRowHeader;
 import com.databazoo.components.textInput.NextFieldObserver;
 import com.databazoo.components.textInput.QueryErrorPositionObserver;
+import com.databazoo.components.textInput.TextScrollPane;
 import com.databazoo.components.textInput.UndoableTextField;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
@@ -58,6 +42,23 @@ import com.databazoo.devmodeler.project.RevisionFactory;
 import com.databazoo.devmodeler.wizards.HistoryTableModel;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.text.Position;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Wizard for manipulating of all database objects (tables, attributes, indexes, etc.)
@@ -303,8 +304,8 @@ public class RelationWizard extends RelationWizardPagesSequence {
 		   });
 		InputMap map = buttonPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "saveInModelAndDB");
-		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "saveInModelAndDB");
-		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()+KeyEvent.SHIFT_MASK), "saveInModel");
+		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "saveInModelAndDB");
+		map.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() + KeyEvent.SHIFT_DOWN_MASK), "saveInModel");
 
 		frame.addWindowListener(new WindowAdapter(){
 			@Override
@@ -318,7 +319,7 @@ public class RelationWizard extends RelationWizardPagesSequence {
 				int selRow = tree.getClosestRowForLocation(e.getX(), e.getY());
 				TreePath selPath = tree.getClosestPathForLocation(e.getX(), e.getY());
 				if(selRow != -1) {
-					if((e.getModifiers() & MouseEvent.BUTTON3_MASK) == MouseEvent.BUTTON3_MASK){
+					if((e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0){
 
 						// Right click - position the menu
 						if(selPath.getLastPathComponent() instanceof DefaultMutableTreeNode) {
@@ -509,9 +510,6 @@ public class RelationWizard extends RelationWizardPagesSequence {
 	protected void addSQLInput(String text){
 		queryInput = new FormattedClickableTextField(editableElement.getDB().getProject(), text);
 		queryInput.setAutocomplete(frame, connection);
-		JScrollPane queryScrollPane = new JScrollPane(queryInput);
-		queryScrollPane.getVerticalScrollBar().setUnitIncrement(Settings.getInt(Settings.L_FONT_MONO_SIZE)*2);
-		queryScrollPane.setRowHeaderView(new LineNumberRowHeader(queryInput, queryScrollPane));
 
 		final RotatedTabbedPane outputTabs = new RotatedTabbedPane(JTabbedPane.RIGHT, JTabbedPane.SCROLL_TAB_LAYOUT);
 
@@ -532,7 +530,7 @@ public class RelationWizard extends RelationWizardPagesSequence {
 			NextFieldObserver.get(this).registerObserverWoKeyListeners(queryInput);
 			bodyInput = null;
 		}
-		outputTabs.addTab("SQL", queryScrollPane);
+		outputTabs.addTab("SQL", TextScrollPane.withLineNumbers(queryInput));
 		addPanel(outputTabs, "span, width 100%, height 100%");
 
 		Schedule.inEDT(Schedule.TYPE_DELAY, () -> {

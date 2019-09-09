@@ -1,6 +1,9 @@
 
 package com.databazoo.components.table;
 
+import com.databazoo.components.UIConstants;
+import com.databazoo.tools.Schedule;
+
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.DefaultEditorKit;
@@ -10,8 +13,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 
-import com.databazoo.tools.Schedule;
-
 /**
  * Table cell editor that disappears on focus loss.
  *
@@ -19,7 +20,7 @@ import com.databazoo.tools.Schedule;
  */
 public class UnfocusableTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
-	protected JTextComponent editor = new JTextField();
+	protected JTextComponent editor;
 	private EditableTable editedTable;
 
 	/**
@@ -37,7 +38,7 @@ public class UnfocusableTableCellEditor extends AbstractCellEditor implements Ta
 	public UnfocusableTableCellEditor(JTextComponent editor){
 		super();
 		this.editor = editor;
-		editor.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createLineBorder(Color.ORANGE, 1), BorderFactory.createEmptyBorder(0,4,0,4)));
+		editor.setBorder(BorderFactory.createCompoundBorder( BorderFactory.createLineBorder(UIConstants.Colors.getSelectionBackground(), 1), BorderFactory.createEmptyBorder(0,4,0,4)));
 		editor.addFocusListener(new FocusAdapter(){
 			@Override public void focusLost(FocusEvent fe) { editedTable.editingStopped(changeEvent); }
 		});

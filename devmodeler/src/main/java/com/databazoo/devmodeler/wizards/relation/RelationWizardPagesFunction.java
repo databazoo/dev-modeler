@@ -3,7 +3,7 @@ package com.databazoo.devmodeler.wizards.relation;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.combo.IconableComboBox;
 import com.databazoo.components.textInput.FormattedClickableTextField;
-import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.components.textInput.TextScrollPane;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.DBTree;
 import com.databazoo.devmodeler.model.DataTypes;
@@ -143,8 +143,7 @@ abstract class RelationWizardPagesFunction extends RelationWizardPagesTrigger {
 			}
 		});
 		bodyInput.setAutocomplete(frame, connection);
-		bodyInputScroll = new JScrollPane(bodyInput);
-		bodyInputScroll.getVerticalScrollBar().setUnitIncrement(Settings.getInt(Settings.L_FONT_MONO_SIZE)*2);
+		bodyInputScroll = new TextScrollPane(bodyInput);
 
 		//guidedPanel.add(bodyInputScroll, BorderLayout.CENTER);
 		//checkComponentsSize();

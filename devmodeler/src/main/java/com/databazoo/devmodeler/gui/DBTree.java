@@ -77,7 +77,7 @@ public class DBTree extends WizardTree {
 				int selRow = getClosestRowForLocation(e.getX(), e.getY());
 				TreePath selPath = getClosestPathForLocation(e.getX(), e.getY());
 				if(selRow != -1) {
-					if((e.getModifiers() & MouseEvent.BUTTON3_MASK) == MouseEvent.BUTTON3_MASK){
+					if((e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0){
 
 						// Right click - position the menu
 						if(selPath.getLastPathComponent() instanceof DefaultMutableTreeNode){
