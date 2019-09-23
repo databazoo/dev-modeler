@@ -3,7 +3,12 @@ package com.databazoo.tools;
 import com.databazoo.components.UIConstants;
 
 import javax.swing.*;
-import java.util.concurrent.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Timed and threaded tasks factory.
@@ -209,5 +214,16 @@ public interface Schedule {
             runnable.run();
         });
         timer.start();
+    }
+
+    /**
+     * Call given Runnable in Event Dispatch Thread and wait.
+     *
+     * @param runnable task to execute
+     */
+    static void waitInEDT(final Runnable runnable) throws InvocationTargetException, InterruptedException {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeAndWait(runnable);
+        }
     }
 }

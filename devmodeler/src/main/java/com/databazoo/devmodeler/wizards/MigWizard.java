@@ -153,7 +153,7 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 		drawPageContent();
 
 		JComponent pane = (JComponent) frame.getContentPane();
-		pane.getActionMap().put("closeWin", new AbstractAction("closeWin") { @Override public void actionPerformed(ActionEvent evt) { executeAction(CLOSE_WINDOW); } });
+		pane.getActionMap().put("closeWin", new AbstractAction("closeWin") { @Override public void actionPerformed(ActionEvent evt) { Schedule.inEDT(() -> executeAction(CLOSE_WINDOW)); } });
 		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "closeWin");
 	}
 
