@@ -1,19 +1,5 @@
 package com.databazoo.devmodeler.wizards;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.Serializable;
-
 import com.databazoo.components.GCFrameWithObservers;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.combo.IconableComboBox;
@@ -37,6 +23,20 @@ import com.databazoo.devmodeler.tools.formatter.FormatterDataType;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.Serializable;
 
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -154,7 +154,7 @@ public abstract class MigWizard implements TreeSelectionListener, Serializable {
 
 		JComponent pane = (JComponent) frame.getContentPane();
 		pane.getActionMap().put("closeWin", new AbstractAction("closeWin") { @Override public void actionPerformed(ActionEvent evt) { executeAction(CLOSE_WINDOW); } });
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "closeWin");
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "closeWin");
 	}
 
 	protected void drawTree(JComponent tree){

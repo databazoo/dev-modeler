@@ -13,7 +13,6 @@ import com.databazoo.components.textInput.TextScrollPane;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
-import com.databazoo.devmodeler.conn.ConnectionOracleForward;
 import com.databazoo.devmodeler.conn.ConnectionUtils;
 import com.databazoo.devmodeler.conn.DBCommException;
 import com.databazoo.devmodeler.conn.IColoredConnection;
@@ -342,8 +341,8 @@ public class DataWindow extends DataWindowOutputMessages {
 		menuPane.getActionMap().put("runExplain", new AbstractAction(){ @Override public void actionPerformed(ActionEvent evt) { explainQuery(); } });
 		menuPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "runExplain");
 		menuPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "runQuery");
-		menuPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "runFocusedQuery");
-		menuPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "saveNewRow");
+		menuPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "runFocusedQuery");
+		menuPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "saveNewRow");
 		return menuPane;
 	}
 

@@ -1,9 +1,8 @@
 
 package com.databazoo.components.combo;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Combobox cell renderer that allows a separator to be added automatically after certain value.
@@ -34,7 +33,7 @@ public abstract class ComboSeparatorsRenderer implements ListCellRenderer<String
 	 * @return A component whose paint() method will render the specified value.
 	 */
 	@Override
-    public Component getListCellRendererComponent(JList list, String value, int index, boolean isSelected, boolean cellHasFocus){
+    public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus){
         Component comp = delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         if(index!=-1 && addSeparatorAfter(list, value, index)){
 			if(!isSelected){

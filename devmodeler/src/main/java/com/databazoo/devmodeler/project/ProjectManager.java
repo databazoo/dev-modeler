@@ -1,22 +1,6 @@
 
 package com.databazoo.devmodeler.project;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Config;
@@ -43,6 +27,22 @@ import com.databazoo.devmodeler.wizards.project.ProjectWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.EncryptedProperties;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Manager of all projects. Can create, store and fetch project configurations from disk.
@@ -96,17 +96,13 @@ public final class ProjectManager
 	}
 
 	public static File getSettingsDirectory(String filename){
-		if (!APP_HOME_FOLDER.exists()) {
-			if (!APP_HOME_FOLDER.mkdirs()) {
-				throw new IllegalStateException(APP_HOME_FOLDER.toString());
-			}
+		if (!APP_HOME_FOLDER.exists() && !APP_HOME_FOLDER.mkdirs()) {
+			throw new IllegalStateException(APP_HOME_FOLDER.toString());
 		}
-
 		if(filename != null) {
 			return new File(APP_HOME_FOLDER, filename);
-		}else{
-			return APP_HOME_FOLDER;
 		}
+		return APP_HOME_FOLDER;
 	}
 
 	private final List<Project> projects = new ArrayList<>();

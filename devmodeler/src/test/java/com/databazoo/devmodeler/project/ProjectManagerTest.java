@@ -1,7 +1,5 @@
 package com.databazoo.devmodeler.project;
 
-import java.io.File;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
@@ -9,6 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

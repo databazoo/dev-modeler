@@ -1,19 +1,20 @@
 
 package com.databazoo.devmodeler.plugincontrol;
 
+import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.tools.Dbg;
+import com.databazoo.tools.Schedule;
+import plugins.IDataWindowPlugin;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.databazoo.devmodeler.config.Settings;
-import com.databazoo.tools.Dbg;
-import com.databazoo.tools.Schedule;
-import plugins.IDataWindowPlugin;
 
 /**
  * Manages all plugin initialization and calls
@@ -61,7 +62,7 @@ public class PluginManager {
     }
 
     private static void loadDotJar(ZipInputStream zipInputStream)
-            throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+            throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         classLoader.setZipInputStream(zipInputStream);
         for (ZipEntry entry; (entry = zipInputStream.getNextEntry()) != null;) {
             if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
@@ -71,17 +72,17 @@ public class PluginManager {
         }
     }
 
-    private static void loadDotClass(String file) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private static void loadDotClass(String file) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         classLoader.setZipInputStream(null);
         loadClass(file);
     }
 
-    private static void loadClass(String file) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Class c = classLoader.loadClass(file.substring(0, file.indexOf('.')));
+    private static void loadClass(String file) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class<?> c = classLoader.loadClass(file.substring(0, file.indexOf('.')));
         Class[] interfaces = c.getInterfaces();
         for (Class interfaceClass : interfaces) {
             if (interfaceClass.getName().equals(IFACE_DATA_WINDOW)) {
-                IDataWindowPlugin plugin = (IDataWindowPlugin) c.newInstance();
+                IDataWindowPlugin plugin = (IDataWindowPlugin) c.getDeclaredConstructor().newInstance();
                 String settingURI = "Global." + Settings.L_GLOBAL_PLUGINS + "." + plugin.getPluginName();
                 if (Settings.getBool(settingURI)) {
                     dataWindowPlugins.add(plugin);

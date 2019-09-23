@@ -1,14 +1,14 @@
 
 package com.databazoo.components.textInput;
 
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import java.awt.*;
-
 import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.tools.Dbg;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import java.awt.*;
 
 /**
  * A component to display line numbers.
@@ -92,7 +92,7 @@ public class LineNumberRowHeader extends JComponent {
 	private void drawLineNumber(Graphics g, int line, int pos) throws BadLocationException {
 		String lineStr = String.valueOf(line);
 
-		int top = textField.modelToView(pos).y + headerFont.getSize();
+		int top = (int) textField.modelToView2D(pos).getY() + headerFont.getSize();
 		int w = fm.stringWidth(lineStr);
 		g.drawString(lineStr, getWidth()-w-2, top);
 	}
