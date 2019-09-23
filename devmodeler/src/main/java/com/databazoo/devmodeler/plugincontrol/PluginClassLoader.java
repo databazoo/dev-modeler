@@ -1,14 +1,14 @@
 
 package com.databazoo.devmodeler.plugincontrol;
 
+import com.databazoo.tools.Dbg;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipInputStream;
-
-import com.databazoo.tools.Dbg;
 
 /**
  *
@@ -39,11 +39,11 @@ class PluginClassLoader extends ClassLoader {
      * load superclasses that are system classes, and it must take this into account.
      */
 	@Override
-    public Class loadClass (String classname, boolean resolve) throws ClassNotFoundException {
+    public Class<?> loadClass (String classname, boolean resolve) throws ClassNotFoundException {
 		try {
 			// Our ClassLoader superclass has a built-in cache of classes it has
 			// already loaded. So, first check the cache.
-			Class c = findLoadedClass(classname);
+			Class<?> c = findLoadedClass(classname);
 
 			// After this method loads a class, it will be called again to
 			// load the superclasses. Since these may be system classes, we've

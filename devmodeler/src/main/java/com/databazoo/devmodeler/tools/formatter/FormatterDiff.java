@@ -1,19 +1,19 @@
 
 package com.databazoo.devmodeler.tools.formatter;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
-import java.util.List;
-
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.textInput.FormattedTextField;
 import com.databazoo.tools.Dbg;
 import difflib.DeleteDelta;
 import difflib.Delta;
 import difflib.InsertDelta;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.util.List;
 
 /**
  * Formatter implementation working with delta's above standard SQL.
@@ -30,7 +30,7 @@ public class FormatterDiff extends FormatterSQL {
 	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_DELETE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_DELETE_DARK);
 	private static final DefaultHighlighter.DefaultHighlightPainter PAINTER_CHANGE_DARK = new DefaultHighlighter.DefaultHighlightPainter(UIConstants.Colors.HILIGHT_CHANGE_DARK);
 
-	public FormatterDiff(List<Delta> deltas, boolean isSource) {
+	public FormatterDiff(List<Delta<String>> deltas, boolean isSource) {
 		super();
 		this.deltaList = deltas;
 		this.isSource = isSource;

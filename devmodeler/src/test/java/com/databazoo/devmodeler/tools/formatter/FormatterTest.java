@@ -1,21 +1,19 @@
 package com.databazoo.devmodeler.tools.formatter;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.databazoo.components.textInput.FormattedClickableTextField;
 import com.databazoo.components.textInput.FormattedTextField;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.conn.ConnectionPg;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.ProjectManager;
-
 import difflib.Patch;
 import difflib.myers.MyersDiff;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
 
 public class FormatterTest {
 
@@ -43,7 +41,7 @@ public class FormatterTest {
         String forwardSQL = "/** new **/\n/** COMMENT **/\nSELECT\n\tid,\n\tvalue\nFROM myTable\nORDER BY id";
         String revertSQL = "/** COMMENT **/\nSELECT *\nFROM myTable\nWHERE id IN (\n\t1, 2, 3\n)\nORDER BY id\nLIMIT 100;";
 
-        Patch patch = new MyersDiff().diff(Arrays.asList(revertSQL.split("\\r?\\n")), Arrays.asList(forwardSQL.split("\\r?\\n")));
+        Patch<String> patch = new MyersDiff<String>().diff(Arrays.asList(revertSQL.split("\\r?\\n")), Arrays.asList(forwardSQL.split("\\r?\\n")));
 
         FormattedTextField query1 = new FormattedClickableTextField(Project.getCurrent(), forwardSQL, new FormatterDiff(patch.getDeltas(), false));
         FormattedTextField query2 = new FormattedClickableTextField(Project.getCurrent(), revertSQL, new FormatterDiff(patch.getDeltas(), true));

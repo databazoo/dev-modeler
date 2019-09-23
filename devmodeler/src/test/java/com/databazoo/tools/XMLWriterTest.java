@@ -1,19 +1,18 @@
 package com.databazoo.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.awt.*;
-import java.io.File;
-
-import javax.xml.parsers.SAXParserFactory;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.SAXParserFactory;
+import java.awt.*;
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class XMLWriterTest {
     private File FILE = new File(new File(System.getProperty("user.dir"), "target"), "test.xml");
@@ -66,7 +65,7 @@ public class XMLWriterTest {
                 if(attributes.getValue("name").equals("tag1")) {
                     tag1Loaded = true;
                     assertEquals("testString", XMLWriter.getString(attributes.getValue("testString")));
-                    assertEquals(new Character('c'), XMLWriter.getChar(attributes.getValue("testChar")));
+                    assertEquals(Character.valueOf('c'), XMLWriter.getChar(attributes.getValue("testChar")));
                     assertEquals(5, XMLWriter.getInt(attributes.getValue("testInt")));
                     assertEquals(10L, XMLWriter.getLong(attributes.getValue("testLong")));
                     assertEquals(20.05D, XMLWriter.getDouble(attributes.getValue("testDouble")), 0.000001);

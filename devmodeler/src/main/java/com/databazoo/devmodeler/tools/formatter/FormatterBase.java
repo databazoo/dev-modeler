@@ -1,6 +1,13 @@
 
 package com.databazoo.devmodeler.tools.formatter;
 
+import com.databazoo.components.FontFactory;
+import com.databazoo.components.UIConstants;
+import com.databazoo.components.textInput.FormattedTextField;
+import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.tools.Dbg;
+import difflib.Delta;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Style;
@@ -16,13 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
-
-import com.databazoo.components.FontFactory;
-import com.databazoo.components.UIConstants;
-import com.databazoo.components.textInput.FormattedTextField;
-import com.databazoo.devmodeler.config.Settings;
-import com.databazoo.tools.Dbg;
-import difflib.Delta;
 
 /**
  * Formatter implementation for Formatted Text Field
@@ -66,7 +66,7 @@ public abstract class FormatterBase implements Serializable {
 	protected final transient Set<String> DML = new HashSet<>();
 	private final transient Set<String> LOCAL_KEYWORDS = new HashSet<>();
 
-	transient List<Delta> deltaList;
+	transient List<Delta<String>> deltaList;
 	boolean isSource = false;
 	public boolean isControlDown = false;
 	private boolean isFirstFormat = true;

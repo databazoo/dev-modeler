@@ -693,7 +693,7 @@ public class DiffWizard extends SQLEnabledWizard {
 
 	private void updateQueryTextFields(String revertSQL, String forwardSQL) {
 		try {
-			Patch patch = new MyersDiff().diff(Arrays.asList(revertSQL.split("\\r?\\n")), Arrays.asList(forwardSQL.split("\\r?\\n")));
+			Patch<String> patch = new MyersDiff<String>().diff(Arrays.asList(revertSQL.split("\\r?\\n")), Arrays.asList(forwardSQL.split("\\r?\\n")));
 			queryRevert = new FormattedClickableTextField(database.getProject(), revertSQL, new FormatterDiff(patch.getDeltas(), true));
 			queryForward = new FormattedClickableTextField(database.getProject(), forwardSQL, new FormatterDiff(patch.getDeltas(), false));
 		} catch (Exception e) {
