@@ -114,70 +114,91 @@ public class DBTree extends WizardTree {
 	}
 
 	public void selectCurrentDB() {
-		DefaultTreeModel model = (DefaultTreeModel) getModel();
-		TreeNode root = (TreeNode)model.getRoot();
-		String dbName = Project.getCurrent().getCurrentDB().getName();
-		for(int g=0; g<root.getChildCount(); g++){
-			TreeNode dbNode = root.getChildAt(g);
-			if(dbNode.toString().equals(dbName)){
-				setSelectionPath(new TreePath(model.getPathToRoot(dbNode)));
-				return;
+		Schedule.inEDT(() -> {
+			DefaultTreeModel model = (DefaultTreeModel) getModel();
+			TreeNode root = (TreeNode) model.getRoot();
+			String dbName = Project.getCurrent().getCurrentDB().getName();
+			for (int g = 0; g < root.getChildCount(); g++) {
+				TreeNode dbNode = root.getChildAt(g);
+				if (dbNode.toString().equals(dbName)) {
+					setSelectionPath(new TreePath(model.getPathToRoot(dbNode)));
+					return;
+				}
 			}
-		}
+		});
 	}
 
 	public void selectWorkspaceByName(String workspaceName) {
-		DefaultTreeModel model = (DefaultTreeModel) getModel();
-		TreeNode root = ((TreeNode)model.getRoot()).getChildAt(0);
-		for(int g=0; g<root.getChildCount(); g++){
-			TreeNode wsNode = root.getChildAt(g);
-			if(wsNode.toString().equals(workspaceName)){
-				setSelectionPath(new TreePath(model.getPathToRoot(wsNode)));
-				return;
+		Schedule.inEDT(() -> {
+			DefaultTreeModel model = (DefaultTreeModel) getModel();
+			TreeNode root = ((TreeNode) model.getRoot()).getChildAt(0);
+			for (int g = 0; g < root.getChildCount(); g++) {
+				TreeNode wsNode = root.getChildAt(g);
+				if (wsNode.toString().equals(workspaceName)) {
+					setSelectionPath(new TreePath(model.getPathToRoot(wsNode)));
+					return;
+				}
 			}
-		}
+		});
 	}
 
 	public void selectSchemaByName(String schemaName) {
-		if(Project.getCurrent().getCurrentConn().isSupported(SupportedElement.SCHEMA)){
-			DefaultTreeModel model = (DefaultTreeModel) getModel();
-			TreeNode root = (TreeNode)model.getRoot();
-			String dbName = Project.getCurrent().getCurrentDB().getName();
-			for(int g=0; g<root.getChildCount(); g++){
-				TreeNode dbNode = root.getChildAt(g);
-				if(dbNode.toString().equals(dbName)){
-					for(int i=0; i<dbNode.getChildCount(); i++){
-						TreeNode schemaNode = dbNode.getChildAt(i);
-						if(schemaNode.toString().equals(schemaName)){
-							setSelectionPath(new TreePath(model.getPathToRoot(schemaNode)));
-							return;
+		Schedule.inEDT(() -> {
+			if (Project.getCurrent().getCurrentConn().isSupported(SupportedElement.SCHEMA)) {
+				DefaultTreeModel model = (DefaultTreeModel) getModel();
+				TreeNode root = (TreeNode) model.getRoot();
+				String dbName = Project.getCurrent().getCurrentDB().getName();
+				for (int g = 0; g < root.getChildCount(); g++) {
+					TreeNode dbNode = root.getChildAt(g);
+					if (dbNode.toString().equals(dbName)) {
+						for (int i = 0; i < dbNode.getChildCount(); i++) {
+							TreeNode schemaNode = dbNode.getChildAt(i);
+							if (schemaNode.toString().equals(schemaName)) {
+								setSelectionPath(new TreePath(model.getPathToRoot(schemaNode)));
+								return;
+							}
 						}
 					}
 				}
+			} else {
+				selectCurrentDB();
 			}
-		}else{
-			selectCurrentDB();
-		}
+		});
 	}
 
 	public void selectRelationByName(String dbName, String schemaName, String functionName) {
-		if(!treeInitiatedClick){
-			DefaultTreeModel model = (DefaultTreeModel) getModel();
-			TreeNode root = (TreeNode)model.getRoot();
-			if (root != null)
-			for(int g=0; g<root.getChildCount(); g++){
-				TreeNode dbNode = root.getChildAt(g);
-				if(dbNode.toString().equals(dbName)){
-					for(int i=0; i<dbNode.getChildCount(); i++){
-						Project project = Project.getCurrent();
-						if(project.getCurrentConn().isSupported(SupportedElement.SCHEMA)){
-							TreeNode schemaNode = dbNode.getChildAt(i);
-							if(schemaNode.toString().equals(schemaName)){
-								for(int j=0; j<schemaNode.getChildCount(); j++){
-									DefaultMutableTreeNode funcNode = (DefaultMutableTreeNode) schemaNode.getChildAt(j);
-									if(funcNode.toString().equals(functionName)){
-										if(getSelectionPath() != null && getSelectionPath().getPathCount() > 3){
-											collapsePath(new TreePath(new Object[]{root, getSelectionPath().getPathComponent(1), getSelectionPath().getPathComponent(2), getSelectionPath().getPathComponent(3)}));
+		Schedule.inEDT(() -> {
+			if (!treeInitiatedClick) {
+				DefaultTreeModel model = (DefaultTreeModel) getModel();
+				TreeNode root = (TreeNode) model.getRoot();
+				if (root != null)
+					for (int g = 0; g < root.getChildCount(); g++) {
+						TreeNode dbNode = root.getChildAt(g);
+						if (dbNode.toString().equals(dbName)) {
+							for (int i = 0; i < dbNode.getChildCount(); i++) {
+								Project project = Project.getCurrent();
+								if (project.getCurrentConn().isSupported(SupportedElement.SCHEMA)) {
+									TreeNode schemaNode = dbNode.getChildAt(i);
+									if (schemaNode.toString().equals(schemaName)) {
+										for (int j = 0; j < schemaNode.getChildCount(); j++) {
+											DefaultMutableTreeNode funcNode = (DefaultMutableTreeNode) schemaNode.getChildAt(j);
+											if (funcNode.toString().equals(functionName)) {
+												if (getSelectionPath() != null && getSelectionPath().getPathCount() > 3) {
+													collapsePath(new TreePath(new Object[]{root, getSelectionPath().getPathComponent(1), getSelectionPath().getPathComponent(2), getSelectionPath().getPathComponent(3)}));
+												}
+												TreePath newPath = new TreePath(model.getPathToRoot(funcNode));
+												setSelectionPath(newPath);
+												scrollPathToVisible(newPath);
+												expandPath(newPath);
+												return;
+											}
+										}
+									}
+								} else {
+									TreeNode funcNode = dbNode.getChildAt(i);
+									if (funcNode.toString().equals(functionName)) {
+										if (getSelectionPath() != null && getSelectionPath().getPathCount() > 3) {
+											collapsePath(new TreePath(new Object[]{root, getSelectionPath().getPathComponent(1), getSelectionPath().getPathComponent(2)}));
 										}
 										TreePath newPath = new TreePath(model.getPathToRoot(funcNode));
 										setSelectionPath(newPath);
@@ -187,25 +208,12 @@ public class DBTree extends WizardTree {
 									}
 								}
 							}
-						}else{
-							TreeNode funcNode = dbNode.getChildAt(i);
-							if(funcNode.toString().equals(functionName)){
-								if(getSelectionPath() != null && getSelectionPath().getPathCount() > 3){
-									collapsePath(new TreePath(new Object[]{root, getSelectionPath().getPathComponent(1), getSelectionPath().getPathComponent(2)}));
-								}
-								TreePath newPath = new TreePath(model.getPathToRoot(funcNode));
-								setSelectionPath(newPath);
-								scrollPathToVisible(newPath);
-								expandPath(newPath);
-								return;
-							}
 						}
 					}
-				}
+			} else {
+				treeInitiatedClick = false;
 			}
-		}else{
-			treeInitiatedClick = false;
-		}
+		});
 	}
 
 	void checkDB(boolean redrawTree){

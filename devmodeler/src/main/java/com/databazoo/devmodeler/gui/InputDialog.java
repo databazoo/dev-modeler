@@ -6,6 +6,7 @@ import com.databazoo.tools.Schedule;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 
 public interface InputDialog {
 
@@ -34,11 +35,21 @@ public interface InputDialog {
      * @throws OperationCancelException if user pressed cancel
      */
     static String ask(String windowName, String fieldName, String defaultValue, int fieldSize, String acceptOption, String cancelOption) throws OperationCancelException {
-        JTextField input = new JTextField(defaultValue);
-        input.setPreferredSize(new Dimension(fieldSize, input.getPreferredSize().height));
-        input.selectAll();
-        if (getOption(windowName, fieldName, acceptOption, cancelOption, input) == 0) {
-            return input.getText();
+        StringBuilder sb = new StringBuilder();
+        try {
+            Schedule.waitInEDT(() -> {
+                JTextField input = new JTextField(defaultValue);
+                input.setPreferredSize(new Dimension(fieldSize, input.getPreferredSize().height));
+                input.selectAll();
+                if (getOption(windowName, fieldName, acceptOption, cancelOption, input) == 0) {
+                    sb.append(input.getText());
+                }
+            });
+        } catch (InvocationTargetException | InterruptedException e) {
+            throw new OperationCancelException("Operation interrupted", e);
+        }
+        if (!sb.toString().isEmpty()) {
+            return sb.toString();
         } else {
             throw new OperationCancelException();
         }
