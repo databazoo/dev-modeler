@@ -263,8 +263,10 @@ abstract class DataWindowOutputData extends DataWindowBase {
                 String message = "SQL could not be executed correctly. Data was not saved.\n\n"
                         + /*"QUERY: "+*/sql+"\n\n"
                         + connection.getCleanError(ex.getLocalizedMessage());
-                JOptionPane.showMessageDialog(frame, new SelectableText(message, false), "Error while saving row", JOptionPane.ERROR_MESSAGE);
-                DesignGUI.getInfoPanel().writeFailed(log, ex.getMessage());
+				Schedule.inEDT(() -> {
+					JOptionPane.showMessageDialog(frame, new SelectableText(message, false), "Error while saving row", JOptionPane.ERROR_MESSAGE);
+					DesignGUI.getInfoPanel().writeFailed(log, ex.getMessage());
+				});
 
                 // restore edit
                 if(row != -1 && col != -1){

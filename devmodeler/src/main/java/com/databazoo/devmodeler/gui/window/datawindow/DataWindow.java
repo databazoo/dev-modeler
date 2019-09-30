@@ -826,7 +826,7 @@ public class DataWindow extends DataWindowOutputMessages {
 					"[]1[]"
 			));
 			statusPane.add(new JLabel("Connection:"), "span 2, align left center");
-			statusPane.add(connectionInfo = new JLabel(), "span 2, height 50px:100%-20px:, align left center");
+			statusPane.add(connectionInfo = new JLabel(), "span 2, height 40px:40px:, align left center");
 			statusPane.add(new JLabel(" Rows:"));
 			statusPane.add(rowCounter = new JLabel("0"));
 			statusPane.add(new JLabel(" Time:"));
