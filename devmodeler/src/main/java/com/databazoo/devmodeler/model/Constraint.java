@@ -137,10 +137,10 @@ public class Constraint extends LineComponent implements IModelElement {
 		if (!isSelected) {
 			Schedule.inEDT(Schedule.CLICK_DELAY, () -> {
 				if (behavior.attr1 != null) {
-					behavior.attr1.setForeground(UIConstants.Colors.getSelectionBackground());
+					behavior.attr1.setForcedSelection(true);
 				}
 				if (behavior.attr2 != null) {
-					behavior.attr2.setForeground(UIConstants.Colors.getSelectionBackground());
+					behavior.attr2.setForcedSelection(true);
 				}
 			});
 			Canvas.instance.setSelectedElement(this);
@@ -617,10 +617,10 @@ public class Constraint extends LineComponent implements IModelElement {
 			}
 		} else {
 			if (behavior.attr1 != null) {
-				behavior.attr1.setForeground(UIConstants.Colors.getLabelForeground());
+				behavior.attr1.setForcedSelection(false);
 			}
 			if (behavior.attr2 != null) {
-				behavior.attr2.setForeground(UIConstants.Colors.getLabelForeground());
+				behavior.attr2.setForcedSelection(false);
 			}
 		}
 	}

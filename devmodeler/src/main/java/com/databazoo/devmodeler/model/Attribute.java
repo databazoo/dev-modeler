@@ -53,6 +53,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 	private int typeOffset;
 	private boolean isDragged;
 	private boolean isDNDEnabled = false;
+	private boolean isForcedSelection = false;
 
 	public Attribute(Relation parent, String name, String attType, boolean attNull, int attNum, String defaultValue, String storage, String descr) {
 		super();
@@ -179,20 +180,14 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 
 			@Override
 			public void mouseEntered(MouseEvent me) {
-				setBackground(HIGH_COLOR);
-				if (getForeground().equals(UIConstants.Colors.getLabelForeground())) {
-					setForeground(UIConstants.Colors.getSelectionForeground());
-				}
-				repaint();
+				drawSelected();
 			}
 
 			@Override
 			public void mouseExited(MouseEvent me) {
-				setBackground(LOW_COLOR);
-				if (getForeground().equals(UIConstants.Colors.getSelectionForeground())) {
-					setForeground(UIConstants.Colors.getLabelForeground());
+				if (!isForcedSelection) {
+					drawNotSelected();
 				}
-				repaint();
 			}
 		});
 
@@ -215,6 +210,27 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 	void setDNDEnabled(boolean isEnabled) {
 		isDNDEnabled = isEnabled && DesignGUI.getView() != ViewMode.DATA;
 		setCursor(Cursor.getPredefinedCursor(isDNDEnabled ? Cursor.CROSSHAIR_CURSOR : Cursor.DEFAULT_CURSOR));
+	}
+
+	void setForcedSelection(boolean isForcedSelection) {
+		this.isForcedSelection = isForcedSelection;
+		if (isForcedSelection) {
+			drawSelected();
+		} else {
+			drawNotSelected();
+		}
+	}
+
+	private void drawSelected() {
+		setBackground(HIGH_COLOR);
+		setForeground(UIConstants.Colors.getSelectionForeground());
+		repaint();
+	}
+
+	private void drawNotSelected() {
+		setBackground(LOW_COLOR);
+		setForeground(UIConstants.Colors.getLabelForeground());
+		repaint();
 	}
 
 	@Override

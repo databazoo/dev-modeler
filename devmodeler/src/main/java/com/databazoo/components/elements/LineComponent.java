@@ -30,7 +30,7 @@ public abstract class LineComponent extends EnvironmentComponent {
 	protected boolean isFlipped = false;
 	protected boolean isDashed = true;
 	protected boolean isSelected = false;
-	protected int lineWidth = 1;
+	protected int lineWidth = 2;
 
 	public transient BufferedImage arrow1;
 	public transient BufferedImage arrow2;
