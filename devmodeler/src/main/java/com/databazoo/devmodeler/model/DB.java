@@ -18,6 +18,7 @@ import com.databazoo.devmodeler.tools.organizer.Organizer;
 import com.databazoo.devmodeler.tools.organizer.OrganizerFactory;
 import com.databazoo.devmodeler.wizards.relation.RelationWizard;
 import com.databazoo.tools.Dbg;
+import com.databazoo.tools.Schedule;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -97,7 +98,8 @@ public class DB implements IModelElement {
 				return true;
 			} catch (DBCommException e){
 				Dbg.notImportantAtAll("Communication error. Already logged.", e);
-				DesignGUI.getInfoPanel().writeFailed(log, getConnection().getCleanError(e.getMessage()));
+				String cleanError = getConnection().getCleanError(e.getMessage());
+				Schedule.inEDT(() -> DesignGUI.getInfoPanel().writeFailed(log, cleanError));
 			}
 		}
 		return false;
