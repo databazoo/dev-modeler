@@ -5,7 +5,6 @@ import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
-import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.GC;
 import com.databazoo.tools.Schedule;

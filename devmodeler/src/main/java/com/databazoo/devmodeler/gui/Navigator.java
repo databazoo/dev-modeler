@@ -137,11 +137,6 @@ public final class Navigator extends JComponent {
         Menu.getInstance().getZoomOutMenuItem().setEnabled(canZoomOut());
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-    }
-
     /**
      * Navigation canvas, where shemata (and possibly other items) can be previewed.
      */
@@ -192,7 +187,7 @@ public final class Navigator extends JComponent {
 
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             int x = Math.round((float) (Canvas.instance.getScrollPosition().x * sizeCoeff));
             int y = Math.round((float) (Canvas.instance.getScrollPosition().y * sizeCoeff));
             int w = Math.round((float) (Canvas.instance.getScrollSize().width * sizeCoeff));
@@ -209,7 +204,7 @@ public final class Navigator extends JComponent {
                 }
             }
             IModelElement elem = Canvas.instance.getSelectedElement();
-            if (elem != null && elem instanceof DraggableComponent && ((DraggableComponent) elem).getAbsCenter() != null
+            if (elem instanceof DraggableComponent && ((DraggableComponent) elem).getAbsCenter() != null
                     && elem.getDB().equals(Project.getCurrDB())) {
                 if (Project.getCurrent().getCurrentWorkspace() == null) {
                     Point center = ((DraggableComponent) elem).getAbsCenter();

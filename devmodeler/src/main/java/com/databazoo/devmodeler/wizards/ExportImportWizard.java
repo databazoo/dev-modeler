@@ -491,9 +491,7 @@ public class ExportImportWizard extends MigWizard {
 
 		@Override
 		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			Graphics2D graphics = (Graphics2D) g;
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 			Rectangle innerSpace = new Rectangle(4, 20, getWidth()-8, getHeight()-24);
 

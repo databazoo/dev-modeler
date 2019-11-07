@@ -1,16 +1,13 @@
 
 package com.databazoo.devmodeler.gui.view;
 
+import com.databazoo.components.FontFactory;
 import com.databazoo.components.RotatedTabbedPane;
 import com.databazoo.components.UIConstants;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-
-import com.databazoo.components.FontFactory;
-import com.databazoo.components.RotatedTabbedPane;
-import com.databazoo.components.UIConstants;
 
 /**
  * Base of all modules.
@@ -52,9 +49,8 @@ abstract class AbstractView extends JComponent {
 		return new JPanel(new FlowLayout(FlowLayout.RIGHT, padding.x, padding.y)) {
 			@Override
 			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
 				Graphics2D graphics = (Graphics2D) g;
-				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 				graphics.setPaint(UIConstants.Colors.getPanelBackground());
 				graphics.fillRect(0, 2, getWidth() - 3, getHeight() - 2);
@@ -68,6 +64,7 @@ abstract class AbstractView extends JComponent {
 					graphics.fillRect(getWidth() - 389, 0, 389 - 3, 3);
 				}
 
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				graphics.setFont(FILTER_FONT);
 				graphics.setPaint(UIConstants.Colors.getLabelForeground());
 				graphics.drawString(title, 10, 22);
@@ -75,7 +72,7 @@ abstract class AbstractView extends JComponent {
 		};
 	}
 
-	class IconCellRenderer extends DefaultTableCellRenderer {
+	static class IconCellRenderer extends DefaultTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			JLabel comp = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

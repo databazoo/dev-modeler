@@ -1,12 +1,6 @@
 
 package com.databazoo.devmodeler.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
@@ -23,6 +17,12 @@ import com.databazoo.devmodeler.model.reference.RelationReference;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.tools.Schedule;
 import com.databazoo.tools.Usage;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A small window displaying table information and table's surroundings.
@@ -151,6 +151,7 @@ public class Neighborhood extends JPanel {
 
 		@Override
 		protected void paintComponent(Graphics g) {
+			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			g.setColor(Canvas.instance.getBackground());
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
@@ -272,18 +273,18 @@ public class Neighborhood extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(HEADER_FONT, (Graphics2D) g);
 			Graphics2D graphics = (Graphics2D) g;
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			for(int i=0; i<attributes.size(); i++){
 				Attribute attr = attributes.get(i);
 
 				int top = i*Attribute.V_SIZE+14;
 
 				if(attr.getBackground() != null){
+					graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 					graphics.setColor(attr.getBackground());
-					//graphics.setColor(Color.ORANGE);
 					graphics.fillRect(1, top, attr.getWidth(), attr.getHeight());
 				}
 
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				graphics.setFont(attr.getFont());
 				graphics.setColor(UIConstants.Colors.getLabelForeground());
 				graphics.drawString(attr.getBehavior().getName(), 1, Attribute.V_SIZE-4 + top);
@@ -342,8 +343,6 @@ public class Neighborhood extends JPanel {
 			displayName = name;
 
 			Graphics2D graphics = (Graphics2D) g;
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
 			graphics.setFont(HEADER_FONT);
 			if(displayName2 != null){
 				graphics.drawString(displayName, (getWidth()-displayNameWidth-5)/2, HEADER_FONT.getSize());

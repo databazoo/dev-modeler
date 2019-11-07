@@ -77,7 +77,6 @@ public class Canvas extends ClickableComponent {
 	public static final int SNAPPINESS = 8;
 	public static final boolean SNAP_TO_GRID = true;
 	public static final int DEFAULT_ENTITY_WIDTH = 7 * GRID_SIZE + 6;
-	public static int ZOOMED_ENTITY_WIDTH = DEFAULT_ENTITY_WIDTH;
 	public static final int WHITESPACE = 10 * GRID_SIZE;
 
 	private static final BasicStroke BASIC_STROKE = new BasicStroke();
@@ -85,6 +84,10 @@ public class Canvas extends ClickableComponent {
 
 	private static double zoomFactor = 1.0;
 	private static Font titleFont = FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
+
+	public static int ZOOMED_ENTITY_WIDTH = DEFAULT_ENTITY_WIDTH;
+	public static int ZOOMED_ATTR_VSIZE_MINUS_4 = Geometry.getZoomed(Attribute.V_SIZE - 4);
+	public static int ZOOMED_10 = Geometry.getZoomed(10);
 
 	public static synchronized boolean getZoomNotTooSmall() {
 		return zoomFactor > 0.55;
@@ -100,7 +103,6 @@ public class Canvas extends ClickableComponent {
 
 	static synchronized void setZoom(double val) {
 		zoomFactor = val;
-		ZOOMED_ENTITY_WIDTH = Geometry.getZoomed(DEFAULT_ENTITY_WIDTH);
 		titleFont = FontFactory.getSans(Font.PLAIN, Geometry.getZoomed(Settings.getInt(Settings.L_FONT_CANVAS_SIZE)));
 		updateStrokes();
 	}
@@ -116,6 +118,10 @@ public class Canvas extends ClickableComponent {
 		lineStrokeFull1 = new BasicStroke(Geometry.getZoomed(1), BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 		lineStrokeFull2 = new BasicStroke(Geometry.getZoomed(2), BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 		lineStrokeFull4 = new BasicStroke(Geometry.getZoomed(4), BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+
+		ZOOMED_ENTITY_WIDTH = Geometry.getZoomed(DEFAULT_ENTITY_WIDTH);
+		ZOOMED_ATTR_VSIZE_MINUS_4 = Geometry.getZoomed(Attribute.V_SIZE - 4);
+		ZOOMED_10 = Geometry.getZoomed(10);
 	}
 
 	public static Stroke getBasicStroke(){
@@ -1055,6 +1061,7 @@ public class Canvas extends ClickableComponent {
 		Rectangle bounds = g.getClipBounds();
 		boolean attributeRedraw = bounds.width == Canvas.ZOOMED_ENTITY_WIDTH - 7 && bounds.height == Attribute.V_SIZE;
 		if(!attributeRedraw) {
+			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			g.setColor(getBackground());
 			g.fillRect(0, 0, getWidth(), getHeight());
 

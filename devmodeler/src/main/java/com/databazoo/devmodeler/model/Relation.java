@@ -1350,9 +1350,6 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 		void updateCache() {
 			imageCache = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D graphics = imageCache.createGraphics();
-			if(Settings.getBool(Settings.L_PERFORM_ANTIALIASING)) {
-				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			}
 			if(Canvas.getZoomNotTooSmall() && !attributes.isEmpty()) {
 				for(Index ind: indexes){
 					paintIndex(graphics, ind);
@@ -1376,6 +1373,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 		}
 
 		private void paintIndex(Graphics2D graphics, Index ind) {
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			final int offset = Geometry.getZoomed(8);
 			final int attrVSize = Geometry.getZoomed(Attribute.V_SIZE);
 
@@ -1403,9 +1401,11 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 						if (ind.getBehavior().isUnique()) {
 							graphics.setColor(Index.COLOR_UNIQUE);
 							graphics.setStroke(Index.STROKE_UNIQUE);
+							graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 						} else {
 							graphics.setColor(Index.COLOR_INDEX);
 							graphics.setStroke(Index.STROKE_INDEX);
+							graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 						}
 						graphics.drawLine(1, top, getWidth(), top);
 					}
@@ -1422,9 +1422,11 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 						if (ind.getBehavior().isUnique()) {
 							graphics.setColor(Index.COLOR_UNIQUE);
 							graphics.setStroke(Index.STROKE_UNIQUE);
+							graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 						} else {
 							graphics.setColor(Index.COLOR_INDEX);
 							graphics.setStroke(Index.STROKE_INDEX);
+							graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 						}
 						graphics.drawLine(1, offset + least * attrVSize, 1, offset + most * attrVSize);
 					}

@@ -1,12 +1,12 @@
 
 package com.databazoo.devmodeler.model;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
 import com.databazoo.components.elements.LineComponent;
 import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.gui.Canvas;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  *

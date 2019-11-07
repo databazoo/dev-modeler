@@ -12,7 +12,8 @@ import com.databazoo.devmodeler.gui.view.ViewMode;
 import com.databazoo.devmodeler.gui.window.AppInfoWindow;
 import com.databazoo.devmodeler.gui.window.ServerActivityWindow;
 import com.databazoo.devmodeler.gui.window.datawindow.DataWindow;
-import com.databazoo.devmodeler.model.*;
+import com.databazoo.devmodeler.model.Constraint;
+import com.databazoo.devmodeler.model.DB;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.devmodeler.tools.organizer.Organizer;
@@ -32,13 +33,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.stream.Collectors;
 
-import static com.databazoo.devmodeler.conn.SupportedElement.SERVER_ADMINISTRATION;
 import static com.databazoo.components.UIConstants.MENU_BUTTON_SIZE;
 import static com.databazoo.components.UIConstants.MENU_COMPONENT_HEIGHT;
 import static com.databazoo.components.UIConstants.MENU_HEIGHT;
-import static com.databazoo.devmodeler.gui.UsageElement.*;
+import static com.databazoo.devmodeler.conn.SupportedElement.SERVER_ADMINISTRATION;
+import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DATA;
+import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DESIGN;
+import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DIFF;
+import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_OPTIMIZE;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ABOUT;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_PROJECTS;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_SQL;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXIT;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_IMG;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_SQL;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_XML;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_HELP;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_IMPORT;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_PROJECTS;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_REARRANGE;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_SETTINGS;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_TGL_GRID;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_TGL_TREE;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ZOOM_IN;
+import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ZOOM_OUT;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_DBS;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_SERVER_ACTIVITY;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_USERS;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_BTN_SYNC;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CHK_SYNC;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CONN2_COMBO;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CONN_COMBO;
+import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_DB_COMBO;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_FUNCTIONS;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_PACKAGES;
 import static com.databazoo.devmodeler.gui.view.DifferenceView.L_SEQUENCES;
@@ -590,15 +617,13 @@ public class Menu extends JPanel {
 
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D graphics = (Graphics2D) g;
-            if (DesignGUI.getView() == ViewMode.DIFF && Project.getCurrent().getType() != Project.TYPE_ABSTRACT && DifferenceView.instance
-                    .isCompareSelected()) {
-                int w = SIDE_MENU_WIDTH;
+            if (DesignGUI.getView() == ViewMode.DIFF && Project.getCurrent().getType() != Project.TYPE_ABSTRACT && DifferenceView.instance.isCompareSelected()) {
+                Graphics2D graphics = (Graphics2D) g;
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
                 graphics.setPaint(UIConstants.Colors.getPanelBackground());
-                graphics.fillRect(getWidth() - w, 0, w - 3, getHeight());
+                graphics.fillRect(getWidth() - SIDE_MENU_WIDTH, 0, SIDE_MENU_WIDTH - 3, getHeight());
                 graphics.setPaint(UIConstants.Colors.getTableBorders());
-                graphics.drawRect(getWidth() - w, 0, w - 3, getHeight());
+                graphics.drawRect(getWidth() - SIDE_MENU_WIDTH, 0, SIDE_MENU_WIDTH - 3, getHeight());
             }
         }
 

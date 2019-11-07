@@ -5,6 +5,7 @@ import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.components.text.SelectableText;
+import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.DBCommException;
 import com.databazoo.devmodeler.conn.IConnection;
@@ -92,9 +93,11 @@ public class Package extends DraggableComponent implements IModelElement {
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		if(Settings.getBool(Settings.L_PERFORM_ANTIALIASING)) {
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
 
-		int width = getWidth()-SHADOW_GAP+1;
+		int width = getWidth() - SHADOW_GAP + 1;
 		int height = getHeight();
 		int gap = 1;
 
@@ -110,6 +113,7 @@ public class Package extends DraggableComponent implements IModelElement {
 		graphics.setStroke(Canvas.getBasicStroke());
 		graphics.drawRoundRect(0, 0, width - gap, height - gap, arcs.width, arcs.height);
 
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphics.setFont(HEAD_FONT);
 		graphics.drawString(behavior.name, 16, 16);
 	}

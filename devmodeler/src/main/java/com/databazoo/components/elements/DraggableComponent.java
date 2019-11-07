@@ -30,7 +30,7 @@ import java.awt.event.MouseMotionListener;
 public abstract class DraggableComponent extends EnvironmentComponent {
 	public final static int SHADOW_GAP = 6;
 	private final static int SHADOW_OFFSET = 2;
-	private final static int SHADOW_ALPHA = 36;
+	private final static int SHADOW_ALPHA = 60;
 	private final static Color SHADOW_COLOR = Color.BLACK;
 
 
@@ -207,7 +207,7 @@ public abstract class DraggableComponent extends EnvironmentComponent {
 		Rectangle bounds = graphics.getClipBounds();
 		boolean attributeRedraw = bounds.width == Canvas.ZOOMED_ENTITY_WIDTH - 7 && bounds.height == Attribute.V_SIZE;
 		if(!attributeRedraw || isSelected) {
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 			int width = getWidth();
 			int height = getHeight();
@@ -216,10 +216,7 @@ public abstract class DraggableComponent extends EnvironmentComponent {
 
 			// Draw shadow borders.
 			graphics.setColor(shadowColorA);
-			graphics.fillRoundRect(SHADOW_OFFSET - 1, SHADOW_OFFSET - 1, width - 1 - SHADOW_OFFSET, height - 1 - SHADOW_OFFSET, arcs.width,
-					arcs.height);
-			graphics.fillRoundRect(SHADOW_OFFSET, SHADOW_OFFSET, width - 1 - SHADOW_OFFSET - 2, height - 1 - SHADOW_OFFSET - 2, arcs.width + 4,
-					arcs.height + 4);
+			graphics.fillRoundRect(SHADOW_OFFSET, SHADOW_OFFSET, width - SHADOW_GAP + SHADOW_OFFSET, height - SHADOW_GAP + SHADOW_OFFSET, arcs.width + 6, arcs.height + 6);
 
 			// Draw the rounded opaque panel with borders.
 			graphics.setColor(getBackground());
@@ -232,6 +229,7 @@ public abstract class DraggableComponent extends EnvironmentComponent {
 				graphics.setColor(UIConstants.Colors.getSelectionBackground());
 				graphics.drawRoundRect(3, 3, width - gap - 6, height - gap - 6, arcs.width - 3, arcs.height - 3);
 			}
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			graphics.setColor(getForeground());
 			graphics.setStroke(Canvas.getBasicStroke());
 			graphics.drawRoundRect(0, 0, width - gap, height - gap, arcs.width, arcs.height);

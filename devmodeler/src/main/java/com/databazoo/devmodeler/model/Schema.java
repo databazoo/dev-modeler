@@ -3,6 +3,7 @@ package com.databazoo.devmodeler.model;
 import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
+import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.conn.SQLOutputConfig;
@@ -810,7 +811,9 @@ public class Schema extends DraggableComponent implements IModelElement {
 				clip.intersects(getWidth()-10D, 0, 10, getHeight())
 		)) {
 			Graphics2D graphics = (Graphics2D) g;
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			if(Settings.getBool(Settings.L_PERFORM_ANTIALIASING)) {
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			}
 
 			int widthNoGap = getWidth() - 1;
 			int heightNoGap = getHeight() - 1;
@@ -827,6 +830,7 @@ public class Schema extends DraggableComponent implements IModelElement {
 			graphics.setColor(Color.GRAY);
 			graphics.drawRoundRect(0, 0, widthNoGap, heightNoGap, arcs.width, arcs.height);
 
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			graphics.drawString(behavior.name, 16, 16);
 		}
 	}

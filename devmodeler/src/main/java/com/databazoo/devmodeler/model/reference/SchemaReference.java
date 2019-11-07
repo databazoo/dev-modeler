@@ -2,6 +2,7 @@
 package com.databazoo.devmodeler.model.reference;
 
 import com.databazoo.components.FontFactory;
+import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.model.Schema;
 import com.databazoo.devmodeler.model.Workspace;
@@ -117,7 +118,9 @@ public class SchemaReference extends DraggableComponentReference {
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		if(Settings.getBool(Settings.L_PERFORM_ANTIALIASING)) {
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
 
 		int width = getWidth();
 		int height = getHeight();
@@ -127,6 +130,7 @@ public class SchemaReference extends DraggableComponentReference {
 		graphics.setStroke(Canvas.getBasicStroke());
 		graphics.drawRoundRect(0, 0, width - gap, height - gap, arcs.width, arcs.height);
 
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphics.setFont(FontFactory.getSans(Font.BOLD+Font.ITALIC, 13));
 		graphics.drawString(schema.getBehavior().getName(), 16, 16);
 	}

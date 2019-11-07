@@ -30,7 +30,7 @@ public abstract class LineComponent extends EnvironmentComponent {
 	protected boolean isFlipped = false;
 	protected boolean isDashed = true;
 	protected boolean isSelected = false;
-	protected int lineWidth = 2;
+	protected int lineWidth = 1;
 
 	public transient BufferedImage arrow1;
 	public transient BufferedImage arrow2;
@@ -175,9 +175,7 @@ public abstract class LineComponent extends EnvironmentComponent {
 
 			if (isSelected) {
 				graphics.setPaint(UIConstants.Colors.getSelectionBackground());
-				graphics.setStroke(Canvas.getLineStrokeFull(4));
-				drawLine(graphics);
-				graphics.setStroke(Canvas.getLineStrokeFull(2));
+				graphics.setStroke(Canvas.getLineStrokeFull(5));
 				drawLine(graphics);
 			}
 
