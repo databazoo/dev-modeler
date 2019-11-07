@@ -1,15 +1,14 @@
 
 package com.databazoo.devmodeler.model.reference;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-import javax.swing.*;
-
 import com.databazoo.devmodeler.model.IModelElement;
 import com.databazoo.devmodeler.model.Inheritance;
 import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.devmodeler.model.Workspace;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Reference to a trigger (implemented as a line component)

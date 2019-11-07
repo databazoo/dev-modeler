@@ -219,9 +219,8 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
 		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 		if (isDragged) {
 			graphics.setColor(DRAG_COLOR);
@@ -235,23 +234,24 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 			}
 		}
 
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphics.setFont(Canvas.getTitleFont());
 		graphics.setColor(getForeground());
-		graphics.drawString(behavior.name, 0, Geometry.getZoomed(Attribute.V_SIZE - 4));
+		graphics.drawString(behavior.name, 1, Canvas.ZOOMED_ATTR_VSIZE_MINUS_4);
 		if (typeColor != null) {
 			graphics.setColor(typeColor);
 		}
-		graphics.drawString(getFullType(), typeOffset, Geometry.getZoomed(Attribute.V_SIZE - 4));
+		graphics.drawString(getFullType(), typeOffset, Canvas.ZOOMED_ATTR_VSIZE_MINUS_4);
 
 		int nullMargin = 0;
 		if (behavior.attNull) {
 			graphics.setColor(NULL_COLOR);
-			graphics.drawString("ø", typeOffset - Geometry.getZoomed(10), Geometry.getZoomed(Attribute.V_SIZE - 4));
-			nullMargin = Geometry.getZoomed(10);
+			graphics.drawString("ø", typeOffset - Canvas.ZOOMED_10, Canvas.ZOOMED_ATTR_VSIZE_MINUS_4);
+			nullMargin = Canvas.ZOOMED_10;
 		}
 		if (behavior.defaultValue != null && !behavior.defaultValue.isEmpty()) {
 			graphics.setColor(DEF_COLOR);
-			graphics.drawString("d", typeOffset - Geometry.getZoomed(10) - nullMargin, Geometry.getZoomed(Attribute.V_SIZE - 4));
+			graphics.drawString("d", typeOffset - Canvas.ZOOMED_10 - nullMargin, Canvas.ZOOMED_ATTR_VSIZE_MINUS_4);
 		}
 	}
 
@@ -421,7 +421,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 	@Override
 	public void checkSize() {
 		setSize(new Dimension(Canvas.ZOOMED_ENTITY_WIDTH - 7, Geometry.getZoomedFloored(Attribute.V_SIZE)));
-		typeOffset = getSize().width - UIConstants.GRAPHICS.getFontMetrics(Canvas.getTitleFont()).stringWidth(getFullType()) - 1;
+		typeOffset = getSize().width - UIConstants.GRAPHICS.getFontMetrics(Canvas.getTitleFont()).stringWidth(getFullType()) - 2;
 		if (!getDescr().isEmpty()) {
 			setToolTipText(getDescr());
 		}
@@ -433,7 +433,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 
 	public void checkSizeNoZoom() {
 		setSize(new Dimension(Canvas.DEFAULT_ENTITY_WIDTH - 7, Attribute.V_SIZE));
-		typeOffset = getSize().width - UIConstants.GRAPHICS.getFontMetrics(FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE))).stringWidth(getFullType()) - 1;
+		typeOffset = getSize().width - UIConstants.GRAPHICS.getFontMetrics(FontFactory.getSans(Font.PLAIN, Settings.getInt(Settings.L_FONT_CANVAS_SIZE))).stringWidth(getFullType()) - 2;
 	}
 
 	@Override

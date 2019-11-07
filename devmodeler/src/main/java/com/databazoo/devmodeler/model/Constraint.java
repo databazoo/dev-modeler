@@ -699,7 +699,6 @@ public class Constraint extends LineComponent implements IModelElement {
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		if (isSelfRelation) {
 			paintSelfRelation(graphics);
@@ -718,6 +717,7 @@ public class Constraint extends LineComponent implements IModelElement {
 	 * @param graphics graphics reference
 	 */
 	private void paintSelfRelation(Graphics2D graphics) {
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		if(isSelected){
 			graphics.setPaint(UIConstants.Colors.getSelectionBackground());
 
@@ -748,6 +748,7 @@ public class Constraint extends LineComponent implements IModelElement {
 	 * @param graphics graphics reference
 	 */
 	private void paintZ(Graphics2D graphics) {
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		if(isSelected){
 			graphics.setPaint(UIConstants.Colors.getSelectionBackground());
 			graphics.setStroke(Canvas.getLineStrokeFull(4));

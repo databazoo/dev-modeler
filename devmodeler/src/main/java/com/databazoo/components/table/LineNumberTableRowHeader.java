@@ -1,16 +1,16 @@
 
 package com.databazoo.components.table;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.Result;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Implementation of line numbers for a table.
@@ -69,9 +69,7 @@ public class LineNumberTableRowHeader extends JComponent {
 			setPreferredSize(size);
 		}
 
-		super.paintComponent(g);
-		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		g.setFont(headerFont);
 

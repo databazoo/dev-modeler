@@ -62,11 +62,11 @@ public class Index extends EnvironmentComponent implements IModelElement {
 
 	static final Color COLOR_UNIQUE			= Color.decode("#FFAA00");
 	static final Color COLOR_INDEX			= Color.decode("#FF4A00");
-	static final BasicStroke STROKE_SELECT	= new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER);
-	static final BasicStroke STROKE_UNIQUE	= new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+	static final BasicStroke STROKE_SELECT	= new BasicStroke(5.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER);
+	static final BasicStroke STROKE_UNIQUE	= new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER);
 	static final BasicStroke STROKE_INDEX	= new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 4.0f, new float[]{0.1f,4.0f}, 0.0f);
 
-	static final int DISTANCE_FROM_TABLE = 10;
+	static final int DISTANCE_FROM_TABLE = 12;
 
 	public static void checkFontSize(){
 		NAME_FONT_SIZE = Geometry.getZoomed(Settings.getInt(Settings.L_FONT_CANVAS_SIZE));
@@ -107,7 +107,7 @@ public class Index extends EnvironmentComponent implements IModelElement {
 			behavior.schemaName = "";
 		}
 
-		setSize(DISTANCE_FROM_TABLE + UIConstants.GRAPHICS.getFontMetrics(NAME_FONT).stringWidth(behavior.name)+2, Attribute.V_SIZE);
+		setSize(DISTANCE_FROM_TABLE + UIConstants.GRAPHICS.getFontMetrics(NAME_FONT).stringWidth(behavior.name), Attribute.V_SIZE);
 		addMouseMotionListener(new DraggableComponentMouseListener());
 	}
 
@@ -374,7 +374,7 @@ public class Index extends EnvironmentComponent implements IModelElement {
 					}
 				}
 				int top = (int) (Geometry.getZoomed(Attribute.V_SIZE)*(least+most)*0.5d)+3;
-				setSize(UIConstants.GRAPHICS.getFontMetrics(NAME_FONT).stringWidth(behavior.name)+DISTANCE_FROM_TABLE/2, Geometry.getZoomed(16));
+				setSize(UIConstants.GRAPHICS.getFontMetrics(NAME_FONT).stringWidth(behavior.name) + DISTANCE_FROM_TABLE, Geometry.getZoomed(16));
 				setLocation(parent.getLocation().x - getWidth() - DISTANCE_FROM_TABLE, parent.getLocation().y + top);
 			} catch (ConcurrentModificationException e){
 				Dbg.notImportant("This could be handled by defensive copies. Ignoring for now.", e);

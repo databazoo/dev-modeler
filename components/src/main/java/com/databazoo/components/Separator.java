@@ -1,9 +1,8 @@
 
 package com.databazoo.components;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * A separator panel for popup menu and data window.
@@ -32,8 +31,8 @@ public class Separator extends JPanel {
 	 */
 	@Override
 	public void paintComponent(Graphics g){
-		super.paintComponent(g);
 		if(isLine){
+			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			g.setColor(Color.GRAY);
 			g.drawLine(SIDE_SPACE, getHeight()/2, getWidth()-SIDE_SPACE, getHeight()/2);
 		}

@@ -1,14 +1,6 @@
 
 package com.databazoo.devmodeler.model.explain;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import com.databazoo.components.FontFactory;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
@@ -16,6 +8,14 @@ import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.gui.window.ExplainContextWindow;
 import com.databazoo.tools.Schedule;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -195,12 +195,6 @@ public class ExplainOperation extends DraggableComponent {
 	}
 	@Override public void doubleClicked(){}
 	@Override public void rightClicked(){}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	}
 
 	private void drawMoreInfo(){
 		ExplainContextWindow context = ExplainContextWindow.get();

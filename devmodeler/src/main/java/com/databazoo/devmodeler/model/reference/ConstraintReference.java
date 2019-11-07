@@ -130,7 +130,7 @@ public class ConstraintReference extends LineComponentReference {
 	protected void paintComponent(Graphics g) {
 		if(con != null && con.isSelfRelation()){
 			Graphics2D graphics = (Graphics2D) g;
-			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 			graphics.setStroke(isDashed ? Canvas.getLineStrokeDashed() : Canvas.getLineStrokeFull(lineWidth));
 			graphics.setPaint(lineColor);

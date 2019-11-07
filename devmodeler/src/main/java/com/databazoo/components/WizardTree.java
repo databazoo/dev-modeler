@@ -1,5 +1,9 @@
 package com.databazoo.components;
 
+import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.project.Project;
+import com.databazoo.devmodeler.project.ProjectManager;
+
 import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -11,10 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.regex.Pattern;
-
-import com.databazoo.devmodeler.config.Settings;
-import com.databazoo.devmodeler.project.Project;
-import com.databazoo.devmodeler.project.ProjectManager;
 
 /**
  * A JTree with modified behavior specially for wizards.
@@ -170,21 +170,18 @@ public class WizardTree extends JTree {
 		g.setColor(getBackground());
 		g.fillRect(0, 0, getWidth(), getHeight());
 		if(drawProjectName && Project.getCurrent() != null && Settings.getBool(Settings.L_LAYOUT_TREE_PROJECT_N)){
-			Graphics2D g2 = (Graphics2D)g;
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setFont(HOLO_FONT);
-			g2.setColor(HOLO_COLOR);
+			Graphics2D graphics = (Graphics2D)g;
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics.setFont(HOLO_FONT);
+			graphics.setColor(HOLO_COLOR);
 
 			Rectangle visRect = getVisibleRect();
-			AffineTransform oldTransform = g2.getTransform();
-			g2.translate(visRect.width-25+visRect.x, HOLO_FM.stringWidth(Project.getCurrent().getProjectName())+15+visRect.y);
-			g2.rotate(-Math.PI/2);
-			g2.drawString(Project.getCurrent().getProjectName(), 0, 0);
-			g2.setTransform(oldTransform);
+			AffineTransform oldTransform = graphics.getTransform();
+			graphics.translate(visRect.width - 25 + visRect.x, HOLO_FM.stringWidth(Project.getCurrent().getProjectName()) + 15 + visRect.y);
+			graphics.rotate(-Math.PI/2);
+			graphics.drawString(Project.getCurrent().getProjectName(), 0, 0);
+			graphics.setTransform(oldTransform);
 		}
-		//if(g != null) {
-			super.paintComponent(g);
-		//}
 	}
 
 	/**

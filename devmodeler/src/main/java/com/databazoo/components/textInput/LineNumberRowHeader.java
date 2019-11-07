@@ -50,8 +50,7 @@ public class LineNumberRowHeader extends JComponent {
 		}
 
 		// Configure graphics
-		Graphics2D graphics = (Graphics2D) g;
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.BLACK);
 		g.setFont(headerFont);
 
