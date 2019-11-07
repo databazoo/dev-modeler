@@ -182,6 +182,7 @@ public class WizardTree extends JTree {
 			graphics.drawString(Project.getCurrent().getProjectName(), 0, 0);
 			graphics.setTransform(oldTransform);
 		}
+		super.paintComponent(g);
 	}
 
 	/**
