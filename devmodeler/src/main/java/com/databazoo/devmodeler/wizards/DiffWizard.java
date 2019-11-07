@@ -909,7 +909,7 @@ public class DiffWizard extends SQLEnabledWizard {
 			} else {
 				revision.applyIn(defaultConn);
 			}
-			loadRevisionPage1();
+			Schedule.inEDT(this::loadRevisionPage1);
 			project.save();
 			DifferenceView.instance.updateRevisionTable();
 		} catch (DBCommException ex) {
@@ -969,7 +969,7 @@ public class DiffWizard extends SQLEnabledWizard {
 			} else {
 				revision.applyIn(defaultConn);
 			}
-			loadRevisionPage1();
+			Schedule.inEDT(this::loadRevisionPage1);
 			project.save();
 			DifferenceView.instance.updateRevisionTable();
 		} catch (DBCommException ex) {
