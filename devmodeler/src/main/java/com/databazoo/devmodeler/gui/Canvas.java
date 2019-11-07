@@ -212,6 +212,16 @@ public class Canvas extends ClickableComponent {
 		HotMenu.instance.checkSize();
 	}
 
+	private void checkComponentZOrder() {
+		if (infoPanel != null) {
+			setComponentZOrder(infoPanel, 0);
+		}
+		if (overview != null) {
+			setComponentZOrder(overview, 0);
+		}
+		setComponentZOrder(HotMenu.instance, 0);
+	}
+
 	public void scrollToCenter() {
 		Dimension viewportSize = scrollPane.getSize();
 		scrollTo(new Point(MathUtils.min0((getWidth() - viewportSize.width) / 2), MathUtils.min0((getHeight() - viewportSize.height) / 2)));
@@ -1039,6 +1049,7 @@ public class Canvas extends ClickableComponent {
                 setSize(size);
                 checkInfoPanelAndOverviewLocation();
             }
+            checkComponentZOrder();
         });
 	}
 
