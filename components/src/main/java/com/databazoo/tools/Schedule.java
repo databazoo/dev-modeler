@@ -224,6 +224,8 @@ public interface Schedule {
     static void waitInEDT(final Runnable runnable) throws InvocationTargetException, InterruptedException {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeAndWait(runnable);
+        } else {
+            runnable.run();
         }
     }
 }

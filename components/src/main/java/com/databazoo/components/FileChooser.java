@@ -1,12 +1,17 @@
 
 package com.databazoo.components;
 
+import com.databazoo.tools.Dbg;
+import com.databazoo.tools.Schedule;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
@@ -29,17 +34,23 @@ public interface FileChooser {
 	}
 
 	static File show(String title, String buttonText, File initialFile, int selectionMode, boolean allowAllFilesFilter, FileFilter[] fileFilters){
-		// Get chooser
-		JFileChooser chooser = getFileChooser(title, buttonText);
-		setPath(chooser, initialFile);
-		setFilters(chooser, selectionMode, allowAllFilesFilter, fileFilters);
+		final AtomicReference<File> result = new AtomicReference<>();
+		try {
+			Schedule.waitInEDT(()-> {
+				// Get chooser
+				JFileChooser chooser = getFileChooser(title, buttonText);
+				setPath(chooser, initialFile);
+				setFilters(chooser, selectionMode, allowAllFilesFilter, fileFilters);
 
-		// Show the dialog
-		if(chooser.showOpenDialog(GCFrame.getActiveWindow()) == JFileChooser.APPROVE_OPTION){
-			return chooser.getSelectedFile();
-		}else{
-			return null;
+				// Show the dialog
+				if (chooser.showOpenDialog(GCFrame.getActiveWindow()) == JFileChooser.APPROVE_OPTION) {
+					result.set(chooser.getSelectedFile());
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			Dbg.notImportant("File chooser interrupted", e);
 		}
+		return result.get();
 	}
 
 	static File showWithOverwrite(String title, String buttonText, File initialFile, FileFilter fileFilter){
@@ -67,23 +78,32 @@ public interface FileChooser {
 			FileFilter[] fileFilters,
 			boolean useCache
 	){
-		while(true){
-			// Get chooser
-			JFileChooser chooser = getFileChooser(title, buttonText);
-			setPath(chooser, getCachedPath(initialFile, useCache));
-			setFilters(chooser, selectionMode, allowAllFilesFilter, fileFilters);
+		final AtomicReference<File> result = new AtomicReference<>();
+		try {
+			Schedule.waitInEDT(()-> {
+				while (true) {
+					// Get chooser
+					JFileChooser chooser = getFileChooser(title, buttonText);
+					setPath(chooser, getCachedPath(initialFile, useCache));
+					setFilters(chooser, selectionMode, allowAllFilesFilter, fileFilters);
 
-			// Show the dialog
-			if(chooser.showOpenDialog(GCFrame.getActiveWindow()) == JFileChooser.APPROVE_OPTION){
-				File selectedFile = chooser.getSelectedFile();
-				if(!selectedFile.exists() || confirmOverwrite()) {
-					setCachedPath(initialFile, selectedFile, useCache);
-					return selectedFile;
+					// Show the dialog
+					if (chooser.showOpenDialog(GCFrame.getActiveWindow()) == JFileChooser.APPROVE_OPTION) {
+						File selectedFile = chooser.getSelectedFile();
+						if (!selectedFile.exists() || confirmOverwrite()) {
+							setCachedPath(initialFile, selectedFile, useCache);
+							result.set(selectedFile);
+							break;
+						}
+					} else {
+						break;
+					}
 				}
-			}else{
-				return null;
-			}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			Dbg.notImportant("File chooser interrupted", e);
 		}
+		return result.get();
 	}
 
 	/*private*/ static void setFilters(JFileChooser chooser, int selectionMode, boolean allowAllFilesFilter, FileFilter[] fileFilters) {
