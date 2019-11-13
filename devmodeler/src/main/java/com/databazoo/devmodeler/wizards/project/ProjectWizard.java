@@ -1,33 +1,6 @@
 
 package com.databazoo.devmodeler.wizards.project;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.TreeSelectionEvent;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.WizardTree;
@@ -53,6 +26,34 @@ import com.databazoo.tools.Dbg;
 import com.databazoo.tools.FileFilterFactory;
 import com.databazoo.tools.Schedule;
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.event.TreeSelectionEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.databazoo.components.table.EditableTable.L_DOUBLECLICK_TO_EDIT;
 
@@ -478,6 +479,11 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 		JLabel projectName = new JLabel("<html><h1>"+name+"</h1></html>", JLabel.CENTER);
 		projectName.setToolTipText("Click to rename project");
 		projectName.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+		LineBorder lineBorder = new LineBorder(UIConstants.Colors.getSelectionBackground());
+		EmptyBorder emptyBorder = new EmptyBorder(1, 1, 1, 1);
+		projectName.setBorder(emptyBorder);
+
 		projectName.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked (MouseEvent e) {
@@ -494,6 +500,18 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 						DesignGUI.get().setTitle(Project.getCurrent().getProjectName());
 					}
 				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				projectName.setIcon(Theme.getSmallIcon(Theme.ICO_EDIT));
+				projectName.setBorder(lineBorder);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				projectName.setIcon(null);
+				projectName.setBorder(emptyBorder);
 			}
 		});
 
