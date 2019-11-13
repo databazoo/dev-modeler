@@ -17,7 +17,6 @@ import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.OperationCancelException;
 import com.databazoo.devmodeler.gui.RightClickMenu;
 import com.databazoo.devmodeler.model.Attribute;
-import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.devmodeler.project.RecentQuery;
 import com.databazoo.devmodeler.project.RevisionFactory;
 import com.databazoo.devmodeler.wizards.DataExportWizard;
@@ -191,10 +190,11 @@ abstract class DataWindowOutputData extends DataWindowBase {
 		outputData.getActionMap().put("removeSelectedRows", new AbstractAction("del") { @Override public void actionPerformed(ActionEvent e) {
 			deleteRows(outputData.getSelectedRows());
 		} });
+		outputData.getTableHeader().addMouseListener(new CellContextMenu(true, false));
 		outputData.getTableHeader().addMouseListener(new TableColumnWidthListener());
 		outputData.setCellSelectionEnabled(true);
 
-		outputScrollData = new LineNumberScrollPane(outputData);
+		outputScrollData = new LineNumberScrollPane(outputData, new CellContextMenu(false, true));
 		outputScrollData.setPreferredSize(new Dimension(frame.getSize().width, frame.getSize().height - 60));
 		outputScrollData.getVerticalScrollBar().setBlockIncrement(40);
 
@@ -452,8 +452,13 @@ abstract class DataWindowOutputData extends DataWindowBase {
 
 	private class CellContextMenu extends MouseAdapter {
 
-		private final String[] scriptOptionString1 = new String[]{L_SELECTED_CELLS, L_ALL_CELLS, L_SELECTED_ROWS_ALL_COLUMNS, L_SELECTED_COLUMNS_ALL_ROWS};
-		private final String[] scriptOptionString2 = new String[]{L_SELECTED_CELLS+" ", L_ALL_CELLS+" ", L_SELECTED_ROWS_ALL_COLUMNS+" ", L_SELECTED_COLUMNS_ALL_ROWS+" "};
+		private final String[] insertOptions = new String[]{L_SELECTED_CELLS, L_ALL_CELLS, L_SELECTED_ROWS_ALL_COLUMNS, L_SELECTED_COLUMNS_ALL_ROWS};
+		private final String[] updateOptions = new String[]{L_SELECTED_CELLS+" ", L_ALL_CELLS+" ", L_SELECTED_ROWS_ALL_COLUMNS+" ", L_SELECTED_COLUMNS_ALL_ROWS+" "};
+		private final String[] insertRowOptions = new String[]{L_ALL_CELLS, L_SELECTED_ROWS_ALL_COLUMNS};
+		private final String[] updateRowOptions = new String[]{L_ALL_CELLS+" ", L_SELECTED_ROWS_ALL_COLUMNS+" "};
+
+		private final boolean isWholeColumn;
+		private final boolean isWholeRow;
 
 		private RightClickMenu menu;
 		private Result model;
@@ -478,12 +483,27 @@ abstract class DataWindowOutputData extends DataWindowBase {
 		private String conditionLike;
 		private String conditionNotLike;
 
-        @Override
+		CellContextMenu() {
+			this(false, false);
+		}
+		CellContextMenu(boolean isWholeColumn, boolean isWholeRow) {
+			this.isWholeColumn = isWholeColumn;
+			this.isWholeRow = isWholeRow;
+		}
+
+		@Override
         public void mouseClicked(MouseEvent e) {
+			Point p = e.getPoint();
+			if (isWholeRow) {
+				p.x = 0;
+			}
+			if (isWholeColumn) {
+				p.y = 0;
+			}
             if (e.getButton() == MouseEvent.BUTTON3) {
                 updateSelectedCellInfo(e);
                 createSQLs();
-                createMenu(e);
+                createMenu(p);
                 createMenuItems();
 
             } else if (e.getButton() == MouseEvent.BUTTON1) {
@@ -567,8 +587,8 @@ abstract class DataWindowOutputData extends DataWindowBase {
 
 		}
 
-		private void createMenu(MouseEvent e) {
-			RightClickMenu.setLocationTo(outputData, e.getPoint());
+		private void createMenu(Point p) {
+			RightClickMenu.setLocationTo(outputData, p);
 			menu = RightClickMenu.get((type, selectedValue) -> {
 				switch(type){
 				case 11: deleteRows(new int[]{row}); break;
@@ -612,13 +632,13 @@ abstract class DataWindowOutputData extends DataWindowBase {
 
 			// REFERENCES
 			String referencedTableName = null;
-			if(constraintColumnUsage != null){
+			if(!isWholeRow && constraintColumnUsage != null){
 				Attribute attr = constraintColumnUsage.get(columnName);
 				if(attr != null){
-					if(cellValue != null) {
-						menu.addItem("Show referenced ...", Relation.ico16, 41, new String[]{outputData.getSelectedRowCount() > 1 ? "Rows" : "Row", "Table"});
+					if(cellValue != null && !isWholeColumn) {
+						menu.addItem("Show referenced ...", RightClickMenu.ICO_TABLE, 41, new String[]{outputData.getSelectedRowCount() > 1 ? "Rows" : "Row", "Table"});
 					} else {
-						menu.addItem("Show referenced table", Relation.ico16, 40);
+						menu.addItem("Show referenced table", RightClickMenu.ICO_TABLE, 40);
 					}
 					referencedTableName = attr.getRel().getName();
 					menu.separator();
@@ -626,38 +646,46 @@ abstract class DataWindowOutputData extends DataWindowBase {
 			}
 
 			// SELECT, JOIN
-			menu.addItem(SELECT + conditionSelect, RightClickMenu.ICO_SQL, 60);
-			if (referencedTableName != null) {
-				menu.addItem("JOIN " + referencedTableName, RightClickMenu.ICO_SQL, 61);
+			if (!isWholeRow) {
+				menu.addItem(SELECT + conditionSelect, RightClickMenu.ICO_COLUMN, 60);
+				if (referencedTableName != null) {
+					menu.addItem("JOIN " + referencedTableName, RightClickMenu.ICO_TABLE, 61);
+				}
+				menu.separator();
 			}
-			menu.separator();
 
 			// WHERE and ORDER BY
-			if (conditionIn != null) {
-				menu.addItem(WHERE + " ... IN", RightClickMenu.ICO_SQL, 20, new String[] { conditionIn, conditionNotIn });
-			} else if (conditionEq != null) {
-				menu.addItem(WHERE + " ... =", RightClickMenu.ICO_SQL, 20, new String[] { conditionEq, conditionNeq });
+			if (!isWholeColumn && !isWholeRow) {
+				if (conditionIn != null) {
+					menu.addItem(WHERE + " ... IN", RightClickMenu.ICO_FILTER, 20, new String[] { conditionIn, conditionNotIn });
+				} else if (conditionEq != null) {
+					menu.addItem(WHERE + " ... =", RightClickMenu.ICO_FILTER, 20, new String[] { conditionEq, conditionNeq });
+				}
 			}
 
-			if(conditionLike != null) {
-				menu.addItem(WHERE + " ... LIKE", RightClickMenu.ICO_SQL, 20, new String[] { conditionLike, conditionNotLike });
+			if(!isWholeColumn && !isWholeRow && conditionLike != null) {
+				menu.addItem(WHERE + " ... LIKE", RightClickMenu.ICO_FILTER, 20, new String[] { conditionLike, conditionNotLike });
 			}
 
-			menu.addItem(WHERE + " ... NULL", RightClickMenu.ICO_SQL, 20, new String[]{ conditionNull, conditionNotNull });
-			menu.separator().addItem(ORDER_BY + " ...", RightClickMenu.ICO_ORDER, 30, new String[]{ escapedColumnName + " ASC", escapedColumnName + " DESC" });
+			if (!isWholeRow) {
+				menu.addItem(WHERE + " ... NULL", RightClickMenu.ICO_FILTER, 20, new String[]{conditionNull, conditionNotNull});
+				menu.separator().addItem(ORDER_BY + " ...", RightClickMenu.ICO_ORDER, 30, new String[]{escapedColumnName + " ASC", escapedColumnName + " DESC"});
+			}
 
 			// INSERT and UPDATE scripts
-			menu.separator().
-					addItem("Generate INSERT", RightClickMenu.ICO_SQL, 50, scriptOptionString1).
-					addItem("Generate UPDATE", RightClickMenu.ICO_SQL, 51, scriptOptionString2);
+			if (!isWholeColumn) {
+				menu.separator().
+						addItem("Generate INSERT", RightClickMenu.ICO_SQL, 50, isWholeRow ? insertRowOptions : insertOptions).
+						addItem("Generate UPDATE", RightClickMenu.ICO_SQL, 51, isWholeRow ? updateRowOptions : updateOptions);
+			}
 
 			// DELETE
-			if(!getPKeyValues((Result) outputData.getModel(), 0).isEmpty()){
+			if (!isWholeColumn && !getPKeyValues((Result) outputData.getModel(), 0).isEmpty()) {
 				menu.separator();
 				final int rowCount = outputData.getSelectedRows().length;
-				if(rowCount > 1){
+				if (rowCount > 1) {
 					menu.addItem("Delete " + rowCount + " rows", RightClickMenu.ICO_DELETE, 12);
-				}else{
+				} else {
 					menu.addItem("Delete row", RightClickMenu.ICO_DELETE, 11);
 				}
 			}

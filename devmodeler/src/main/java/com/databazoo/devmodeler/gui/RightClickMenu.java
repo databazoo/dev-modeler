@@ -27,8 +27,10 @@ public class RightClickMenu extends JPopupMenu implements java.awt.event.ActionL
 	public static final Icon ICO_FILTER = Theme.getSmallIcon(Theme.ICO_FILTER);
 	public static final Icon ICO_ORDER = Theme.getSmallIcon(Theme.ICO_SORT);
 	public static final Icon ICO_SQL = Theme.getSmallIcon(Theme.ICO_SQL_WINDOW);
+    public static final Icon ICO_TABLE = Theme.getSmallIcon(Theme.ICO_TABLE);
+    public static final Icon ICO_COLUMN = Theme.getSmallIcon(Theme.ICO_COLUMN);
 
-	private static Point location;
+    private static Point location;
 	private static Component locationTo;
 	public static RightClickMenu get(ActionListener listener){
 		return new RightClickMenu(location, listener);
