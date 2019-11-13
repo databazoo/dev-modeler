@@ -23,7 +23,6 @@ public class Splash extends JWindow {
     private static final String[] PARTS = new String[] { "Initialize", "Prepare LAF", "Prepare main window", "Load project list", "Check drivers",
             "Check JRE version", "Reopen last project", "All done" };
     private static final Dimension SIZE = new Dimension(400, 300);
-    private static final Color COLOR_RED_SPLASH = Color.decode("#9F2927");
 
     public static synchronized Splash get() {
         if (instance == null) {
@@ -38,14 +37,22 @@ public class Splash extends JWindow {
     }
 
     private Splash() {
-        try {
-            img = ImageIO.read(DevModeler.class.getResource("/gfx/splash.png"));
-        } catch (IOException e) {
-            Dbg.notImportant("Nothing we can do.", e);
-        }
-        getContentPane().add(new ImageComponent());
+        //getContentPane().add(new ImageComponent("/gfx/splash.png", Color.decode("#9F2927"), new Point(250, 240)));
+        //getContentPane().setBackground(Color.WHITE);
+        getContentPane().add(new ImageComponent("/gfx/splash3.png", Color.decode("#f289b2"), new Point(10, 290)));
+        getContentPane().setBackground(Color.decode("#2f2754"));
+        //getContentPane().add(new ImageComponent("/gfx/splash4.png", Color.decode("#d6a76e"), new Point(70, 290)));
+        //getContentPane().setBackground(Color.WHITE);
+        //getContentPane().add(new ImageComponent("/gfx/splash5.png", Color.decode("#f31e3c"), new Point(420, 290)));
+        //getContentPane().setBackground(Color.decode("#2a1800"));
+        //getContentPane().add(new ImageComponent("/gfx/splash6.png", Color.decode("#aeabfc"), null));
+        //getContentPane().setBackground(Color.decode("#5e4654"));
+        //getContentPane().add(new ImageComponent("/gfx/splash7.png", Color.decode("#c70e1a"), new Point(30, 200)));
+        //getContentPane().setBackground(Color.decode("#d7e5f2"));
+        //getContentPane().add(new ImageComponent("/gfx/splash8.png", Color.decode("#fa9d07"), new Point(10, 290)));
+        //getContentPane().setBackground(Color.BLACK);
+
         setSize(SIZE.width, SIZE.height + 3);
-        getContentPane().setBackground(Color.WHITE);
         setLocationRelativeTo(null);
         setAlwaysOnTop(true);
         setVisible(GCFrame.SHOW_GUI);
@@ -74,19 +81,32 @@ public class Splash extends JWindow {
     }
 
     private static class ImageComponent extends Component {
-        private ImageComponent() {
-            setPreferredSize(new Dimension(SIZE.width, SIZE.height));
+        private final Point textLocation;
+
+        private ImageComponent(String imageURI, Color progressColor, Point textLocation) {
+            this.textLocation = textLocation;
+            setForeground(progressColor);
+            try {
+                img = ImageIO.read(DevModeler.class.getResource(imageURI));
+                SIZE.setSize(img.getWidth(), img.getHeight());
+                setPreferredSize(SIZE);
+            } catch (IOException e) {
+                Dbg.notImportant("Nothing we can do.", e);
+            }
         }
 
         @Override
         public void paint(Graphics g) {
-            g.drawImage(img, 0, 0, null);
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setPaint(COLOR_RED_SPLASH);
-            g2.setStroke(new BasicStroke(3));
-            g2.drawLine(0, SIZE.height + 1, SIZE.width * loadedParts / (PARTS.length - 1), SIZE.height + 1);
-            //g2.drawString(parts[loadedParts], 4, imgSize.height-6);
-            g2.drawString(PARTS[loadedParts], 250, 240);
+            Graphics2D graphics = (Graphics2D) g;
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+            graphics.drawImage(img, 0, 0, null);
+            graphics.setPaint(getForeground());
+            graphics.setStroke(new BasicStroke(3));
+            graphics.drawLine(0, SIZE.height + 1, SIZE.width * loadedParts / (PARTS.length - 1), SIZE.height + 1);
+            if (textLocation != null) {
+                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                graphics.drawString(PARTS[loadedParts], textLocation.x, textLocation.y);
+            }
         }
     }
 }
