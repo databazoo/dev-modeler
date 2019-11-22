@@ -95,6 +95,10 @@ public class UndoableTextField extends JTextPane {
 
 			"PERFORM ", "FOREACH ", "WINDOW ", "PARTITION BY ", "EXCEPT ", "NULLS FIRST", "NULLS LAST", "WITH ", "WITH RECURSIVE ", "ONLY "
 	};
+	private static final String ACTION_UNDO = "Undo";
+	private static final String ACTION_REDO = "Redo";
+	private static final String ACTION_FIND = "Find";
+	private static final String ACTION_DUPLICATE = "Duplicate";
 
 	/**
 	 * For use with Next Field Observer
@@ -175,10 +179,10 @@ public class UndoableTextField extends JTextPane {
 	private void setKeyListeners() {
 		undoManager.updateOriginalText();
 		getDocument().addUndoableEditListener(undoManager);
-		getActionMap().put("Undo", undoManager.undoAction);
-		getActionMap().put("Redo", undoManager.redoAction);
-		getActionMap().put("Find",
-				new AbstractAction("Find") {
+		getActionMap().put(ACTION_UNDO, undoManager.undoAction);
+		getActionMap().put(ACTION_REDO, undoManager.redoAction);
+		getActionMap().put(ACTION_FIND,
+				new AbstractAction(ACTION_FIND) {
 					@Override
 					public void actionPerformed(ActionEvent evt) {
 						if (finder == null) {
@@ -194,11 +198,65 @@ public class UndoableTextField extends JTextPane {
 						}
 					}
 				});
+		getActionMap().put(ACTION_DUPLICATE,
+				new AbstractAction(ACTION_DUPLICATE) {
+					@Override
+					public void actionPerformed(ActionEvent evt) {
+						String selectedText = getSelectedText();
+						String allText = getText();
+						if (selectedText == null || selectedText.isEmpty()) {
+							int caret = getCaretPosition();
 
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Undo");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Redo");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Find");
-		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Find");
+							setSelectionStart(0);
+							for (int pos = caret-1; pos >= 0; pos--) {
+								char c = allText.charAt(pos);
+								if (c == '\n') {
+									setSelectionStart(pos+1);
+									break;
+								}
+							}
+
+							setSelectionEnd(allText.length());
+							for (int pos = caret; pos < allText.length(); pos++) {
+								char c = allText.charAt(pos);
+								if (c == '\n') {
+									setSelectionEnd(pos);
+									break;
+								}
+							}
+							duplicateLine(allText.substring(getSelectionStart(), getSelectionEnd()), allText);
+						} else {
+							duplicateSelection(selectedText, allText);
+						}
+					}
+
+					private void duplicateLine(String selectedText, String allText) {
+						int end = getSelectionEnd();
+						String text1 = allText.substring(0, end);
+						String text2 = allText.substring(end);
+						setText(text1 + '\n' + selectedText + text2);
+
+						setSelectionStart(end);
+						setSelectionEnd(end + selectedText.length() + 1);
+					}
+
+					private void duplicateSelection(String selectedText, String allText) {
+						int end = getSelectionEnd();
+						String text1 = allText.substring(0, end);
+						String text2 = allText.substring(end);
+						setText(text1 + selectedText + text2);
+
+						setCaretPosition(end + selectedText.length());
+						setSelectionStart(end);
+						setSelectionEnd(end + selectedText.length());
+					}
+				});
+
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_UNDO);
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_REDO);
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_FIND);
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_FIND);
+		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_DUPLICATE);
 
 		if (UIConstants.isMac()) {
 			// ^A ^C ^V ^X fix for MacOS
