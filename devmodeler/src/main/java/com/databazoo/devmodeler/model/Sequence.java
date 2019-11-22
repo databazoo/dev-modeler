@@ -30,6 +30,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -75,7 +76,7 @@ public class Sequence extends DraggableComponent implements IModelElement {
 		behavior.cycle = cycle;
 		this.schemaContainer = parent;
 
-		setAttributesByDependance(depend);
+		setAttributesByDependence(depend);
 
 		draw();
 	}
@@ -402,10 +403,9 @@ public class Sequence extends DraggableComponent implements IModelElement {
 		for(int i=0; i<tmp.length; i++){
 			Attribute attr = attributes.get(i);
 			tmp[i] = attr.getRel().getFullName()+"."+attr.getName();
-			//Dbg.info("Will reassign to "+tmp[i]);
 		}
-		setAttributesByDependance(tmp);
-		attributes.stream().filter(attr -> attr != null).forEach(attr -> attr.setSequence(this));
+		setAttributesByDependence(tmp);
+		attributes.stream().filter(Objects::nonNull).forEach(attr -> attr.setSequence(this));
 	}
 
 	public void assignToSchemaAndAttributes(Schema schema){
@@ -438,10 +438,9 @@ public class Sequence extends DraggableComponent implements IModelElement {
 		this.behavior = (Behavior) behavior;
 	}
 
-	public final void setAttributesByDependance(String[] depend) {
+	public final void setAttributesByDependence(String[] depend) {
 		attributes.clear();
 		for(String depObj : depend) {
-			//Dbg.toFile(depObj);
 			String depSchema, depTable, depAttr;
 			String[] depParts = depObj.split("\\.");
 			if(depParts.length == 2){
@@ -470,7 +469,7 @@ public class Sequence extends DraggableComponent implements IModelElement {
 		}
 	}
 
-	public String getDependances(){
+	public String getDependencies(){
 		String ret = "";
 		String comma = "";
 		for(Attribute attr: attributes){

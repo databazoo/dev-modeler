@@ -647,9 +647,9 @@ public class Comparator implements Serializable {
 						matches = false;
 					}
 
-					String depend = remote.getDependances();
-					if (!local.getDependances().equals(depend)) {
-						local.setAttributesByDependance(depend.split(","));
+					String depend = remote.getDependencies();
+					if (!local.getDependencies().equals(depend)) {
+						local.setAttributesByDependence(depend.split(","));
 						local.assignToSchemaAndAttributes();
 					}
 

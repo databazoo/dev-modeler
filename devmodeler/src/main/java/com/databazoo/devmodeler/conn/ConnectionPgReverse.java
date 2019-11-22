@@ -3,7 +3,19 @@ package com.databazoo.devmodeler.conn;
 
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.DesignGUI;
-import com.databazoo.devmodeler.model.*;
+import com.databazoo.devmodeler.model.Attribute;
+import com.databazoo.devmodeler.model.CheckConstraint;
+import com.databazoo.devmodeler.model.Constraint;
+import com.databazoo.devmodeler.model.DB;
+import com.databazoo.devmodeler.model.Function;
+import com.databazoo.devmodeler.model.IModelElement;
+import com.databazoo.devmodeler.model.Index;
+import com.databazoo.devmodeler.model.Relation;
+import com.databazoo.devmodeler.model.Schema;
+import com.databazoo.devmodeler.model.Sequence;
+import com.databazoo.devmodeler.model.Trigger;
+import com.databazoo.devmodeler.model.User;
+import com.databazoo.devmodeler.model.View;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.tools.Dbg;
 
@@ -11,7 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.databazoo.devmodeler.conn.ConnectionUtils.*;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.COMMA;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.DESCRIPTION;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.FULL_NAME;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.SELECT;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.TABLE_NAME;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.TABLE_SCHEMA;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.TYPE;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.WHERE;
 
 /**
  * Reverse engineering setup for PostgreSQL
@@ -237,7 +256,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 					+ "JOIN pg_class t ON ad.adrelid = t.oid\n"
 					+ "JOIN pg_type ct ON ct.oid = t.reltype\n"
 					+ "JOIN pg_namespace ts ON ts.oid = ct.typnamespace\n"
-					+ "WHERE ad.adsrc LIKE 'nextval('''|| CASE WHEN sequence_schema = 'public' THEN sequence_name ELSE sequence_schema||'.'||sequence_name END ||'''%'\n"
+					+ "WHERE ad.adsrc LIKE 'nextval('''|| sequence_name ||'''%' OR ad.adsrc LIKE 'nextval('''|| sequence_schema||'.'||sequence_name ||'''%'\n"
 					+ ") AS k\n"
 					+ "), '') AS depend,\n"
 					+ "s.minimum_value,\n"

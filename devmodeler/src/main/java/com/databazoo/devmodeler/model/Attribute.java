@@ -59,10 +59,6 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 		super();
 		behavior.name = name;
 		behavior.attType = attType;
-		if (behavior.attType.contains("(")) {
-			behavior.attPrecision = behavior.attType.replaceAll("(.*)\\(([^)]+)\\).*", "$2");
-			behavior.attType = behavior.attType.replaceAll("(.*)\\(([^)]+)\\).*", "$1");
-		}
 		behavior.attNull = attNull;
 		behavior.defaultValue = defaultValue == null ? "" : defaultValue;
 		behavior.descr = descr != null ? descr : "";
@@ -71,12 +67,8 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 		}
 		this.attNum = attNum;
 		this.rel = parent;
-		if ((attType.matches("int(eger|4|8)") || attType.equals("bigint")) && (behavior.defaultValue.equals("nextval('" + rel.getName() + "_" + name + "_seq'::regclass)") || behavior.defaultValue.equals("nextval('" + rel.getFullName() + "_" + name + "_seq'::regclass)"))) {
-			behavior.attType = attType.matches("int(eger|4)") ? "serial" : "bigserial";
-			behavior.defaultValue = "";
-		} else if (behavior.attType.equals("bpchar")) {
-			behavior.attType = "char";
-		}
+
+		updateType();
 
 		setBackground(LOW_COLOR);
 		setForeground(UIConstants.Colors.getLabelForeground());
@@ -86,6 +78,19 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 
 		if(attNum <= 0){
 			Dbg.fixme("Attribute numbering must start with 1");
+		}
+	}
+
+	private void updateType() {
+		if (behavior.attType.contains("(")) {
+			behavior.attPrecision = behavior.attType.replaceAll("(.*)\\(([^)]+)\\).*", "$2");
+			behavior.attType = behavior.attType.replaceAll("(.*)\\(([^)]+)\\).*", "$1");
+		}
+		if ((behavior.attType.matches("int(eger|4|8)") || behavior.attType.equals("bigint")) && getSequence() != null) {
+			behavior.attType = behavior.attType.matches("int(eger|4)") ? "serial" : "bigserial";
+			behavior.defaultValue = "";
+		} else if (behavior.attType.equals("bpchar")) {
+			behavior.attType = "char";
 		}
 	}
 
@@ -109,6 +114,7 @@ public class Attribute extends EnvironmentComponent implements IModelElement {
 
 	public void setSequence(Sequence sequence) {
 		this.sequence = sequence;
+		updateType();
 	}
 
 	public Color getTypeColor() {
