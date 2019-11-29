@@ -83,7 +83,7 @@ public class MNRelationWizardTest extends TestProjectSetup {
                 "\t\tFOREIGN KEY (\"test attr 3\")\n" +
                 "\t\tREFERENCES \"test 2\".\"test 4\" (\"test attr 3\") MATCH SIMPLE\n" +
                 "\t\tON UPDATE CASCADE ON DELETE CASCADE\n" +
-                ") WITHOUT OIDS;";
+                ");";
         String expectedRevert = "DROP TABLE \"test 2\".\"test 3_test 4\";";
 
         assertEquals(true, wizard.checkSQLChanges());

@@ -401,12 +401,14 @@ abstract class ConnectionPgForward extends Connection {
 		if (rel.getBehavior().getInheritParentName() != null && !rel.getBehavior().getInheritParentName().isEmpty()) {
 			inherits = "\nINHERITS (" + rel.getBehavior().getInheritParentName() + ")\n";
 		}
-		ret.a(prevAttrComment).a(comma.equals(COMMA) ? "\n" : "").a(")").a(inherits).a("WITH");
+		ret.a(prevAttrComment).a(comma.equals(COMMA) ? "\n" : "").a(")").a(inherits);
 
 		if (rel.getBehavior().getOptions().length == 0) {
-			ret.a(rel.getBehavior().hasOIDs() ? "" : "OUT").a(" OIDS");
+			if (rel.getBehavior().hasOIDs()) {
+				ret.a("WITH OIDS");
+			}
 		} else {
-			ret.a(" (\n\toids=").a(rel.getBehavior().hasOIDs() ? "true" : "false");
+			ret.a("WITH (\n\toids=").a(rel.getBehavior().hasOIDs() ? "true" : "false");
 			for (String opt : rel.getBehavior().getOptions()) {
 				if (!opt.isEmpty()) {
 					ret.a(COMMA).nt().a(opt);
