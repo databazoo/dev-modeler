@@ -13,6 +13,7 @@ import com.databazoo.devmodeler.gui.view.DifferenceView;
 import com.databazoo.devmodeler.gui.view.OptimizerView;
 import com.databazoo.devmodeler.gui.view.ViewMode;
 import com.databazoo.devmodeler.gui.window.Splash;
+import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
@@ -223,21 +224,25 @@ public class DesignGUI {
 	private void registerKeys(){
 		AbstractAction aaAlt = new AbstractAction("alt") {
 			@Override public void actionPerformed(ActionEvent e) {
-				if(Settings.getBool(Settings.L_KEYS_CANVAS_ALT_MODES)){
-					viewOld = view;
-					if(view != ViewMode.DATA){
-						switchView(ViewMode.DATA, true);
-					}else{
-						switchView(ViewMode.DESIGNER, true);
+				Schedule.inEDT(() -> {
+					if(Settings.getBool(Settings.L_KEYS_CANVAS_ALT_MODES)){
+						viewOld = view;
+						if(view != ViewMode.DATA && Project.getCurrent().getType() != Project.TYPE_ABSTRACT){
+							switchView(ViewMode.DATA, true);
+						}else{
+							switchView(ViewMode.DESIGNER, true);
+						}
 					}
-				}
+				});
 			}
 		};
 		AbstractAction aaAltReleased = new AbstractAction("rel alt") {
 			@Override public void actionPerformed(ActionEvent e) {
-				if(Settings.getBool(Settings.L_KEYS_CANVAS_ALT_MODES)){
-					switchView(viewOld, true);
-				}
+				Schedule.inEDT(() -> {
+					if(Settings.getBool(Settings.L_KEYS_CANVAS_ALT_MODES) && Project.getCurrent().getType() != Project.TYPE_ABSTRACT){
+						switchView(viewOld, true);
+					}
+				});
 			}
 		};
 		actionMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, InputEvent.ALT_DOWN_MASK), aaAlt);

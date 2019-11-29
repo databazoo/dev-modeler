@@ -44,7 +44,9 @@ public final class HotMenu extends JComponent {
                     element instanceof View ||
                     element instanceof Constraint) {
                 add(Buttons.PROPERTIES);
-                add(Buttons.DATA);
+                if (Project.getCurrent().getType() != Project.TYPE_ABSTRACT) {
+                    add(Buttons.DATA);
+                }
 
             } else if (element instanceof Function) {
                 add(Buttons.PROPERTIES);

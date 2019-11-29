@@ -214,7 +214,7 @@ public class ConnectionPgTest extends TestProjectSetup {
 						"\t\tFOREIGN KEY (\"test attr 1\")\n" +
 						"\t\tREFERENCES \"test 2\".\"test 4\" (\"test attr 3\") MATCH SIMPLE\n" +
 						"\t\tON UPDATE CASCADE ON DELETE CASCADE\t-- test 5\n" +
-						") WITHOUT OIDS;\n\n" +
+						");\n\n" +
 						"COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 1\" IS 'test attr 1';\n\n" +
 						"COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 2\" IS 'test attr 2';\n\n" +
 						"COMMENT ON CONSTRAINT \"test PK\" ON \"test 2\".\"test 3\" IS 'test PK';\n\n" +
@@ -242,7 +242,7 @@ public class ConnectionPgTest extends TestProjectSetup {
 						"\t\tFOREIGN KEY (\"test attr 1\")\n" +
 						"\t\tREFERENCES \"test 2\".\"test 4\" (\"test attr 3\") MATCH SIMPLE\n" +
 						"\t\tON UPDATE CASCADE ON DELETE CASCADE\t-- test 5\n" +
-						") WITHOUT OIDS;\n\n" +
+						");\n\n" +
 						"COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 1\" IS 'test attr 1';\n\n" +
 						"COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 2\" IS 'test attr 2';\n\n" +
 						"COMMENT ON CONSTRAINT \"test PK\" ON \"test 2\".\"test 3\" IS 'test PK';\n\n" +

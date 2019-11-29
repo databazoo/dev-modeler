@@ -55,7 +55,7 @@ public class RelationWizardTest extends TestProjectSetup {
                 "\t\tFOREIGN KEY (\"test attr 1\")\n" +
                 "\t\tREFERENCES \"test 2\".\"test 4\" (\"test attr 3\") MATCH SIMPLE\n" +
                 "\t\tON UPDATE CASCADE ON DELETE CASCADE\t-- test 5\n" +
-                ") WITHOUT OIDS;\n" +
+                ");\n" +
                 "\n" +
                 "COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 1\" IS 'test attr 1';\n" +
                 "\n" +
@@ -88,7 +88,7 @@ public class RelationWizardTest extends TestProjectSetup {
                 "\t\tFOREIGN KEY (\"test attr 1\")\n" +
                 "\t\tREFERENCES \"test 2\".\"test 4\" (\"test attr 3\") MATCH SIMPLE\n" +
                 "\t\tON UPDATE CASCADE ON DELETE CASCADE\t-- test 5\n" +
-                ") WITHOUT OIDS;\n" +
+                ");\n" +
                 "\n" +
                 "COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 1\" IS 'test attr 1';\n" +
                 "\n" +
@@ -137,7 +137,7 @@ public class RelationWizardTest extends TestProjectSetup {
         wizard.notifyChange(Relation.Behavior.L_NAME, "new_table_123");
 
         assertEquals(true, wizard.checkSQLChanges());
-        assertEquals("CREATE TABLE \"test 2\".new_table_123 () WITHOUT OIDS;", wizard.queryInput.getText());
+        assertEquals("CREATE TABLE \"test 2\".new_table_123 ();", wizard.queryInput.getText());
         assertEquals("DROP TABLE \"test 2\".new_table_123;", wizard.revertSQL);
 
         wizard.saveEdited(false);
@@ -145,7 +145,7 @@ public class RelationWizardTest extends TestProjectSetup {
         revision = Project.getCurrent().revisions.get(Project.getCurrent().revisions.size()-1);
 
         assertEquals("new_table_123", wizard.rel.getName());
-        assertEquals("CREATE TABLE \"test 2\".new_table_123 () WITHOUT OIDS;", wizard.forwardSQL);
+        assertEquals("CREATE TABLE \"test 2\".new_table_123 ();", wizard.forwardSQL);
         assertEquals("DROP TABLE \"test 2\".new_table_123;", wizard.revertSQL);
 
         Relation relation1 = schema.getRelations().get(schema.getRelations().size() - 1);
@@ -197,7 +197,7 @@ public class RelationWizardTest extends TestProjectSetup {
                 "\t\tFOREIGN KEY (\"test attr 1\")\n" +
                 "\t\tREFERENCES \"test 2\".\"test 4\" (\"test attr 3\") MATCH SIMPLE\n" +
                 "\t\tON UPDATE CASCADE ON DELETE CASCADE\t-- test 5\n" +
-                ") WITHOUT OIDS;\n" +
+                ");\n" +
                 "\n" +
                 "COMMENT ON COLUMN \"test 2\".\"test 3\".\"test attr 1\" IS 'test attr 1';\n" +
                 "\n" +
