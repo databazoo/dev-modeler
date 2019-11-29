@@ -30,7 +30,7 @@ public class DBTreeTest extends TestProjectSetup {
         scrollPane.setSize(800, 600);
         Canvas.instance.setScrolls(scrollPane);
         DBTree.instance.checkDB(true);
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
         Thread.sleep(500);
     }
 

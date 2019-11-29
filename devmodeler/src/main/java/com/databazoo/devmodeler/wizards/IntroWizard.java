@@ -10,6 +10,7 @@ import com.databazoo.components.textInput.UndoableTextField;
 import com.databazoo.devmodeler.DevModeler;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.devmodeler.wizards.project.ProjectWizard;
 import com.databazoo.tools.Dbg;
@@ -84,11 +85,11 @@ public class IntroWizard extends MigWizard {
 				if(!eulaAccepted){
 					DevModeler.exit(0);
 				}else{
+					DesignGUI.get().drawMainWindow();
 					ProjectWizard.getInstance();
 				}
 			}
 		});
-		frame.setAlwaysOnTop(true);
 	}
 
 	@Override
@@ -219,29 +220,31 @@ public class IntroWizard extends MigWizard {
 
 	@Override
 	protected void executeAction(int type){
-		if(type == CLOSE_WINDOW){
-			frame.dispose();
+		Schedule.inEDT(() -> {
+			if (type == CLOSE_WINDOW) {
+				frame.dispose();
 
-		}else if(type == ACCEPT_EULA){
-			tree.setSelectionRow(1);
-			eulaAccepted = true;
-			Config.setPwrdToDefault();
-			ProjectManager.getInstance().resetPassword();
+			} else if (type == ACCEPT_EULA) {
+				tree.setSelectionRow(1);
+				eulaAccepted = true;
+				Config.setPwrdToDefault();
+				ProjectManager.getInstance().resetPassword();
 
 		/*}else if(type == SAVE_PASSWORD){
 			tree.setSelectionRow(2);
 			Config.pwrd = new String(passwordField1.getPassword());
 			ProjectManager.get().resetPassword();*/
 
-		}else if(type == SKIP_TUTORIAL_1){
-			tree.setSelectionRow(3);
+			} else if (type == SKIP_TUTORIAL_1) {
+				tree.setSelectionRow(4);
 
-		}else if(type == SKIP_TUTORIAL_2){
-			tree.setSelectionRow(4);
+			} else if (type == SKIP_TUTORIAL_2) {
+				tree.setSelectionRow(5);
 
-		}else if(type == SKIP_TUTORIAL_3){
-			tree.setSelectionRow(5);
-		}
+			} else if (type == SKIP_TUTORIAL_3) {
+				tree.setSelectionRow(6);
+			}
+		});
 	}
 	@Override public void notifyChange (String elementName, String value) {}
 	@Override public void notifyChange (String elementName, boolean value) {}

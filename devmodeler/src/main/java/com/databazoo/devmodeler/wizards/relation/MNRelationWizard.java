@@ -7,6 +7,7 @@ import com.databazoo.components.textInput.UndoableTextField;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.OperationCancelException;
 import com.databazoo.devmodeler.model.Attribute;
 import com.databazoo.devmodeler.model.Constraint;
@@ -302,10 +303,10 @@ public class MNRelationWizard extends RelationWizard {
 		}
 		if(uniqueIndex != null){
 			uniqueIndex.assignToRelation(rel);
-			Canvas.instance.drawProject(false);
+			DesignGUI.get().drawProject(false);
 			uniqueIndex.getBehavior().setNew();
 		}
-		Canvas.instance.drawProject(true);
+		DesignGUI.get().drawProject(true);
 		frame.dispose();
 	}
 

@@ -509,7 +509,7 @@ public final class ProjectManager
 		saveProjects();
 
 		if(p.getType() != Project.TYPE_ABSTRACT){
-			Canvas.instance.drawProject(true);
+			DesignGUI.get().drawProject(true);
 			DesignGUI.getInfoPanel().write("Project created. Start loading databases from server");
 			Schedule.inWorker(() -> {
                 final CountDownLatch latch = new CountDownLatch(p.getDatabases().size());
@@ -522,7 +522,7 @@ public final class ProjectManager
 
 						OrganizerFactory.getAlphabetical().organize(db);
                         if(db.getFullName().equals(p.getCurrentDB().getFullName())){
-                            Canvas.instance.drawProject(true);
+                            DesignGUI.get().drawProject(true);
                             Canvas.instance.scrollToCenter();
                         }
                         latch.countDown();
@@ -550,7 +550,7 @@ public final class ProjectManager
 
 	public void resetProjectGUI(){
 		if(GCFrame.SHOW_GUI){
-			Canvas.instance.drawProject(true);
+			DesignGUI.get().drawProject(true);
 			SearchPanel.instance.clearSearch();
 			SearchPanel.instance.updateDbTree();
 			Menu.redrawRightMenu();
@@ -570,7 +570,7 @@ public final class ProjectManager
 		if(currProject != null && currProject.changeHappened){
 			if(currProject.getVerType().equals(Project.VERSIONING_MANUAL)) {
 				if(currProject.showChangeNote && !UIConstants.DEBUG){
-					JOptionPane.showMessageDialog(DesignGUI.instance.frame, "You made some changes in project "+currProject.projectName +".\n\nDo not forget to commit them.", "Do not forget to commit", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(DesignGUI.get().frame, "You made some changes in project "+currProject.projectName +".\n\nDo not forget to commit them.", "Do not forget to commit", JOptionPane.WARNING_MESSAGE);
 				}
 			}else{
 				if((Project.COMMIT_ON_CLOSE_ASK+Project.COMMIT_ON_CLOSE_SILENT).contains(currProject.getVerCommitMode())){

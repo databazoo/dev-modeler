@@ -4,6 +4,7 @@ import com.databazoo.components.GCFrame;
 import com.databazoo.devmodeler.TestProjectSetup;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.CanvasTest;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.project.Project;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class OrganizerExplodeTest extends TestProjectSetup {
     public void organize() throws Exception {
         Project.getCurrent().setCurrentDB(database);
         CanvasTest.initializeCanvas();
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
 
         Organizer organizer = OrganizerFactory.getExplode();
         organizer.organize(database);

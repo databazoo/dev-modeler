@@ -57,7 +57,7 @@ public class CanvasTest extends TestProjectSetup {
     @Test
     public void drawQuirks() throws Exception {
         Canvas.instance.quirksMode = true;
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
         Canvas.instance.repaint();
 
         SwingUtilities.invokeAndWait(() -> {
@@ -76,8 +76,8 @@ public class CanvasTest extends TestProjectSetup {
 
     @Test
     public void drawProject() throws Exception {
-        Canvas.instance.drawProject(true);
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
+        DesignGUI.get().drawProject(true);
         Canvas.instance.repaint();
 
         SwingUtilities.invokeAndWait(() -> {
@@ -111,7 +111,7 @@ public class CanvasTest extends TestProjectSetup {
     @Test
     public void drawWorkspace() throws Exception {
         Project.getCurrent().setCurrentWorkspace(workspace);
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
         Canvas.instance.repaint();
 
         Component[] components = Canvas.instance.getComponents();

@@ -139,7 +139,7 @@ public class RelationReference extends DraggableComponentReference implements Re
 		workspace.getDB().getProject().save();
 		schemaRef.checkEmpty();
 
-		Canvas.instance.drawProjectLater(true);
+		DesignGUI.get().drawProjectLater(true);
 		SearchPanel.instance.updateDbTree();
 	}
 

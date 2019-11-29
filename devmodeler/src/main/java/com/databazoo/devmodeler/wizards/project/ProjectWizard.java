@@ -172,7 +172,7 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 			db.getSchemas().clear();
 			p.loadDbFromXML(db, dumpResourceToFile("/emptyDB.xml", ProjectManager.getSettingsDirectory("emptyDB.xml")));
 			p.setLoaded();
-			Canvas.instance.drawProjectLater(true);
+			DesignGUI.get().drawProjectLater(true);
 			SearchPanel.instance.updateDbTree();
 
 			p.save();

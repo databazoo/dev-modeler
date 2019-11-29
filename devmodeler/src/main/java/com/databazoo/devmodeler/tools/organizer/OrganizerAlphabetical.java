@@ -3,6 +3,7 @@ package com.databazoo.devmodeler.tools.organizer;
 
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.model.Package;
 import com.databazoo.devmodeler.model.reference.FunctionReference;
@@ -54,7 +55,7 @@ public class OrganizerAlphabetical implements Organizer {
 				tallest = 0;
 			}
 		}
-		Canvas.instance.drawProject(true);
+		DesignGUI.get().drawProject(true);
 	}
 	@Override public void organize(SchemaReference schema, int cycles) {
 		for(int i=0; i<cycles; i++){
@@ -157,7 +158,7 @@ public class OrganizerAlphabetical implements Organizer {
 				tallest = 0;
 			}
 		}
-		Canvas.instance.drawProject(true);
+		DesignGUI.get().drawProject(true);
 	}
 	@Override public void organize(Schema schema, int cycles) {
 		for(int i=0; i<cycles; i++){

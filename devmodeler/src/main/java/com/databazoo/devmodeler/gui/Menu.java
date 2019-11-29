@@ -388,7 +388,7 @@ public class Menu extends JPanel {
             case L_STRAIGHT_CON:
                 //Usage.log(LEFT_MENU_TGL_GRID);
                 Constraint.isDrawStraight = item.isSelected();
-                Canvas.instance.drawProject(true);
+                DesignGUI.get().drawProject(true);
                 Settings.put(Settings.L_LAYOUT_CANV_STRAIGHT, item.isSelected());
                 Settings.save();
                 break;
@@ -737,7 +737,7 @@ public class Menu extends JPanel {
             dbCombo.addActionListener(e -> {
                 Usage.log(RIGHT_MENU_DB_COMBO);
                 Project.getCurrent().setCurrentDB(Project.getCurrent().getDatabases().get(dbCombo.getSelectedIndex()));
-                Canvas.instance.drawProject(true);
+                DesignGUI.get().drawProject(true);
             });
             Menu.this.validate();
         }

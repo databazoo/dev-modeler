@@ -255,7 +255,7 @@ public class Schema extends DraggableComponent implements IModelElement {
                             }
                         }
                     }
-                    Canvas.instance.drawProject(true);
+                    DesignGUI.get().drawProject(true);
                     break;
 				default: throw new IllegalArgumentException("Menu option " + type + " is not known");
             }

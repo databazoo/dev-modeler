@@ -4,6 +4,7 @@ package com.databazoo.devmodeler.tools.organizer;
 import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.window.ProgressWindow;
 import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.model.reference.*;
@@ -98,7 +99,7 @@ class OrganizerForceDirected extends OrganizerAlphabetical {
 		function.accept(op);
 		op.done();
 		Canvas.instance.quirksMode = false;
-		Canvas.instance.drawProject(true);
+		DesignGUI.get().drawProject(true);
 	}
 
 	private void explode(DB db) {

@@ -1083,7 +1083,7 @@ public class Relation extends DraggableComponent implements IModelElement, IMode
 				Inheritance inh = new Inheritance(this, inheritParent);
 				inheritParent.getInheritances().add(inh);
 				inheritances.add(inh);
-				Canvas.instance.drawProjectLater(true);
+				DesignGUI.get().drawProjectLater(true);
 			}else{
 				Dbg.fixme("Inherit parent not found: "+behavior.getInheritParentName());
 			}

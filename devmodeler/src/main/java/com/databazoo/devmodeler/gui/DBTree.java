@@ -353,7 +353,7 @@ public class DBTree extends WizardTree {
 							currProject.setCurrentWorkspace(currProject.getWorkspaceByName(path.getPathComponent(2).toString()));
 							currProject.setCurrentDB(currProject.getCurrentWorkspace().getDB());
 							Menu.redrawRightMenu();
-							Canvas.instance.drawProject(true);
+							DesignGUI.get().drawProject(true);
 							Navigator.instance.checkSize();
 							HotMenu.instance.checkSize();
 
@@ -368,7 +368,7 @@ public class DBTree extends WizardTree {
 							currProject.setCurrentWorkspace(null);
 							currProject.setCurrentDB(dbName);
 							Menu.redrawRightMenu();
-							Canvas.instance.drawProject(true);
+							DesignGUI.get().drawProject(true);
 
 							animationDelay = 500;
 
@@ -376,7 +376,7 @@ public class DBTree extends WizardTree {
 						}else if(!currProject.getCurrentDB().getFullName().equals(dbName)){
 							currProject.setCurrentDB(dbName);
 							Menu.redrawRightMenu();
-							Canvas.instance.drawProject(true);
+							DesignGUI.get().drawProject(true);
 
 							animationDelay = 500;
 						}

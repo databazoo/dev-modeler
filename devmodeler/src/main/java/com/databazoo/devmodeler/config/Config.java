@@ -101,7 +101,7 @@ public class Config {
 	 */
 	public static String getPassword() {
 		if (pwrd == null) {
-			if (ProjectManager.getSettingsDirectory(ProjectManager.CONFIG_FILE).isFile()) {
+			if (isApplicationStartedPreviously()) {
 				pwrd = "";
 				EncryptedProperties p = new EncryptedProperties(pwrd);
 				try {
@@ -136,11 +136,14 @@ public class Config {
 					Splash.get().setVisible(true);
 				}
 			} else {
-				Schedule.reInvokeInEDT(Schedule.Named.INTRO_WIZARD_START, 2000, () -> IntroWizard.get().draw());
 				pwrd = "";
 			}
 		}
 		return pwrd;
+	}
+
+	public static boolean isApplicationStartedPreviously() {
+		return ProjectManager.getSettingsDirectory(ProjectManager.CONFIG_FILE).isFile();
 	}
 
 	/**

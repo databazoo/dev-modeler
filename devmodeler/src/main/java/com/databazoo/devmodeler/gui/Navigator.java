@@ -79,7 +79,7 @@ public final class Navigator extends JComponent {
             if (!slider.getValueIsAdjusting()) {
                 Canvas.setZoom(SLIDER_MAP[slider.getValue()]);
                 Index.checkFontSize();
-                Canvas.instance.drawProject(true);
+                DesignGUI.get().drawProject(true);
             }
         });
         return zoomSlider;
