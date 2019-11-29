@@ -240,7 +240,7 @@ public class Canvas extends ClickableComponent {
 		});
 	}
 
-	public synchronized void drawProject(boolean forceCompleteRedraw) {
+	synchronized void drawProject(boolean forceCompleteRedraw) {
 		try {
 			if (Project.getCurrDB() != null) {
 				boolean differentDB = forceCompleteRedraw || displayedDB == null || !displayedDB.getName().equals(Project.getCurrDB().getName());
@@ -316,7 +316,7 @@ public class Canvas extends ClickableComponent {
 		}
 	}
 
-	public synchronized void drawProjectLater(final boolean forceCompleteRedraw) {
+	synchronized void drawProjectLater(final boolean forceCompleteRedraw) {
 		Schedule.reInvokeInWorker(Schedule.Named.CANVAS_DRAW_PROJECT, UIConstants.TYPE_TIMEOUT, () -> drawProject(forceCompleteRedraw));
 	}
 

@@ -229,7 +229,7 @@ abstract class VersionedProject extends ProjectIO {
 					break;
 
 				default:
-					String commitMessage = JOptionPane.showInputDialog(DesignGUI.instance.frame, "Committing changes on project "+ projectName +"\n\nYour commit message:", changedRevision.getName());
+					String commitMessage = JOptionPane.showInputDialog(DesignGUI.get().frame, "Committing changes on project "+ projectName +"\n\nYour commit message:", changedRevision.getName());
 					if(commitMessage == null || commitMessage.isEmpty()){
 						return;
 					}else{

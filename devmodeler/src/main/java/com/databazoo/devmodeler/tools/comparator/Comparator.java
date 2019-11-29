@@ -99,7 +99,7 @@ public class Comparator implements Serializable {
 	public void checkIsDifferent() {
 		DesignGUI.getInfoPanel().write("Comparison: difference " + (pendingDifference ? "found (" + differences.size() + ")" : (hadDifference ? "merged in" : "not found")));
 		if (pendingDifference || hadDifference) {
-			Canvas.instance.drawProject(true);
+			DesignGUI.get().drawProject(true);
 			SearchPanel.instance.updateDbTree();
 		}
 		//Menu.get().setDifferenceCount(differences.size());

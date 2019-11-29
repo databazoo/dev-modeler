@@ -182,7 +182,7 @@ public class ExportImportWizard extends MigWizard {
 		dbCombo.addActionListener(e -> {
             selectedDB = project.getDatabases().get(dbCombo.getSelectedIndex());
             project.setCurrentDB(selectedDB);
-            Canvas.instance.drawProject(true);
+            DesignGUI.get().drawProject(true);
             Schedule.reInvokeInEDT(Schedule.Named.EXPORT_IMPORT_WIZARD_DB_COMBO_LISTENER, Schedule.TYPE_DELAY, preview::repaint);
         });
 
@@ -257,7 +257,7 @@ public class ExportImportWizard extends MigWizard {
 
 	private void runImportFromXML(){
 		project.loadDbFromXML(selectedDB, new File(importPathField.getText()), true);
-		Canvas.instance.drawProjectLater(true);
+		DesignGUI.get().drawProjectLater(true);
 		SearchPanel.instance.updateDbTree();
 		frame.dispose();
 	}

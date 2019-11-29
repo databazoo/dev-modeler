@@ -11,6 +11,7 @@ import com.databazoo.devmodeler.gui.UsageElement;
 import com.databazoo.devmodeler.gui.window.Splash;
 import com.databazoo.devmodeler.plugincontrol.PluginManager;
 import com.databazoo.devmodeler.project.ProjectManager;
+import com.databazoo.devmodeler.wizards.IntroWizard;
 import com.databazoo.devmodeler.wizards.SettingsWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
@@ -57,7 +58,11 @@ public class DevModeler {
 		}
 		splash.partLoaded();
 
-		DesignGUI.get().drawMainWindow();
+		if (Config.isApplicationStartedPreviously()) {
+			DesignGUI.get().drawMainWindow();
+		} else {
+			Schedule.inEDT(() -> IntroWizard.get().draw());
+		}
 		ProjectManager.getInstance().init(Settings.getBool(Settings.L_NOTICE_OPEN_PROJECT));
 		ConnectionUtils.initConnectionChecker();
 		splash.dispose();

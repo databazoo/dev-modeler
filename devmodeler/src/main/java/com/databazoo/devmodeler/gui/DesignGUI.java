@@ -44,7 +44,7 @@ public class DesignGUI {
 	private static ViewMode view;
 	private static ViewMode viewOld;
 	private static IInfoPanel infoPanel;
-	public static DesignGUI instance;
+	private static DesignGUI instance;
 
 	public static DesignGUI get(){
 		if(instance == null){
@@ -118,7 +118,8 @@ public class DesignGUI {
 
 	public void drawMainWindow(){
 		try {
-			SwingUtilities.invokeAndWait(() -> {
+			if (frame == null)
+			Schedule.waitInEDT(() -> {
 				setLAF();
 				Splash.get().partLoaded();
 
@@ -290,6 +291,24 @@ public class DesignGUI {
 		}
 	}
 
+	public void drawProject(boolean forceCompleteRedraw) {
+		if (frame != null) {
+			Canvas.instance.drawProject(forceCompleteRedraw);
+		}
+	}
+
+	public void drawProjectLater(final boolean forceCompleteRedraw) {
+		Schedule.reInvokeInWorker(Schedule.Named.CANVAS_DRAW_PROJECT, UIConstants.TYPE_TIMEOUT, () -> drawProject(forceCompleteRedraw));
+	}
+
+	public void repaint() {
+		if (frame != null) {
+			Canvas.instance.repaint();
+			DBTree.instance.repaint();
+			frame.repaint();
+		}
+	}
+
 	private void switchView(ViewMode view) {
 		if(diffSplitPane != null) {
 			if (view == ViewMode.DIFF) {
@@ -319,7 +338,7 @@ public class DesignGUI {
 		switchView(view);
 		if(redraw){
 			Canvas.instance.setSelectedElement(null);
-			Schedule.inWorker(() -> Canvas.instance.drawProject(true));
+			Schedule.inWorker(() -> drawProject(true));
 		}
 	}
 

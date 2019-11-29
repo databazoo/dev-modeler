@@ -270,19 +270,17 @@ public class Settings {
 
 	private static void updateReferences() {
 		if (isInitialized) {
-			Schedule.inEDT(2000, () -> {
+			Schedule.inEDT(() -> {
 				Dbg.sendCrashReports = getBool(L_ERRORS_CRASH_REPORTS);
 				Usage.sendUsageReports = getBool(L_ERRORS_USAGE_REPORTS);
 				Canvas.instance.gridEnabled = getBool(L_LAYOUT_CANV_GRID);
-				Canvas.instance.repaint();
-				DBTree.instance.repaint();
                 boolean isDrawStraight = getBool(L_LAYOUT_CANV_STRAIGHT);
                 if (isDrawStraight != Constraint.isDrawStraight) {
                     Constraint.isDrawStraight = isDrawStraight;
-                    Canvas.instance.drawProject(true);
+					DesignGUI.get().drawProject(true);
                 }
-				DesignGUI.instance.setLAF();
-                DesignGUI.instance.frame.repaint();
+				DesignGUI.get().setLAF();
+                DesignGUI.get().repaint();
 			});
 		}
 	}

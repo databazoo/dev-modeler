@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.model.Function;
 import com.databazoo.devmodeler.model.Relation;
 import com.databazoo.devmodeler.model.Schema;
@@ -111,6 +112,6 @@ class OrganizerCircular extends OrganizerAlphabetical {
 			}
 		}
 		schema.checkSize();
-		Canvas.instance.drawProject(true);
+		DesignGUI.get().drawProject(true);
 	}
 }

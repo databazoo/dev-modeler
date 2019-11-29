@@ -3,6 +3,7 @@ package com.databazoo.devmodeler.model.reference;
 
 import com.databazoo.components.elements.DraggableComponent;
 import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.SearchPanel;
 import com.databazoo.devmodeler.model.View;
 import com.databazoo.devmodeler.model.Workspace;
@@ -76,7 +77,7 @@ public class ViewReference extends DraggableComponentReference {
 		workspace.getDB().getProject().save();
 		schemaRef.checkEmpty();
 
-		Canvas.instance.drawProject(true);
+		DesignGUI.get().drawProject(true);
 		SearchPanel.instance.updateDbTree();
 	}
 

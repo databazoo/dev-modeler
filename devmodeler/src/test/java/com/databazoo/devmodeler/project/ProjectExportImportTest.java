@@ -4,6 +4,7 @@ import com.databazoo.devmodeler.TestProjectSetup;
 import com.databazoo.devmodeler.conn.IConnection;
 import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.CanvasTest;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.model.Attribute;
 import com.databazoo.devmodeler.model.Constraint;
 import com.databazoo.devmodeler.model.DB;
@@ -152,7 +153,7 @@ public class ProjectExportImportTest extends TestProjectSetup {
 
         ProjectManager.getInstance().setCurrentProject(project1);
         project1.setCurrentDB(db1);
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
 
         assertEquals(new Point(150, 240), db1.getKnownLocation("importSchema2.importLocation1"));
 

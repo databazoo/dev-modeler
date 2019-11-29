@@ -41,7 +41,7 @@ public class LineComponentTest extends TestProjectSetup {
 
     @Test
     public void getAbsCenter() throws Exception {
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
 
         relation.setSize(200, 200);
         relation.setLocation(new Point(30, 30));
@@ -69,7 +69,7 @@ public class LineComponentTest extends TestProjectSetup {
 
     @Test
     public void getAbsCenter2() throws Exception {
-        Canvas.instance.drawProject(true);
+        DesignGUI.get().drawProject(true);
 
         relation.setSize(200, 400);
         relation.setLocation(new Point(30, 30));

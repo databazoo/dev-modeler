@@ -22,6 +22,7 @@ import com.databazoo.devmodeler.conn.IColoredConnection;
 import com.databazoo.devmodeler.conn.IConnectionQuery;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.Canvas;
+import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.OperationCancelException;
 import com.databazoo.devmodeler.gui.RightClickMenu;
 import com.databazoo.devmodeler.gui.SearchPanel;
@@ -757,7 +758,7 @@ public class RelationWizard extends RelationWizardPagesSequence {
                 }
             }
         }
-        Canvas.instance.drawProjectLater(true);
+        DesignGUI.get().drawProjectLater(true);
         SearchPanel.instance.updateDbTree();
     }
 

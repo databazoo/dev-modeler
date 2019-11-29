@@ -284,7 +284,7 @@ public class DB implements IModelElement {
                     }else{
 						organizer.organize(p.getCurrentWorkspace());
                     }
-                    Canvas.instance.drawProject(true);
+					DesignGUI.get().drawProject(true);
                     break;
 				default: throw new IllegalArgumentException("Menu option " + type + " is not known");
             }
