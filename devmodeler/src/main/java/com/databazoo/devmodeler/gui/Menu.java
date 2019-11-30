@@ -329,19 +329,21 @@ public class Menu extends JPanel {
             case L_REARRANGE_EXPLODE:
             case L_REARRANGE_IMPLODE:
                 Usage.log(LEFT_MENU_REARRANGE);
-                Schedule.inWorker(() -> {
-                    Object[] options = { "Rearrange", "Cancel" };
+                Schedule.inEDT(() -> {
+                    Object[] options = {"Rearrange", "Cancel"};
                     int n = JOptionPane
                             .showOptionDialog(DesignGUI.get().frame, "Rearrange all elements?", "Rearrange elements", JOptionPane.YES_NO_OPTION,
                                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                     if (n == 0) {
-                        final Project p = Project.getCurrent();
-                        final Organizer organizer = OrganizerFactory.get(ae.getActionCommand());
-                        if (p.getCurrentWorkspace() == null) {
-                            organizer.organize(p.getCurrentDB());
-                        } else {
-                            organizer.organize(p.getCurrentWorkspace());
-                        }
+                        Schedule.inWorker(() -> {
+                            final Project p = Project.getCurrent();
+                            final Organizer organizer = OrganizerFactory.get(ae.getActionCommand());
+                            if (p.getCurrentWorkspace() == null) {
+                                organizer.organize(p.getCurrentDB());
+                            } else {
+                                organizer.organize(p.getCurrentWorkspace());
+                            }
+                        });
                     }
                 });
                 break;

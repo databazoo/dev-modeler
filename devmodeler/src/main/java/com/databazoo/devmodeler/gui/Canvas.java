@@ -168,7 +168,7 @@ public class Canvas extends ClickableComponent {
 	private Canvas() {
 		setPreferredSize(size);
 		setAutoscrolls(true);
-		setBackground(UIConstants.isLafWithDarkSkin() ? UIConstants.Colors.getLabelBackground() : Color.white);
+		updateBackground();
 		addListeners();
 		getActionMap().put(ACTION_MAIN_SEARCH, new AbstractAction(ACTION_MAIN_SEARCH) {
 			@Override
@@ -189,6 +189,10 @@ public class Canvas extends ClickableComponent {
 		});
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_MAIN_SEARCH);
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), ACTION_TOGGLE_DB_TREE);
+	}
+
+	void updateBackground() {
+		setBackground(UIConstants.isLafWithDarkSkin() ? UIConstants.Colors.getLabelBackground() : Color.white);
 	}
 
 	void setScrolls(JScrollPane scr) {

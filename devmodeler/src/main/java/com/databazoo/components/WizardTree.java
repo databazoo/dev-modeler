@@ -3,6 +3,7 @@ package com.databazoo.components;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.ProjectManager;
+import com.databazoo.tools.Schedule;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
@@ -208,5 +209,9 @@ public class WizardTree extends JTree {
 				break;
 			}
 		}
+	}
+
+	public void selectNextRow() {
+		Schedule.inEDT(() -> setSelectionRow(getLeadSelectionRow()+1));
 	}
 }

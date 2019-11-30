@@ -108,7 +108,7 @@ public class DocumentationWizard extends MigWizard {
                     loadWelcomePage();
                     break;
                 case IntroWizard.L_TUTORIAL:
-                    tree.setSelectionRow(tree.getLeadSelectionRow() + 1);
+                    tree.selectNextRow();
                     break;
                 case IntroWizard.L_TUTORIAL_1:
                     loadTutorialPage1();
@@ -136,12 +136,7 @@ public class DocumentationWizard extends MigWizard {
         JPanel content = new JPanel(new GridLayout(0, 2, 20, 20));
         for(final UseCase useCase : UseCase.values()){
             JButton button = new JButton(useCase.toString());
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    tree.selectRow(useCase.toString());
-                }
-            });
+            button.addActionListener(e -> tree.selectRow(useCase.toString()));
             content.add(button);
         }
         addPanel(content, "span, align center, width 450px, height 520px");
@@ -171,21 +166,21 @@ public class DocumentationWizard extends MigWizard {
 
     private void loadTutorialPage1(){
         resetContent();
-        addPanel(new JLabel(new ImageIcon(getClass().getResource("/gfx/tutorial1.png"))), SPAN_CENTER);
+        addPanel(new JLabel(new ImageIcon(getClass().getResource("/gfx/tutorial/tutorial1.png"))), SPAN_CENTER);
 
         setNextButton(L_MORE_INFO, true, MORE_INFO);
     }
 
     private void loadTutorialPage2(){
         resetContent();
-        addPanel(new JLabel(new ImageIcon(getClass().getResource("/gfx/tutorial2.png"))), SPAN_CENTER);
+        addPanel(new JLabel(new ImageIcon(getClass().getResource("/gfx/tutorial/tutorial2.png"))), SPAN_CENTER);
 
         setNextButton(L_MORE_INFO, true, MORE_INFO);
     }
 
     private void loadTutorialPage3(){
         resetContent();
-        addPanel(new JLabel(new ImageIcon(getClass().getResource("/gfx/tutorial3.png"))), SPAN_CENTER);
+        addPanel(new JLabel(new ImageIcon(getClass().getResource("/gfx/tutorial/tutorial3.png"))), SPAN_CENTER);
 
         setNextButton(L_MORE_INFO, true, MORE_INFO);
     }

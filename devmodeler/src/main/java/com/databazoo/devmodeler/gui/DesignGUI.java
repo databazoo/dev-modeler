@@ -93,6 +93,7 @@ public class DesignGUI {
 				UIConstants.setLafWithRotatedTabs(true);
 				UIConstants.setLafWithDarkSkin(SkinnedSubstanceLAF.isCurrentSkinDark());
 				UIConstants.setLafRequiresBorderedTextFields(SkinnedSubstanceLAF.isCurrentSkinBordered());
+				UIConstants.Colors.update();
 				return;
 			} catch (UnsupportedLookAndFeelException e) {
 				Dbg.fixme("Switching to SkinnedSubstanceLAF failed, trying Nimbus.", e);
@@ -143,6 +144,7 @@ public class DesignGUI {
                     canvasScroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
                     canvasScroll.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
                 }
+                Canvas.instance.updateBackground();
                 Canvas.instance.setScrolls(canvasScroll);
                 Canvas.instance.setInfoPanel((Component) infoPanel);
                 Canvas.instance.setOverview(Navigator.instance);
@@ -308,6 +310,7 @@ public class DesignGUI {
 
 	public void repaint() {
 		if (frame != null) {
+			Canvas.instance.updateBackground();
 			Canvas.instance.repaint();
 			DBTree.instance.repaint();
 			frame.repaint();

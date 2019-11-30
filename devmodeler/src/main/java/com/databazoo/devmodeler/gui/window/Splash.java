@@ -37,19 +37,19 @@ public class Splash extends JWindow {
     }
 
     private Splash() {
-        //getContentPane().add(new ImageComponent("/gfx/splash.png", Color.decode("#9F2927"), new Point(250, 240)));
+        //getContentPane().add(new ImageComponent("/gfx/splash/splash.png", Color.decode("#9F2927"), new Point(250, 240)));
         //getContentPane().setBackground(Color.WHITE);
-        getContentPane().add(new ImageComponent("/gfx/splash3.png", Color.decode("#f289b2"), new Point(10, 290)));
+        getContentPane().add(new ImageComponent("/gfx/splash/splash3.png", Color.decode("#f289b2"), new Point(10, 290)));
         getContentPane().setBackground(Color.decode("#2f2754"));
-        //getContentPane().add(new ImageComponent("/gfx/splash4.png", Color.decode("#d6a76e"), new Point(70, 290)));
+        //getContentPane().add(new ImageComponent("/gfx/splash/splash4.png", Color.decode("#d6a76e"), new Point(70, 290)));
         //getContentPane().setBackground(Color.WHITE);
-        //getContentPane().add(new ImageComponent("/gfx/splash5.png", Color.decode("#f31e3c"), new Point(420, 290)));
+        //getContentPane().add(new ImageComponent("/gfx/splash/splash5.png", Color.decode("#f31e3c"), new Point(420, 290)));
         //getContentPane().setBackground(Color.decode("#2a1800"));
-        //getContentPane().add(new ImageComponent("/gfx/splash6.png", Color.decode("#aeabfc"), null));
+        //getContentPane().add(new ImageComponent("/gfx/splash/splash6.png", Color.decode("#aeabfc"), null));
         //getContentPane().setBackground(Color.decode("#5e4654"));
-        //getContentPane().add(new ImageComponent("/gfx/splash7.png", Color.decode("#c70e1a"), new Point(30, 200)));
+        //getContentPane().add(new ImageComponent("/gfx/splash/splash7.png", Color.decode("#c70e1a"), new Point(30, 200)));
         //getContentPane().setBackground(Color.decode("#d7e5f2"));
-        //getContentPane().add(new ImageComponent("/gfx/splash8.png", Color.decode("#fa9d07"), new Point(10, 290)));
+        //getContentPane().add(new ImageComponent("/gfx/splash/splash8.png", Color.decode("#fa9d07"), new Point(10, 290)));
         //getContentPane().setBackground(Color.BLACK);
 
         setSize(SIZE.width, SIZE.height + 3);

@@ -11,6 +11,7 @@ import com.databazoo.devmodeler.DevModeler;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.gui.DesignGUI;
+import com.databazoo.devmodeler.gui.SkinnedSubstanceLAF;
 import com.databazoo.devmodeler.project.ProjectManager;
 import com.databazoo.devmodeler.wizards.project.ProjectWizard;
 import com.databazoo.tools.Dbg;
@@ -22,7 +23,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.Map;
 
+import static com.databazoo.devmodeler.gui.SkinnedSubstanceLAF.SKIN_NIMBUS;
 import static com.databazoo.tools.Dbg.THIS_SHOULD_NEVER_HAPPEN;
 
 /**
@@ -32,14 +35,14 @@ import static com.databazoo.tools.Dbg.THIS_SHOULD_NEVER_HAPPEN;
 public class IntroWizard extends MigWizard {
 
 	private static final int ACCEPT_EULA = 21;
-//	protected static final int SAVE_PASSWORD = 22;
+	protected static final int SAVE_THEME = 22;
 
 	private static final int SKIP_TUTORIAL_1 = 31;
 	private static final int SKIP_TUTORIAL_2 = 32;
 	private static final int SKIP_TUTORIAL_3 = 33;
 
 	private static final String L_WELCOME		= "End User License Agreement";
-//	private static final String L_PASSWORD		= "Set password";
+	private static final String L_THEME 		= "Theme";
 	private static final String L_PROJECT		= "Create first project";
 	static final String L_TUTORIAL				= "Quick UI reference";
 	static final String L_TUTORIAL_1			= "Main menu panel";
@@ -52,6 +55,7 @@ public class IntroWizard extends MigWizard {
 
 	protected WizardTree tree;
 	boolean eulaAccepted = false;
+	private String selectedTheme = SKIN_NIMBUS;
 //	protected JPasswordField passwordField1;
 //	protected JPasswordField passwordField2;
 
@@ -65,6 +69,7 @@ public class IntroWizard extends MigWizard {
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
 		root.add(new DefaultMutableTreeNode(L_WELCOME));
+		root.add(new DefaultMutableTreeNode(L_THEME));
 		root.add(tutNode);
 		root.add(new DefaultMutableTreeNode(L_PROJECT));
 
@@ -85,8 +90,11 @@ public class IntroWizard extends MigWizard {
 				if(!eulaAccepted){
 					DevModeler.exit(0);
 				}else{
-					DesignGUI.get().drawMainWindow();
-					ProjectWizard.getInstance();
+					Settings.put(Settings.L_THEME_COLORS, selectedTheme);
+					Schedule.inEDT(() -> {
+						DesignGUI.get().drawMainWindow();
+						ProjectWizard.getInstance();
+					});
 				}
 			}
 		});
@@ -100,11 +108,11 @@ public class IntroWizard extends MigWizard {
 				case L_WELCOME:
 					loadWelcomePage();
 					break;
-				/*case L_PASSWORD:
-					loadPasswordPage();
-					break;*/
+                case L_THEME:
+                    loadThemePage();
+                    break;
 				case L_TUTORIAL:
-					tree.setSelectionRow(2);
+					tree.selectNextRow();
 					break;
 				case L_TUTORIAL_1:
 					loadTutorialPage1();
@@ -154,53 +162,53 @@ public class IntroWizard extends MigWizard {
 		setNextButton("I ACCEPT", true, ACCEPT_EULA);
 	}
 
-	/*protected void loadPasswordPage(){
+	protected void loadThemePage(){
 		resetContent();
 
-		addTitle(L_PASSWORD);
-		addText("Here you can set up a password to prevent unauthorized access to "+Config.APP_NAME_BASE+".<br><br>"
-				+ "This password will also be used to securely store login information to your databases.<br><br>"
-				+ "You can leave the password empty so that you are not asked to enter it every time you start "+Config.APP_NAME_BASE+". (NOTE: insecure!)<br><br>"
-				+ "&nbsp;", "width 100%-6px!, span");
+		addTitle(L_THEME);
+		//addText("Choose a color setup.<br><br>", "width 100%-6px!, span");
 
-		passwordField1 = new JPasswordField(20);
-		passwordField1.addKeyListener(new KeyAdapter(){
-			@Override public void keyTyped(KeyEvent ke) { checkPasswordsMatch(); }
+		Map<String, SkinnedSubstanceLAF.SkinDescriptor> themes = SkinnedSubstanceLAF.getThemeDescriptors();
+		String defaultTheme = SkinnedSubstanceLAF.L_BRIGHT;
+
+		JLabel previewLabel = new JLabel(themes.get(defaultTheme).getPreview());
+		IconableComboBox combo = addCombo("Color palette", themes.keySet().toArray(String[]::new), defaultTheme, SPAN_GROW);
+		combo.addActionListener(actionEvent -> {
+			Object selectedItem = combo.getSelectedItem();
+			if (selectedItem != null) {
+				SkinnedSubstanceLAF.SkinDescriptor theme = themes.get(selectedItem.toString());
+				if (theme != null) {
+					previewLabel.setIcon(theme.getPreview());
+					selectedTheme = theme.getName();
+				} else {
+					previewLabel.setIcon(null);
+					selectedTheme = SKIN_NIMBUS;
+				}
+			}
 		});
-		addText("Password", "width 130px!");
-		addPanel(passwordField1, "wrap");
+		addEmptyLine();
+		addPanel(previewLabel, SPAN_GROW);
 
-		passwordField2 = new JPasswordField(20);
-		passwordField2.addKeyListener(new KeyAdapter(){
-			@Override public void keyTyped(KeyEvent ke) { checkPasswordsMatch(); }
-		});
-		addText("Repeat password", "width 130px!");
-		addPanel(passwordField2, "wrap");
-
-		Config.pwrd = "ABC";
-		ProjectManager.get().resetPassword();
-
-		setNextButton("Save password", true, SAVE_PASSWORD);
-		checkPasswordsMatch();
-	}*/
+		setNextButton("Save theme", true, SAVE_THEME);
+	}
 
 	private void loadTutorialPage1(){
 		resetContent();
-		addPanel(new JLabel(new ImageIcon(IntroWizard.class.getResource("/gfx/tutorial1.png"))), "align center, span");
+		addPanel(new JLabel(new ImageIcon(IntroWizard.class.getResource("/gfx/tutorial/tutorial1.png"))), "align center, span");
 
 		setNextButton("Got it!", true, SKIP_TUTORIAL_1);
 	}
 
 	private void loadTutorialPage2(){
 		resetContent();
-		addPanel(new JLabel(new ImageIcon(IntroWizard.class.getResource("/gfx/tutorial2.png"))), "align center, span");
+		addPanel(new JLabel(new ImageIcon(IntroWizard.class.getResource("/gfx/tutorial/tutorial2.png"))), "align center, span");
 
 		setNextButton("Got it!", true, SKIP_TUTORIAL_2);
 	}
 
 	private void loadTutorialPage3(){
 		resetContent();
-		addPanel(new JLabel(new ImageIcon(IntroWizard.class.getResource("/gfx/tutorial3.png"))), "align center, span");
+		addPanel(new JLabel(new ImageIcon(IntroWizard.class.getResource("/gfx/tutorial/tutorial3.png"))), "align center, span");
 
 		setNextButton("Got it!", true, SKIP_TUTORIAL_3);
 	}
@@ -225,24 +233,22 @@ public class IntroWizard extends MigWizard {
 				frame.dispose();
 
 			} else if (type == ACCEPT_EULA) {
-				tree.setSelectionRow(1);
+				tree.selectNextRow();
 				eulaAccepted = true;
 				Config.setPwrdToDefault();
 				ProjectManager.getInstance().resetPassword();
 
-		/*}else if(type == SAVE_PASSWORD){
-			tree.setSelectionRow(2);
-			Config.pwrd = new String(passwordField1.getPassword());
-			ProjectManager.get().resetPassword();*/
+			}else if(type == SAVE_THEME){
+				tree.selectNextRow();
 
 			} else if (type == SKIP_TUTORIAL_1) {
-				tree.setSelectionRow(4);
+				tree.selectNextRow();
 
 			} else if (type == SKIP_TUTORIAL_2) {
-				tree.setSelectionRow(5);
+				tree.selectNextRow();
 
 			} else if (type == SKIP_TUTORIAL_3) {
-				tree.setSelectionRow(6);
+				tree.selectNextRow();
 			}
 		});
 	}

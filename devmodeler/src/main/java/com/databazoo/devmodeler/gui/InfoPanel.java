@@ -90,26 +90,28 @@ class InfoPanel extends ClickableComponent implements IInfoPanel {
 
 	@Override
 	public synchronized void writeFailed(int uid, String failedReason) {
-		InfoPanelLabel m = getLabel(uid);
-		if(m != null){
-			m.setText(m.getText() + " FAILED:");
-			m.updateSize();
-			m.setHideTimer(Config.INFO_PANEL_TIMEOUT_FAIL);
+		Schedule.inEDT(() -> {
+			InfoPanelLabel m = getLabel(uid);
+			if(m != null){
+				m.setText(m.getText() + " FAILED:");
+				m.updateSize();
+				m.setHideTimer(Config.INFO_PANEL_TIMEOUT_FAIL);
 
-			int i = getLabelIndex(uid);
-			ArrayList<InfoPanelLabel> tmp = new ArrayList<>();
-			for (int j = i + 1; j < labels.size(); j++) {
-				tmp.add(labels.get(j));
+				int i = getLabelIndex(uid);
+				ArrayList<InfoPanelLabel> tmp = new ArrayList<>();
+				for (int j = i + 1; j < labels.size(); j++) {
+					tmp.add(labels.get(j));
+				}
+				for (int j = i + 1; j < labels.size(); j++) {
+					labels.remove(j);
+				}
+				m = new InfoPanelLabel(failedReason, UIConstants.Colors.RED);
+				m.setHideTimer(Config.INFO_PANEL_TIMEOUT_FAIL);
+				labels.add(m);
+				labels.addAll(tmp);
+				drawLabels();
 			}
-			for (int j = i + 1; j < labels.size(); j++) {
-				labels.remove(j);
-			}
-			m = new InfoPanelLabel(failedReason, UIConstants.Colors.RED);
-			m.setHideTimer(Config.INFO_PANEL_TIMEOUT_FAIL);
-			labels.add(m);
-			labels.addAll(tmp);
-			drawLabels();
-		}
+		});
 	}
 
 	private void drawLabels(){
