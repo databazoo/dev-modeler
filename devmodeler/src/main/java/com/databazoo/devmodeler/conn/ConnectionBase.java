@@ -258,7 +258,7 @@ public abstract class ConnectionBase implements IConnection {
 				failedReason = ex.getMessage();
 				Dbg.info("SQL state: " + ex.getSQLState() + ", reason: " + failedReason);
 				if ((ex.getSQLState() != null && ex.getSQLState().equals(UNKNOWN_DATABASE_ORA_CODE)) || failedReason.contains(UNKNOWN_DATABASE) || failedReason.matches(".*atabase.*does not exist.*")) {
-					Schedule.inWorker(Schedule.CLICK_DELAY, () -> CreateDbWizard.get().drawCreateDB(ConnectionBase.this, dbAlias != null ? dbAlias : dbName));
+					Schedule.inEDT(Schedule.CLICK_DELAY, () -> CreateDbWizard.get().drawCreateDB(ConnectionBase.this, dbAlias != null ? dbAlias : dbName));
 					throw new DBCommException(failedReason, sql);
 				} else if (ex.getSQLState() != null && !ex.getSQLState().equals(NO_DATA_SQL_STATE)) {
 					setConAvailable(con);

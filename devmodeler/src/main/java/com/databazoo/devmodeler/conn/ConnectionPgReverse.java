@@ -139,7 +139,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 				+ SELECT_SCHEMA_NAME_AS + TABLE_SCHEMA + ", "
 				+ SELECT_FULL_RELNAME_AS + FULL_NAME + ", "
 				+ "c.relname AS " + TABLE_NAME + ",\n"
-				+ "c.relhasoids,\n"
+				+ (versionMajor < 12.0 ? "c.relhasoids,\n" : "false as relhasoids,\n")
 				+ "COALESCE(c.reloptions, '{}') AS reloptions,\n"
 				+ "c.relnatts,\n"
 				+ "c.reltuples,\n"
@@ -243,6 +243,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 	public void loadSequences(DB db) throws DBCommException {
 		if(versionMajor>=9.1) {
 			int log = DesignGUI.getInfoPanel().write("Loading sequences of " + db.getFullName() + "...");
+			String defValue = versionMajor < 12.0 ? "ad.adsrc" : "pg_get_expr(ad.adbin, ad.adrelid)";
 			String sql = SELECT
 					+ "cs.nspname AS " + TABLE_SCHEMA + ", "
 					+ "CASE WHEN cs.nspname = 'public' THEN c.relname ELSE cs.nspname||'.'||c.relname END AS " + FULL_NAME + ", "
@@ -256,7 +257,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 					+ "JOIN pg_class t ON ad.adrelid = t.oid\n"
 					+ "JOIN pg_type ct ON ct.oid = t.reltype\n"
 					+ "JOIN pg_namespace ts ON ts.oid = ct.typnamespace\n"
-					+ "WHERE ad.adsrc LIKE 'nextval('''|| sequence_name ||'''%' OR ad.adsrc LIKE 'nextval('''|| sequence_schema||'.'||sequence_name ||'''%'\n"
+					+ "WHERE " + defValue + " LIKE 'nextval('''|| sequence_name ||'''%' OR " + defValue + " LIKE 'nextval('''|| sequence_schema||'.'||sequence_name ||'''%'\n"
 					+ ") AS k\n"
 					+ "), '') AS depend,\n"
 					+ "s.minimum_value,\n"
@@ -309,6 +310,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 	@Override
 	public void loadAttributes(DB db) throws DBCommException {
 		int log = DesignGUI.getInfoPanel().write("Loading attributes of "+db.getFullName()+"...");
+		String defValue = versionMajor < 12.0 ? "ad.adsrc" : "pg_get_expr(ad.adbin, ad.adrelid)";
 		Query q = new Query(SELECT
 					+ SELECT_SCHEMA_NAME_AS + TABLE_SCHEMA + ",\n"
 					+ SELECT_FULL_RELNAME_AS + FULL_NAME + ",\n"
@@ -320,7 +322,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 						+ "END "
 					+ "AS " + TYPE + ",\n"
 					+ "NOT a.attnotnull AS is_null,\n"
-					+ "(CASE WHEN a.atthasdef THEN (SELECT adsrc FROM pg_attrdef WHERE adrelid = c.oid AND adnum = a.attnum) ELSE '' END) AS def,\n"
+					+ "(CASE WHEN a.atthasdef THEN (SELECT " + defValue + " FROM pg_attrdef ad WHERE ad.adrelid = c.oid AND ad.adnum = a.attnum) ELSE '' END) AS def,\n"
 					+ "a.attnum,"
 					+ "a.attstorage,"
 					+ "col_description(a.attrelid, a.attnum) AS "+DESCRIPTION+"\n"
@@ -360,6 +362,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 	@Override
 	public void loadConstraints(DB db) throws DBCommException {
 		int log = DesignGUI.getInfoPanel().write("Loading constraints of "+db.getFullName()+"...");
+		String conValue = versionMajor < 12.0 ? "cc.consrc,\n" : "pg_get_constraintdef(cc.oid) AS consrc,\n";
 		Query q = new Query(SELECT
 					+ "cc.conname,\n"
 					+ "COALESCE((SELECT nspname||'.' FROM pg_namespace WHERE oid = ct.typnamespace AND nspname != 'public'), '')||cc.conname AS "+FULL_NAME+",\n"
@@ -370,7 +373,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 					+ "cc.contype = 'f' AS isforeign,\n"
 					+ "cc.confupdtype,\n"
 					+ "cc.confdeltype,\n"
-					+ "cc.consrc,\n"
+					+ conValue
 					+ "obj_description(cc.oid, 'pg_constraint') AS description\n"
 				+ "FROM pg_constraint cc\n"
 				+ "JOIN pg_class c ON c.oid = cc.conrelid\n"
@@ -400,6 +403,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 	@Override
 	public void loadFunctions(DB db) throws DBCommException {
 		int log = DesignGUI.getInfoPanel().write("Loading functions of "+db.getFullName()+"...");
+		String allowedTypes = versionMajor < 11.0 ? "NOT pp.proisagg AND NOT pp.proiswindow" : "prokind IN ('f', 'p')";
 		Query q = new Query(SELECT
 					+ "(SELECT nspname FROM pg_namespace WHERE oid = pp.pronamespace) AS " + TABLE_SCHEMA + ", "
 					+ "COALESCE((SELECT nspname||'.' FROM pg_namespace WHERE oid = pp.pronamespace AND nspname != 'public'), '')||proname AS "+FULL_NAME+","
@@ -410,7 +414,7 @@ abstract class ConnectionPgReverse extends ConnectionPgForward {
 					+ "obj_description(pp.oid, 'pg_proc') AS description\n"
 				+ "FROM pg_proc pp\n"
 				+ "WHERE pp.pronamespace IN (SELECT oid FROM pg_namespace WHERE nspname='public' OR nspname IN (SELECT schema_name FROM information_schema.schemata)) "
-				+ "AND NOT pp.proisagg AND NOT pp.proiswindow\n"
+				+ "AND " + allowedTypes + "\n"
 				+ "ORDER BY proname, proargnames, proargtypes", db.getFullName()).run();
 		while (q.next()) {
 			for(Schema schema: db.getSchemas()){

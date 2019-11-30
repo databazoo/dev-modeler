@@ -99,7 +99,7 @@ public class DB implements IModelElement {
 			} catch (DBCommException e){
 				Dbg.notImportantAtAll("Communication error. Already logged.", e);
 				String cleanError = getConnection().getCleanError(e.getMessage());
-				Schedule.inEDT(() -> DesignGUI.getInfoPanel().writeFailed(log, cleanError));
+				DesignGUI.getInfoPanel().writeFailed(log, cleanError);
 			}
 		}
 		return false;

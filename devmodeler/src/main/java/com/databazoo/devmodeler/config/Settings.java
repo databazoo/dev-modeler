@@ -273,14 +273,16 @@ public class Settings {
 			Schedule.inEDT(() -> {
 				Dbg.sendCrashReports = getBool(L_ERRORS_CRASH_REPORTS);
 				Usage.sendUsageReports = getBool(L_ERRORS_USAGE_REPORTS);
+
+				DesignGUI.get().setLAF();
+				DesignGUI.get().repaint();
+
 				Canvas.instance.gridEnabled = getBool(L_LAYOUT_CANV_GRID);
                 boolean isDrawStraight = getBool(L_LAYOUT_CANV_STRAIGHT);
                 if (isDrawStraight != Constraint.isDrawStraight) {
                     Constraint.isDrawStraight = isDrawStraight;
 					DesignGUI.get().drawProject(true);
                 }
-				DesignGUI.get().setLAF();
-                DesignGUI.get().repaint();
 			});
 		}
 	}
