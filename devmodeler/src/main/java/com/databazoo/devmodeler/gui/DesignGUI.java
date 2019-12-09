@@ -22,11 +22,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -135,7 +131,7 @@ public class DesignGUI {
                 frame.getContentPane().add(Menu.getInstance(), BorderLayout.NORTH);
                 //frame.getContentPane().setBorder(new EmptyBorder(0, 0, 0, 0));
 
-                infoPanel = new InfoPanel();
+                infoPanel = new HistorizingInfoPanel();
 
                 // Canvas
                 canvasScroll = new JScrollPane(Canvas.instance);

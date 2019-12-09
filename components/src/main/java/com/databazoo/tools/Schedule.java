@@ -4,11 +4,7 @@ import com.databazoo.components.UIConstants;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Timed and threaded tasks factory.
@@ -78,6 +74,7 @@ public interface Schedule {
         DIFFERENCE_VIEW_REVISION_SEARCH,
         EXPORT_IMPORT_WIZARD_DB_COMBO_LISTENER,
         GC,
+        INFO_PANEL_REPAINT,
         INTRO_WIZARD_PASSWORDS_MATCH,
         INTRO_WIZARD_START,
         LICENSE_WIZARD_CHECK_LICENSE,
