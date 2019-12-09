@@ -8,7 +8,6 @@ import com.databazoo.devmodeler.gui.InputDialog;
 import com.databazoo.devmodeler.gui.OperationCancelException;
 import com.databazoo.devmodeler.gui.window.Splash;
 import com.databazoo.devmodeler.project.ProjectManager;
-import com.databazoo.devmodeler.wizards.IntroWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.EncryptedProperties;
 import com.databazoo.tools.RestClient;
@@ -48,8 +47,8 @@ public class Config {
 	public static final boolean SHOW_LARGE_ICONS_IN_PROJECT = false;
 
 	public static final int INFO_PANEL_MAX_LABELS = 40;
-	public static final int INFO_PANEL_TIMEOUT_OK = 4;
-	public static final int INFO_PANEL_TIMEOUT_FAIL = 10;
+	public static final int INFO_PANEL_TIMEOUT_OK = 5;
+	public static final int INFO_PANEL_TIMEOUT_FAIL = 20;
 	public static final int INFO_PANEL_TIMEOUT_WAIT = 20;
 	public static final int WIZARD_FAIL_LIMIT = 10;
 	public static final int SCROLL_THRESHOLD = 200;
