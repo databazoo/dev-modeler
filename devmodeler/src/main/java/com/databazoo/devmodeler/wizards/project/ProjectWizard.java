@@ -15,7 +15,6 @@ import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
 import com.databazoo.devmodeler.conn.DBCommException;
 import com.databazoo.devmodeler.conn.IConnection;
-import com.databazoo.devmodeler.gui.Canvas;
 import com.databazoo.devmodeler.gui.DesignGUI;
 import com.databazoo.devmodeler.gui.SearchPanel;
 import com.databazoo.devmodeler.model.DB;
@@ -32,23 +31,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.awt.event.*;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -885,13 +869,8 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 	}
 
 	@Override
-	protected void executeAction(int type)
-	{
+	protected void executeAction(int type) {
 		switch(type){
-			case CLOSE_WINDOW:
-				frame.dispose();
-				break;
-
 			case CREATE_PROJECT_FINAL:
 				createProject();
 				frame.dispose();
@@ -925,18 +904,22 @@ public class ProjectWizard extends MigWizard implements ActionListener {
 			case CREATE_PROJECT_PAGE_3:
 				loadNewProjectPage3();
 				break;
+
+			default: super.executeAction(type);
 		}
 	}
 
 	@Override
-	protected void executeAction(int type, final String extra)
-	{
-		if(type == OPEN_PROJECT){
+	protected void executeAction(int type, final String extra) {
+		if (type == OPEN_PROJECT) {
 			setNextButton("Loading...", false, OPEN_PROJECT);
 			Schedule.inWorker(Schedule.CLICK_DELAY, () -> {
                 ProjectManager.getInstance().openProject(extra);
                 frame.dispose();
             });
+
+		} else {
+			super.executeAction(type, extra);
 		}
 	}
 

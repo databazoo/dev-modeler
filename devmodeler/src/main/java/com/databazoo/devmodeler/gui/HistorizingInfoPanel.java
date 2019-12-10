@@ -5,6 +5,7 @@ import com.databazoo.components.UIConstants;
 import com.databazoo.components.elements.ClickableComponent;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
+import com.databazoo.devmodeler.wizards.InfoPanelHistoryWizard;
 import com.databazoo.tools.Schedule;
 
 import java.awt.*;
@@ -159,17 +160,12 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
 
     @Override
     public void doubleClicked() {
-        //HistoryWindow.get();
+        InfoPanelHistoryWizard.getInstance(lines).drawHistoryPage();
     }
 
     @Override
     public void rightClicked() {
 
-    }
-
-    @Override
-    public boolean isVisible() {
-        return super.isVisible();
     }
 
     @Override
@@ -185,7 +181,7 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
         super.setVisible(visible);
     }
 
-    static class InfoLine {
+    public static class InfoLine {
         private static int SEQUENCE = 0;
         private static synchronized int getSequence() {
             return SEQUENCE++;
@@ -213,6 +209,18 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
             String currentText = messageLines.get(lineNumber);
             messageLines.remove(lineNumber);
             messageLines.add(currentText + text);
+        }
+
+        public List<String> getMessageLines() {
+            return messageLines;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public LocalTime getCreated() {
+            return created;
         }
 
         @Override

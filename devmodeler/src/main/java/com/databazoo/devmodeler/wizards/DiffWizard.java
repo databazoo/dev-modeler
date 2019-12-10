@@ -48,16 +48,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * UI for revisions and change comparison
@@ -105,7 +98,6 @@ public class DiffWizard extends SQLEnabledWizard {
 		revision = rev;
 		tree = new WizardTree(rev.getTreeView(), 0, new DiffIconRenderer(), this);
 		drawWindow("Revision " + rev.getName(), tree, Settings.getBool(Settings.L_MAXIMIZE_REVISIONS), true);
-		//treeScroll.setPreferredSize(new Dimension(Config.DB_TREE_SPLIT_WIDTH + (Settings.getInt(Settings.L_LAYOUT_WIZARD_TREE_W)-1)*44, frame.getSize().height));
 	}
 
 	/**
@@ -834,10 +826,8 @@ public class DiffWizard extends SQLEnabledWizard {
 				saveToDBWithManualRollback(extra, true);
 			}
 
-		} else if (type == CLOSE_WINDOW) {
-			frame.dispose();
 		} else {
-			Dbg.fixme("DiffWizard: unsupported action type: " + type + " extra: " + extra);
+			super.executeAction(type, extra);
 		}
 	}
 
@@ -850,11 +840,8 @@ public class DiffWizard extends SQLEnabledWizard {
 			} else {
 				tree.assignNewModel(revision.getTreeView());
 			}
-
-		} else if (type == CLOSE_WINDOW) {
-			frame.dispose();
 		} else {
-			Dbg.fixme("DiffWizard: unsupported action type: " + type);
+			super.executeAction(type);
 		}
 	}
 
