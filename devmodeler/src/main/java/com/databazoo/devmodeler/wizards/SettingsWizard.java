@@ -164,18 +164,4 @@ public class SettingsWizard extends IntroWizard {
 		btnSave.setVisible(false);
 	}*/
 
-	@Override
-	protected void executeAction(int type){
-		if(type == CLOSE_WINDOW){
-			frame.dispose();
-
-		/*}else if(type == SAVE_PASSWORD){
-			//tree.setSelectionRow(tree.getSelectionRows()[0]+1);
-			tree.setSelectionRow(0);
-			Config.pwrd = new String(passwordField1.getPassword());
-			ProjectManager.get().resetPassword();
-			ProjectManager.get().saveProjects();*/
-		}
-	}
-
 }

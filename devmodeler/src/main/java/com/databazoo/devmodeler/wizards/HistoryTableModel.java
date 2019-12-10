@@ -1,6 +1,12 @@
 
 package com.databazoo.devmodeler.wizards;
 
+import com.databazoo.components.table.EditableTable;
+import com.databazoo.devmodeler.config.Config;
+import com.databazoo.devmodeler.model.IModelElement;
+import com.databazoo.devmodeler.project.Project;
+import com.databazoo.devmodeler.project.Revision;
+
 import javax.swing.table.AbstractTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,12 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import com.databazoo.components.table.EditableTable;
-import com.databazoo.devmodeler.config.Config;
-import com.databazoo.devmodeler.model.IModelElement;
-import com.databazoo.devmodeler.project.Project;
-import com.databazoo.devmodeler.project.Revision;
 
 /**
  * Table model for detailed changes list in Relation Wizard
@@ -45,7 +45,7 @@ public class HistoryTableModel extends AbstractTableModel {
 						});
 			}
 		}
-		Collections.sort(rows, Collections.reverseOrder());
+		rows.sort(Collections.reverseOrder());
 	}
 
 	@Override

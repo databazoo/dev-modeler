@@ -8,12 +8,7 @@ import com.databazoo.components.elements.LineComponent;
 import com.databazoo.components.icons.ModelIconRenderer;
 import com.databazoo.components.icons.PlainColorIcon;
 import com.databazoo.components.table.EditableTable;
-import com.databazoo.components.textInput.FormattedClickableTextField;
-import com.databazoo.components.textInput.LineNumberRowHeader;
-import com.databazoo.components.textInput.NextFieldObserver;
-import com.databazoo.components.textInput.QueryErrorPositionObserver;
-import com.databazoo.components.textInput.TextScrollPane;
-import com.databazoo.components.textInput.UndoableTextField;
+import com.databazoo.components.textInput.*;
 import com.databazoo.devmodeler.config.Config;
 import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.devmodeler.config.Theme;
@@ -22,22 +17,9 @@ import com.databazoo.devmodeler.conn.IColoredConnection;
 import com.databazoo.devmodeler.conn.IConnectionQuery;
 import com.databazoo.devmodeler.conn.SupportedElement;
 import com.databazoo.devmodeler.gui.Canvas;
-import com.databazoo.devmodeler.gui.DesignGUI;
-import com.databazoo.devmodeler.gui.OperationCancelException;
-import com.databazoo.devmodeler.gui.RightClickMenu;
-import com.databazoo.devmodeler.gui.SearchPanel;
-import com.databazoo.devmodeler.model.Attribute;
-import com.databazoo.devmodeler.model.Constraint;
-import com.databazoo.devmodeler.model.Function;
-import com.databazoo.devmodeler.model.IModelElement;
-import com.databazoo.devmodeler.model.Index;
+import com.databazoo.devmodeler.gui.*;
 import com.databazoo.devmodeler.model.Package;
-import com.databazoo.devmodeler.model.Relation;
-import com.databazoo.devmodeler.model.Schema;
-import com.databazoo.devmodeler.model.Sequence;
-import com.databazoo.devmodeler.model.Trigger;
-import com.databazoo.devmodeler.model.View;
-import com.databazoo.devmodeler.model.Workspace;
+import com.databazoo.devmodeler.model.*;
 import com.databazoo.devmodeler.project.Project;
 import com.databazoo.devmodeler.project.RevisionFactory;
 import com.databazoo.devmodeler.wizards.HistoryTableModel;
@@ -51,12 +33,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -577,14 +554,14 @@ public class RelationWizard extends RelationWizardPagesSequence {
 	protected void executeAction(int type)
 	{
 	    try {
-            if (type == CLOSE_WINDOW) {
-                frame.dispose();
-
-            } else if (type == SAVE_IN_MODEL) {
+            if (type == SAVE_IN_MODEL) {
                 saveEdited(true);
 
             } else if (type == SAVE_IN_MODEL_AND_DB) {
                 saveInModelAndDB();
+
+            } else {
+                super.executeAction(type);
             }
         } catch (OperationCancelException e) {
             Dbg.info("Revision cancelled. Cancelling the whole operation.");

@@ -8,20 +8,11 @@ import com.databazoo.devmodeler.config.Settings;
 import com.databazoo.tools.Dbg;
 import difflib.Delta;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
+import javax.swing.text.*;
 import java.awt.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -129,9 +120,9 @@ public abstract class FormatterBase implements Serializable {
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
 		styleRegular = doc.addStyle("regular", def);
-		StyleConstants.setFontFamily(def, FontFactory.getMonospacedName());
-		StyleConstants.setFontSize(def, Settings.getInt(Settings.L_FONT_MONO_SIZE));
-		StyleConstants.setForeground(def, Color.LIGHT_GRAY);
+		StyleConstants.setFontFamily(styleRegular, FontFactory.getMonospacedName());
+		StyleConstants.setFontSize(styleRegular, Settings.getInt(Settings.L_FONT_MONO_SIZE));
+		StyleConstants.setForeground(styleRegular, Color.LIGHT_GRAY);
 
 		styleKeyword = doc.addStyle("kw", styleRegular);
 		StyleConstants.setForeground(styleKeyword, UIConstants.Colors.BLUE_GRAY);
@@ -175,9 +166,9 @@ public abstract class FormatterBase implements Serializable {
 		Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
 		styleRegular = doc.addStyle("regular", def);
-		StyleConstants.setFontFamily(def, FontFactory.getMonospacedName());
-		StyleConstants.setFontSize(def, Settings.getInt(Settings.L_FONT_MONO_SIZE));
-		StyleConstants.setForeground(def, Color.BLACK);
+		StyleConstants.setFontFamily(styleRegular, FontFactory.getMonospacedName());
+		StyleConstants.setFontSize(styleRegular, Settings.getInt(Settings.L_FONT_MONO_SIZE));
+		StyleConstants.setForeground(styleRegular, Color.BLACK);
 
 		styleKeyword = doc.addStyle("kw", styleRegular);
 		StyleConstants.setForeground(styleKeyword, UIConstants.Colors.BLUE);

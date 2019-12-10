@@ -1,15 +1,5 @@
 package com.databazoo.devmodeler.wizards.server;
 
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.table.TableColumnModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.databazoo.components.GCFrame;
 import com.databazoo.components.WizardTree;
 import com.databazoo.components.combo.IconableComboBox;
@@ -28,11 +18,19 @@ import com.databazoo.devmodeler.wizards.SQLEnabledWizard;
 import com.databazoo.tools.Dbg;
 import com.databazoo.tools.Schedule;
 
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.table.TableColumnModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.databazoo.components.table.EditableTable.L_DOUBLECLICK_TO_EDIT;
 import static com.databazoo.devmodeler.conn.SupportedElement.DATABASE_RENAME;
-import static com.databazoo.devmodeler.wizards.ConnectionChecker.L_HOST;
-import static com.databazoo.devmodeler.wizards.ConnectionChecker.L_PASS;
-import static com.databazoo.devmodeler.wizards.ConnectionChecker.L_USER;
+import static com.databazoo.devmodeler.wizards.ConnectionChecker.*;
 
 /**
  * Use-cases described in HTML
@@ -344,14 +342,14 @@ public class ServerAdministrationWizard extends SQLEnabledWizard {
 
     @Override
     protected void executeAction(int type) {
-        if (type == CLOSE_WINDOW) {
-            frame.dispose();
-
-        } else if (type == REFRESH_DB) {
+        if (type == REFRESH_DB) {
             refreshDatabases();
 
         } else if (type == REFRESH_USER) {
             refreshUsers();
+
+        } else {
+            super.executeAction(type);
         }
     }
 

@@ -15,8 +15,6 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 
@@ -188,11 +186,10 @@ public class DocumentationWizard extends MigWizard {
 
     @Override
     protected void executeAction(int type){
-        if(type == CLOSE_WINDOW){
-            frame.dispose();
-
-        }else if(type == MORE_INFO) {
+        if(type == MORE_INFO) {
             DesignGUI.get().openURL(Config.APP_DEFAULT_URL);
+        } else {
+            super.executeAction(type);
         }
     }
     @Override public void notifyChange(String elementName, String value) {}

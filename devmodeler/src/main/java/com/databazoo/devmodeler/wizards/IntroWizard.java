@@ -229,10 +229,7 @@ public class IntroWizard extends MigWizard {
 	@Override
 	protected void executeAction(int type){
 		Schedule.inEDT(() -> {
-			if (type == CLOSE_WINDOW) {
-				frame.dispose();
-
-			} else if (type == ACCEPT_EULA) {
+			if (type == ACCEPT_EULA) {
 				tree.selectNextRow();
 				eulaAccepted = true;
 				Config.setPwrdToDefault();
@@ -249,6 +246,9 @@ public class IntroWizard extends MigWizard {
 
 			} else if (type == SKIP_TUTORIAL_3) {
 				tree.selectNextRow();
+
+			} else {
+				super.executeAction(type);
 			}
 		});
 	}

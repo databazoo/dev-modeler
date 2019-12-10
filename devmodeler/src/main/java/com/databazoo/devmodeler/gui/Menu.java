@@ -34,46 +34,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import static com.databazoo.components.UIConstants.MENU_BUTTON_SIZE;
-import static com.databazoo.components.UIConstants.MENU_COMPONENT_HEIGHT;
-import static com.databazoo.components.UIConstants.MENU_HEIGHT;
+import static com.databazoo.components.UIConstants.*;
 import static com.databazoo.devmodeler.conn.SupportedElement.SERVER_ADMINISTRATION;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DATA;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DESIGN;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_DIFF;
-import static com.databazoo.devmodeler.gui.UsageElement.CENTER_MENU_BTN_OPTIMIZE;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ABOUT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_PROJECTS;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_BTN_SQL;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXIT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_IMG;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_SQL;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_EXPORT_XML;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_HELP;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_IMPORT;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_PROJECTS;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_REARRANGE;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_SETTINGS;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_TGL_GRID;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_TGL_TREE;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ZOOM_IN;
-import static com.databazoo.devmodeler.gui.UsageElement.LEFT_MENU_ZOOM_OUT;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_DBS;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_SERVER_ACTIVITY;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_ADMIN_USERS;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_BTN_SYNC;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CHK_SYNC;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CONN2_COMBO;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_CONN_COMBO;
-import static com.databazoo.devmodeler.gui.UsageElement.RIGHT_MENU_DB_COMBO;
-import static com.databazoo.devmodeler.gui.view.DifferenceView.L_FUNCTIONS;
-import static com.databazoo.devmodeler.gui.view.DifferenceView.L_PACKAGES;
-import static com.databazoo.devmodeler.gui.view.DifferenceView.L_SEQUENCES;
-import static com.databazoo.devmodeler.gui.view.DifferenceView.L_TABLES;
-import static com.databazoo.devmodeler.gui.view.DifferenceView.L_VIEWS;
-import static com.databazoo.devmodeler.model.Relation.L_CONSTRAINTS;
-import static com.databazoo.devmodeler.model.Relation.L_INDEXES;
-import static com.databazoo.devmodeler.model.Relation.L_TRIGGERS;
+import static com.databazoo.devmodeler.gui.UsageElement.*;
+import static com.databazoo.devmodeler.gui.view.DifferenceView.*;
+import static com.databazoo.devmodeler.model.Relation.*;
+import static com.databazoo.devmodeler.wizards.InfoPanelHistoryWizard.L_NOTIFICATION_LOG;
 
 /**
  * Application menu.
@@ -125,7 +91,7 @@ public class Menu extends JPanel {
 
     private JButton menuBtnAdmin;
 
-    JButton menuBtnViewDesigner, menuBtnViewOptimizer, menuBtnViewData, menuBtnViewDiff;
+    JToggleButton menuBtnViewDesigner, menuBtnViewOptimizer, menuBtnViewData, menuBtnViewDiff;
 
     private MyCheckboxMenuItem dbTreeMenuItem;
     private MyMenuItem zoomInMenuItem;
@@ -181,33 +147,25 @@ public class Menu extends JPanel {
 
     void switchView(ViewMode view) {
         if (view.equals(ViewMode.DESIGNER)) {
-            if (menuBtnViewDesigner.isEnabled()) {
-                menuBtnViewDesigner.setEnabled(false);
-                menuBtnViewOptimizer.setEnabled(true);
-                menuBtnViewData.setEnabled(true);
-                menuBtnViewDiff.setEnabled(true);
-            }
+                menuBtnViewDesigner.getModel().setSelected(true);
+                menuBtnViewOptimizer.getModel().setSelected(false);
+                menuBtnViewData.getModel().setSelected(false);
+                menuBtnViewDiff.getModel().setSelected(false);
         } else if (view.equals(ViewMode.OPTIMIZE)) {
-            if (menuBtnViewOptimizer.isEnabled()) {
-                menuBtnViewDesigner.setEnabled(true);
-                menuBtnViewOptimizer.setEnabled(false);
-                menuBtnViewData.setEnabled(true);
-                menuBtnViewDiff.setEnabled(true);
-            }
+                menuBtnViewDesigner.getModel().setSelected(false);
+                menuBtnViewOptimizer.getModel().setSelected(true);
+                menuBtnViewData.getModel().setSelected(false);
+                menuBtnViewDiff.getModel().setSelected(false);
         } else if (view.equals(ViewMode.DATA)) {
-            if (menuBtnViewData.isEnabled()) {
-                menuBtnViewDesigner.setEnabled(true);
-                menuBtnViewOptimizer.setEnabled(true);
-                menuBtnViewData.setEnabled(false);
-                menuBtnViewDiff.setEnabled(true);
-            }
+                menuBtnViewDesigner.getModel().setSelected(false);
+                menuBtnViewOptimizer.getModel().setSelected(false);
+                menuBtnViewData.getModel().setSelected(true);
+                menuBtnViewDiff.getModel().setSelected(false);
         } else {
-            if (menuBtnViewDiff.isEnabled()) {
-                menuBtnViewDesigner.setEnabled(true);
-                menuBtnViewOptimizer.setEnabled(true);
-                menuBtnViewData.setEnabled(true);
-                menuBtnViewDiff.setEnabled(false);
-            }
+                menuBtnViewDesigner.getModel().setSelected(false);
+                menuBtnViewOptimizer.getModel().setSelected(false);
+                menuBtnViewData.getModel().setSelected(false);
+                menuBtnViewDiff.getModel().setSelected(true);
         }
         MenuElementView.getInstance().updateMenuItems();
         rightMenu.redraw();
@@ -437,6 +395,7 @@ public class Menu extends JPanel {
 
             add(drawProjectButton());
             add(drawQueryButton());
+            add(drawHistoryButton());
         }
 
         private JMenu drawFileMenu() {
@@ -532,6 +491,18 @@ public class Menu extends JPanel {
             menuBtnQuery.setPreferredSize(MENU_BUTTON_SIZE);
             return menuBtnQuery;
         }
+
+        private JButton drawHistoryButton() {
+            JButton menuBtnHistory = new JButton(Theme.getSmallIcon(Theme.ICO_HISTORY));
+            menuBtnHistory.setToolTipText(L_NOTIFICATION_LOG);
+            menuBtnHistory.addActionListener(e -> {
+                //Usage.log(LEFT_MENU_BTN_SQL);
+                DesignGUI.getInfoPanel().doubleClicked();
+            });
+            menuBtnHistory.setFocusable(false);
+            menuBtnHistory.setPreferredSize(MENU_BUTTON_SIZE);
+            return menuBtnHistory;
+        }
     }
 
     private class CenterMenu extends JPanel {
@@ -552,8 +523,8 @@ public class Menu extends JPanel {
             add(viewMenu, BorderLayout.CENTER);
         }
 
-        private JButton drawDiffButton() {
-            menuBtnViewDiff = new JButton("Changes", Theme.getSmallIcon(Theme.ICO_DIFFERENCE));
+        private JToggleButton drawDiffButton() {
+            menuBtnViewDiff = new JToggleButton("Changes", Theme.getSmallIcon(Theme.ICO_DIFFERENCE));
             menuBtnViewDiff.setToolTipText("History of changes, database comparator");
             menuBtnViewDiff.addActionListener(e -> {
                 Usage.log(CENTER_MENU_BTN_DIFF);
@@ -563,8 +534,8 @@ public class Menu extends JPanel {
             return menuBtnViewDiff;
         }
 
-        private JButton drawDataButton() {
-            menuBtnViewData = new JButton("Data", Theme.getSmallIcon(Theme.ICO_DATA));
+        private JToggleButton drawDataButton() {
+            menuBtnViewData = new JToggleButton("Data", Theme.getSmallIcon(Theme.ICO_DATA));
             menuBtnViewData.setToolTipText("Data view [ALT]");
             menuBtnViewData.addActionListener(e -> {
                 Usage.log(CENTER_MENU_BTN_DATA);
@@ -574,8 +545,8 @@ public class Menu extends JPanel {
             return menuBtnViewData;
         }
 
-        private JButton drawOptimizerButton() {
-            menuBtnViewOptimizer = new JButton("Optimize", Theme.getSmallIcon(Theme.ICO_APPROVED));
+        private JToggleButton drawOptimizerButton() {
+            menuBtnViewOptimizer = new JToggleButton("Optimize", Theme.getSmallIcon(Theme.ICO_APPROVED));
             menuBtnViewOptimizer.setToolTipText("Model optimizer");
             menuBtnViewOptimizer.addActionListener(e -> {
                 Usage.log(CENTER_MENU_BTN_OPTIMIZE);
@@ -585,8 +556,8 @@ public class Menu extends JPanel {
             return menuBtnViewOptimizer;
         }
 
-        private JButton drawDesignerButton() {
-            menuBtnViewDesigner = new JButton("Design", Theme.getSmallIcon(Theme.ICO_ABSTRACT));
+        private JToggleButton drawDesignerButton() {
+            menuBtnViewDesigner = new JToggleButton("Design", Theme.getSmallIcon(Theme.ICO_ABSTRACT));
             menuBtnViewDesigner.setToolTipText("Design view [ALT]");
             menuBtnViewDesigner.addActionListener(e -> {
                 Usage.log(CENTER_MENU_BTN_DESIGN);
