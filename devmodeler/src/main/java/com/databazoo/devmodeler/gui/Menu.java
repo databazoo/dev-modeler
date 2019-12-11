@@ -107,6 +107,7 @@ public class Menu extends JPanel {
     private IconableComboBox connCombo2 = new IconableComboBox(connComboOptions2);
 
     private JButton menuBtnQuery;
+    private JToggleButton menuBtnHistory;
     private JCheckBox syncCheckBox;
 
     private Menu() {
@@ -173,6 +174,10 @@ public class Menu extends JPanel {
 
     public void setEntityButtonsEnabled() {
         menuBtnQuery.setEnabled(Project.getCurrent().getType() != Project.TYPE_ABSTRACT);
+    }
+
+    public void setHistoryButtonSelected(boolean selected) {
+        menuBtnHistory.setSelected(selected);
     }
 
     public void setModelingMode(boolean isAbstract) {
@@ -492,12 +497,14 @@ public class Menu extends JPanel {
             return menuBtnQuery;
         }
 
-        private JButton drawHistoryButton() {
-            JButton menuBtnHistory = new JButton(Theme.getSmallIcon(Theme.ICO_HISTORY));
+        private JToggleButton drawHistoryButton() {
+            menuBtnHistory = new JToggleButton(Theme.getSmallIcon(Theme.ICO_HISTORY));
             menuBtnHistory.setToolTipText(L_NOTIFICATION_LOG);
             menuBtnHistory.addActionListener(e -> {
                 //Usage.log(LEFT_MENU_BTN_SQL);
+                DesignGUI.getInfoPanel().clicked();
                 DesignGUI.getInfoPanel().doubleClicked();
+
             });
             menuBtnHistory.setFocusable(false);
             menuBtnHistory.setPreferredSize(MENU_BUTTON_SIZE);

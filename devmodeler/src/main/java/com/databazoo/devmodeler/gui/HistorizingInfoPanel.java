@@ -179,6 +179,7 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
             }
         }
         super.setVisible(visible);
+        Menu.getInstance().setHistoryButtonSelected(visible);
     }
 
     public static class InfoLine {
