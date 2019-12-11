@@ -131,16 +131,17 @@ public class LineNumberTableRowHeader extends JComponent {
         public void mouseClicked(MouseEvent me) {
             int row = table.rowAtPoint(me.getPoint());
             table.setColumnSelectionAllowed(false);
+            table.setCellSelectionEnabled(false);
             table.setRowSelectionAllowed(true);
             if(me.isControlDown()){
                 if(me.isShiftDown()){
-                    table.addRowSelectionInterval(row<initialRowClicked ? row : initialRowClicked, row>=initialRowClicked ? row : initialRowClicked);
+                    table.addRowSelectionInterval(Math.min(row, initialRowClicked), Math.max(row, initialRowClicked));
                 }else{
                     table.addRowSelectionInterval(row, row);
                 }
             }else{
                 if(me.isShiftDown()){
-                    table.setRowSelectionInterval(row<initialRowClicked ? row : initialRowClicked, row>=initialRowClicked ? row : initialRowClicked);
+                    table.setRowSelectionInterval(Math.min(row, initialRowClicked), Math.max(row, initialRowClicked));
                 }else{
                     table.setRowSelectionInterval(row, row);
                 }
@@ -154,9 +155,9 @@ public class LineNumberTableRowHeader extends JComponent {
             table.setColumnSelectionAllowed(false);
             table.setRowSelectionAllowed(true);
             if(me.isControlDown()){
-                table.addRowSelectionInterval(row<initialRow ? row : initialRow, row>=initialRow ? row : initialRow);
+                table.addRowSelectionInterval(Math.min(row, initialRow), Math.max(row, initialRow));
             }else{
-                table.setRowSelectionInterval(row<initialRow ? row : initialRow, row>=initialRow ? row : initialRow);
+                table.setRowSelectionInterval(Math.min(row, initialRow), Math.max(row, initialRow));
             }
         }
 

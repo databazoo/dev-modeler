@@ -23,6 +23,7 @@ public class InfoPanelHistoryWizard extends MigWizard {
 
 	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("\nHH:mm:ss ");
 	private static final int REFRESH = 21;
+	private static final int OUTPUT_LIMIT = 10000;
 	private final List<HistorizingInfoPanel.InfoLine> lines;
 
 	public static InfoPanelHistoryWizard getInstance(List<HistorizingInfoPanel.InfoLine> lines) {
@@ -57,7 +58,8 @@ public class InfoPanelHistoryWizard extends MigWizard {
 		StyledDocument doc = aboutText.getStyledDocument();
 		addStylesToDocument(doc);
 
-		for (HistorizingInfoPanel.InfoLine line : lines) {
+		for (int i = lines.size() <= OUTPUT_LIMIT ? 0 : lines.size() - OUTPUT_LIMIT; i < lines.size(); i++) {
+			HistorizingInfoPanel.InfoLine line = lines.get(i);
 			try {
 				doc.insertString(doc.getLength(), line.getCreated().format(TIME_FORMATTER), doc.getStyle("regular"));
 				Style style = doc.getStyle(styleFromColor(line.getColor()));
