@@ -34,17 +34,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.databazoo.components.UIConstants.MENU_BUTTON_SIZE;
-import static com.databazoo.devmodeler.conn.ConnectionUtils.ORDER_BY;
-import static com.databazoo.devmodeler.conn.ConnectionUtils.SELECT;
-import static com.databazoo.devmodeler.conn.ConnectionUtils.WHERE;
+import static com.databazoo.devmodeler.conn.ConnectionUtils.*;
 
 abstract class DataWindowOutputData extends DataWindowBase {
 
@@ -507,7 +500,7 @@ abstract class DataWindowOutputData extends DataWindowBase {
                 createMenuItems();
 
             } else if (e.getButton() == MouseEvent.BUTTON1) {
-                if (outputData.getRowSelectionAllowed()) {
+                if (!isWholeRow && outputData.getRowSelectionAllowed()) {
                     outputData.setCellSelectionEnabled(true);
                 }
             }
