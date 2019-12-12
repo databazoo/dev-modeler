@@ -9,7 +9,7 @@ import com.databazoo.devmodeler.wizards.InfoPanelHistoryWizard;
 import com.databazoo.tools.Schedule;
 
 import java.awt.*;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -64,12 +64,12 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
 
     @Override
     public void writeOK(int uid) {
-        for (int i = lines.size()-1; i >= 0; i--) {
+        for (int i = lines.size() - 1; i >= 0; i--) {
             InfoLine line = lines.get(i);
             if (line.id == uid) {
                 line.color = UIConstants.Colors.GREEN;
                 line.appendLastLine(" OK");
-                line.validTill = LocalTime.now().plusSeconds(Config.INFO_PANEL_TIMEOUT_OK);
+                line.validTill = LocalDateTime.now().plusSeconds(Config.INFO_PANEL_TIMEOUT_OK);
                 break;
             }
         }
@@ -78,13 +78,13 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
 
     @Override
     public void writeFailed(int uid, String failedReason) {
-        for (int i = lines.size()-1; i >= 0; i--) {
+        for (int i = lines.size() - 1; i >= 0; i--) {
             InfoLine line = lines.get(i);
             if (line.id == uid) {
                 line.color = UIConstants.Colors.RED;
                 line.appendLastLine(" FAILED:");
                 line.messageLines.add(failedReason.replaceAll("\\s+", " "));
-                line.validTill = LocalTime.now().plusSeconds(Config.INFO_PANEL_TIMEOUT_FAIL);
+                line.validTill = LocalDateTime.now().plusSeconds(Config.INFO_PANEL_TIMEOUT_FAIL);
                 break;
             }
         }
@@ -92,14 +92,14 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
     }
 
     private void checkSize() {
-        InfoLine.NOW = LocalTime.now();
+        InfoLine.updateTimestamp();
 
         int height = 0;
         int length = 0;
-        for (int i = lines.size()-1; i >= 0; i--) {
+        for (int i = lines.size() - 1; i >= 0; i--) {
             InfoLine line = lines.get(i);
             if (line.isValid()) {
-                for (int j = line.messageLines.size()-1; j >= 0; j--) {
+                for (int j = line.messageLines.size() - 1; j >= 0; j--) {
                     String message = line.messageLines.get(j);
                     if (message.length() > length) {
                         length = message.length();
@@ -126,27 +126,27 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
         graphics.setColor(new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), 230));
-        graphics.fillRoundRect(1, 1, getWidth()-2, getHeight()-2, 10, 10);
+        graphics.fillRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 10, 10);
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setFont(getFont());
 
         graphics.setColor(UIConstants.Colors.getTableBorders());
-        graphics.drawRoundRect(1, 1, getWidth()-2, getHeight()-2, 10, 10);
+        graphics.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 10, 10);
 
-        InfoLine.NOW = LocalTime.now();
+        InfoLine.updateTimestamp();
 
         int linesDrawn = 0;
-        for (int i = lines.size()-1; i >= 0; i--) {
+        for (int i = lines.size() - 1; i >= 0; i--) {
             InfoLine line = lines.get(i);
             if (line.isValid()) {
                 graphics.setColor(line.color);
 
-                for (int j = line.messageLines.size()-1; j >= 0; j--) {
+                for (int j = line.messageLines.size() - 1; j >= 0; j--) {
                     graphics.drawString(line.messageLines.get(j), PADDING, getHeight() - linesDrawn * LINE_HEIGHT - PADDING);
                     linesDrawn++;
                 }
-                if (linesDrawn * LINE_HEIGHT >= getHeight()) {
+                if (linesDrawn * LINE_HEIGHT >= getHeight() - LINE_HEIGHT) {
                     break;
                 }
             }
@@ -173,7 +173,7 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
         if (visible) {
             Schedule.reInvokeInWorker(INFO_PANEL_REPAINT, Schedule.TYPE_DELAY, this::checkSize);
         } else {
-            for (int i = lines.size()-1; i >= 0 && i >= lines.size()-50; i--) {
+            for (int i = lines.size() - 1; i >= 0 && i >= lines.size() - 50; i--) {
                 InfoLine line = lines.get(i);
                 line.validTill = line.created;
             }
@@ -184,16 +184,22 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
 
     public static class InfoLine {
         private static int SEQUENCE = 0;
+
         private static synchronized int getSequence() {
             return SEQUENCE++;
         }
-        private static LocalTime NOW = LocalTime.now();
+
+        private static LocalDateTime NOW = LocalDateTime.now();
+
+        private static void updateTimestamp() {
+            NOW = LocalDateTime.now();
+        }
 
         int id;
         List<String> messageLines;
         Color color;
-        LocalTime created = LocalTime.now();
-        LocalTime validTill = LocalTime.now().plusSeconds(Config.INFO_PANEL_TIMEOUT_WAIT);
+        LocalDateTime created = LocalDateTime.now();
+        LocalDateTime validTill = LocalDateTime.now().plusSeconds(Config.INFO_PANEL_TIMEOUT_WAIT);
 
         public InfoLine(int id, String message, Color color) {
             this.id = id;
@@ -220,7 +226,7 @@ public class HistorizingInfoPanel extends ClickableComponent implements IInfoPan
             return color;
         }
 
-        public LocalTime getCreated() {
+        public LocalDateTime getCreated() {
             return created;
         }
 
